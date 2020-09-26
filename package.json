@@ -5,6 +5,8 @@
     "build": "npx webpack --mode development"
   },
   "devDependencies": {
+    "@types/react": "^16.9.49",
+    "@types/react-dom": "^16.9.8",
     "gulp": "^4.0.2",
     "gulp-sass": "^4.1.0",
     "ts-loader": "^8.0.4",
@@ -13,5 +15,9 @@
     "webpack": "^4.44.2",
     "webpack-cli": "^3.3.12",
     "webpack-stream": "^6.1.0"
+  },
+  "dependencies": {
+    "react": "^16.13.1",
+    "react-dom": "^16.13.1"
   }
 }

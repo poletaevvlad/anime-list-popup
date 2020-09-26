@@ -12,18 +12,18 @@ function watchManifest() {
 }
 
 function popupHtml() {
-  return src("src/popup.html")
-    .pipe(dest("dist"));
+  return src("src/popup/popup.html")
+    .pipe(dest("dist/popup"));
 }
 
 function watchPopupManifest() {
-  return watch("src/popup.html", popupHtml);
+  return watch("src/popup/popup.html", popupHtml);
 }
 
 function sass() {
   return src("sass/styles.sass")
     .pipe(buildSass())
-    .pipe(dest("dist"));
+    .pipe(dest("dist/popup"));
 }
 
 function watchSass() {
@@ -31,7 +31,7 @@ function watchSass() {
 }
 
 function buildJs(watch) {
-  return src("src/index.ts")
+  return src("src/popup/index.tsx")
     .pipe(webpack({
       mode: "development",
       watch: !!watch,
@@ -50,7 +50,7 @@ function buildJs(watch) {
       },
       output: { filename: "index.js" }
     }))
-    .pipe(dest("dist"));
+    .pipe(dest("dist/popup/"));
 }
 
 exports.manifest = manifest;
