@@ -1,5 +1,6 @@
 const { src, dest, parallel, watch } = require('gulp');
 const webpack = require('webpack-stream');
+var buildSass = require('gulp-sass');
 
 function manifest() {
   return src("src/manifest.json")
@@ -17,6 +18,16 @@ function popupHtml() {
 
 function watchPopupManifest() {
   return watch("src/popup.html", popupHtml);
+}
+
+function sass() {
+  return src("sass/styles.sass")
+    .pipe(buildSass())
+    .pipe(dest("dist"));
+}
+
+function watchSass() {
+  return watch("sass/**/*.sass", sass)
 }
 
 function buildJs(watch) {
@@ -45,9 +56,10 @@ function buildJs(watch) {
 exports.manifest = manifest;
 exports.buildJs = buildJs;
 exports.popupHtml = popupHtml;
-exports.default = parallel(manifest, buildJs, popupHtml);
+exports.default = parallel(manifest, buildJs, popupHtml, sass);
 exports.watch = parallel(
   watchManifest,
   watchPopupManifest,
   buildJs.bind(undefined, true),
+  watchSass,
 );
