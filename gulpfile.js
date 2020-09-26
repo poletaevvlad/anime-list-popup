@@ -24,6 +24,7 @@ function buildJs(watch) {
     .pipe(webpack({
       mode: "development",
       watch: !!watch,
+      devtool: 'source-map',
       module: {
         rules: [
           {
