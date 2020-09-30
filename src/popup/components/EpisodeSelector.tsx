@@ -27,6 +27,8 @@ interface GrowableInputFieldProps {
     autoFocus: boolean,
     onBlur: () => void,
     onFocus: () => void,
+    onSubmit: () => void,
+    onCancel: () => void,
     fieldRef: React.MutableRefObject<HTMLInputElement>
 }
 
@@ -45,6 +47,15 @@ const GrowableInputField = (props: GrowableInputFieldProps) => {
         }}
         onBlur={props.onBlur}
         onFocus={props.onFocus}
+        onKeyDown={event => {
+            if (event.key == "Enter") {
+                props.fieldRef.current.blur();
+                event.preventDefault();
+            } else if (event.key == "Escape") {
+                props.onCancel();
+                event.preventDefault();
+            }
+        }}
         ref={props.fieldRef} />
 }
 
@@ -57,17 +68,25 @@ interface EpisodeSelectorProps {
 
 const EpisodeSelector = (props: EpisodeSelectorProps) => {
     const [focused, setFocused] = React.useState(false);
+    const [current, setCurrent] = React.useState(props.current);
     const fieldRef = React.useRef<HTMLInputElement>(null);
 
     return <div
         className={"episode-selector" + (focused ? " focused" : "")}
         onClick={event => fieldRef.current.focus()}>
         <GrowableInputField
-            value={props.current}
-            onChange={props.onChange}
+            value={current}
+            onChange={setCurrent}
             autoFocus={focused}
-            onBlur={() => setFocused(false)}
+            onBlur={() => {
+                setFocused(false);
+                if (props.current != current) {
+                    props.onChange(current);
+                }
+            }}
+            onSubmit={() => fieldRef.current.blur()}
             onFocus={() => setFocused(true)}
+            onCancel={() => setCurrent(props.current)}
             fieldRef={fieldRef} />
         /{props.totalEpisodes}
     </div>
