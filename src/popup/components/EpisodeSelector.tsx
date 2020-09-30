@@ -2,6 +2,7 @@ import * as React from "react";
 
 const computeWidth = (content: string) => {
     const span = document.createElement("span");
+    span.classList.add("episode-list-measurement")
     span.innerText = content;
     document.body.appendChild(span);
     const width = span.getBoundingClientRect().width;
@@ -12,6 +13,10 @@ const computeWidth = (content: string) => {
 interface GrowableInputFieldProps {
     value: number;
     onChange: (value: number) => void
+    autoFocus: boolean,
+    onBlur: () => void,
+    onFocus: () => void,
+    fieldRef: React.MutableRefObject<HTMLInputElement>
 }
 
 const GrowableInputField = (props: GrowableInputFieldProps) => {
@@ -28,19 +33,34 @@ const GrowableInputField = (props: GrowableInputFieldProps) => {
                 ? 0
                 : parseInt(event.target.value);
             props.onChange(newValue);
-        }} />
+        }}
+        onBlur={props.onBlur}
+        onFocus={props.onFocus}
+        ref={props.fieldRef} />
 }
 
-interface EpisodeSelector {
+interface EpisodeSelectorProps {
     current: number;
     totalEpisodes: number;
     onChange: (value: number) => void
 }
 
 
-const EpisodeSelector = (props: EpisodeSelector) => {
-    return <div className="episode-selector">
-        <GrowableInputField value={props.current} onChange={props.onChange} />
+const EpisodeSelector = (props: EpisodeSelectorProps) => {
+    const [focused, setFocused] = React.useState(false);
+    const fieldRef = React.useRef<HTMLInputElement>(null);
+
+    return <div
+        className={"episode-selector" + (focused ? " focused" : "")}
+        onClick={event => fieldRef.current.focus()}>
+        <GrowableInputField
+            value={props.current}
+            onChange={props.onChange}
+            autoFocus={focused}
+            onBlur={() => setFocused(false)}
+            onFocus={() => setFocused(true)}
+            fieldRef={fieldRef} />
+        /{props.totalEpisodes}
     </div>
 }
 
