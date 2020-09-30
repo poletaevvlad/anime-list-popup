@@ -1,0 +1,55 @@
+.progress-indicator
+  $tile-size: 7px
+  $tile-spacing: 3px
+
+  position: relative
+  width: $tile-size * 2 + $tile-spacing
+  height: $tile-size * 2 + $tile-spacing
+
+  .tile
+    background-color: $accent-dark
+    width: $tile-size
+    height: $tile-size
+    position: absolute
+    animation: progress-animation 1.5s infinite linear
+
+  .tile-tl
+    top: 0
+    left: 0
+    animation-delay: 0s
+
+  .tile-tr
+    top: 0
+    right: 0
+    animation-delay: 0.3s
+
+  .tile-bl
+    bottom: 0
+    left: 0
+    animation-delay: 0.2s
+
+  .tile-br
+    bottom: 0
+    right: 0
+    animation-delay: 0.1s
+
+@keyframes progress-animation
+  from
+    transform: rotate(0deg)
+    opacity: 1
+
+  20%
+    transform: rotate(90deg)
+    opacity: 1
+
+  28%
+    transform: rotate(90deg)
+    opacity: 0.5
+
+  92%
+    transform: rotate(90deg)
+    opacity: 0.5
+
+  to
+    transform: rotate(90deg)
+    opacity: 1
