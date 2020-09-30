@@ -11,6 +11,15 @@ function watchManifest() {
   return watch("src/manifest.json", manifest);
 }
 
+function assets() {
+  return src("assets/**/*")
+    .pipe(dest("dist/assets"))
+}
+
+function watchAssets() {
+  return watch("assets/**/*", assets)
+}
+
 function popupHtml() {
   return src("src/popup/popup.html")
     .pipe(dest("dist/popup"));
@@ -56,10 +65,11 @@ function buildJs(watch) {
 exports.manifest = manifest;
 exports.buildJs = buildJs;
 exports.popupHtml = popupHtml;
-exports.default = parallel(manifest, buildJs, popupHtml, sass);
+exports.default = parallel(manifest, buildJs, popupHtml, sass, assets);
 exports.watch = parallel(
   watchManifest,
   watchPopupManifest,
   buildJs.bind(undefined, true),
   watchSass,
+  watchAssets
 );
