@@ -1,0 +1,40 @@
+.dropdown
+  border-radius: 4px
+  overflow: hidden
+  display: inline-block
+  height: 24px
+  box-sizing: border-box
+  position: relative
+  border: 1px solid transparent
+
+  select
+    margin: 0
+    padding: 2px 24px 2px 8px
+    border-style: none
+    -webkit-appearance: none
+    -moz-appearance: none
+    appearance: none
+    line-height: 18px
+    background: transparent
+
+  .icon
+    position: absolute
+    right: 8px
+    top: 9px
+
+    path
+      fill: none
+      stroke: $accent
+      stroke-width: 1.5
+
+  #header-bar &
+    background-color: $accent-dark
+
+    select
+      color: white
+
+    .icon path
+      stroke: white
+
+  .content &
+    border-color: $input-border
