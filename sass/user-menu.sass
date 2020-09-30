@@ -10,6 +10,34 @@
   overflow: hidden
 
 .user-menu-inner
-  width: 150px
-  height: 200px
+  width: 175px
   background-color: white
+  padding: 6px 0
+
+.user-menu a
+  display: block
+  padding: 8px 12px
+  text-decoration: none
+  color: black
+
+  &:hover
+    background-color: #00000020
+
+  &:active
+    color: $accent-dark
+    background-color: transparentize($accent, 0.8) !important
+
+  &.with-avatar
+    padding: 6px 12px
+
+.avatar
+  display: inline-block
+  width: 24px
+  height: 24px
+  background-color: purple
+  vertical-align: middle
+  margin-right: 12px
+  background-color: #00000020
+  background-repeat: no-repeat
+  background-size: cover
+  background-position: center
