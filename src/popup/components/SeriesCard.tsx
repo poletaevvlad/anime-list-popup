@@ -25,7 +25,11 @@ interface SeriesCardProps {
 
 const SeriesCard = (props: SeriesCardProps) =>
     <div className="card">
-        <div className="series-cover" />
+        <div className="series-cover" style={
+            props.seriesInfo.coverUrl == null ? {} : {
+                backgroundImage: `url(${props.seriesInfo.coverUrl})`,
+                backgroundSize: "cover"
+            }} />
         <div className="series-description">
             <div className="series-name">{props.seriesInfo.name}</div>
             <div className="series-english-name">{props.seriesInfo.englishName}</div>
