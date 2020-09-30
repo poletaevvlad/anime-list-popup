@@ -41,7 +41,7 @@ const UserMenuButton = (props: UserMenuButtonProps) => {
     })
 
     return <div
-        className="header-button user-menu-button"
+        className="header-button user-menu-button icon-user-menu"
         tabIndex={0}
         onClick={_event => setOpened(true)}>
         {menu}
