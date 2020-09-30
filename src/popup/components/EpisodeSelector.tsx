@@ -10,6 +10,17 @@ const computeWidth = (content: string) => {
     return width;
 }
 
+const parseField = (value: string): number => {
+    let result = 0;
+    for (let i = 0; i < value.length; i++) {
+        const char = value.charAt(i);
+        if (char >= '0' && char <= '9') {
+            result = result * 10 + (char.charCodeAt(0) - '0'.charCodeAt(0));
+        }
+    }
+    return result;
+}
+
 interface GrowableInputFieldProps {
     value: number;
     onChange: (value: number) => void
@@ -29,9 +40,7 @@ const GrowableInputField = (props: GrowableInputFieldProps) => {
         style={{ width: `${width}px` }}
         value={props.value == 0 ? "" : valueString}
         onChange={event => {
-            const newValue = event.target.value == ""
-                ? 0
-                : parseInt(event.target.value);
+            const newValue = parseField(event.target.value);
             props.onChange(newValue);
         }}
         onBlur={props.onBlur}
