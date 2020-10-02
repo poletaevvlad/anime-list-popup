@@ -46,7 +46,7 @@ function Application() {
 document.addEventListener("DOMContentLoaded", () => {
     browser.tabs.create({
         active: true,
-        url: "/authentication.html",
+        url: "/auth.html",
     });
     window.close();
     render(<Application />, document.getElementById("app"));
