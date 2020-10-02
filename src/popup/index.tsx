@@ -3,7 +3,10 @@ import { render } from "react-dom";
 import { ApplicationState } from "./state/state"
 import { rootReducer } from "./state/reducers"
 import { Action, CurrentListChanged } from "./state/actions"
-import StatusDropdown from "./components/StatusDropdown"
+import StatusDropdown from "../components/StatusDropdown"
+import LoginPrompt from "../components/LoginPrompt"
+import Auth from "../listdata/auth";
+import { browser } from "webextension-polyfill-ts";
 
 function Application() {
     const initialValue: ApplicationState = {
@@ -27,6 +30,10 @@ function Application() {
 
     [state, dispatch] = React.useReducer<React.Reducer<ApplicationState, Action>>(reducer, initialValue);
 
+    if (!state.isLoggedIn) {
+        return <LoginPrompt onLoginRequested={() => { Auth.launchAuthentication(); }} />
+    }
+
     return <div>
         <div className="header-bar">
             <StatusDropdown
@@ -37,5 +44,10 @@ function Application() {
 }
 
 document.addEventListener("DOMContentLoaded", () => {
+    browser.tabs.create({
+        active: true,
+        url: "/authentication.html",
+    });
+    window.close();
     render(<Application />, document.getElementById("app"));
 });

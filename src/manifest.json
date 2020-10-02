@@ -3,7 +3,15 @@
   "name": "AnimeList",
   "version": "0.1",
   "browser_action": {
-    "default_popup": "popup/popup.html"
+    "default_popup": "popup.html"
   },
-  "content_security_policy": "default-src 'self'"
+  "content_security_policy": "default-src 'self'",
+  "permissions": [
+    "identity"
+  ],
+  "browser_specific_settings": {
+    "gecko": {
+      "id": "animelist@poletaevvlad.github.io"
+    }
+  }
 }

@@ -1,5 +1,5 @@
 import * as React from "react";
-import SeriesInfo from "../../listdata/seriesinfo";
+import SeriesInfo from "../listdata/seriesinfo";
 import Dropdown from "./Dropdown";
 import EpisodeSelector from "./EpisodeSelector";
 

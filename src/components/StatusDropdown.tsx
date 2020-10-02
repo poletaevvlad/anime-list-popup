@@ -1,5 +1,5 @@
 import * as React from "react";
-import { AnimeStatus } from "../state/state";
+import { AnimeStatus } from "../popup/state/state";
 import Dropdown from "./Dropdown";
 
 const statusLabels: { key: AnimeStatus, label: string }[] = [

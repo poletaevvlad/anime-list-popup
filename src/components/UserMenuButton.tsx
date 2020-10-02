@@ -1,5 +1,5 @@
 import * as React from "react";
-import UserInfo from "../../listdata/userinfo"
+import UserInfo from "../listdata/userinfo"
 
 interface UserMenuButtonProps {
     userInfo: UserInfo;

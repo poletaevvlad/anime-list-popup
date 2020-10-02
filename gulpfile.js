@@ -20,19 +20,18 @@ function watchAssets() {
   return watch("assets/**/*", assets)
 }
 
-function popupHtml() {
-  return src("src/popup/popup.html")
-    .pipe(dest("dist/popup"));
+function html() {
+  return src("html/*.html").pipe(dest("dist"));
 }
 
-function watchPopupManifest() {
-  return watch("src/popup/popup.html", popupHtml);
+function watchHtml() {
+  return watch("html/*.html", html);
 }
 
 function sass() {
   return src("sass/styles.sass")
     .pipe(buildSass())
-    .pipe(dest("dist/popup"));
+    .pipe(dest("dist/assets"));
 }
 
 function watchSass() {
@@ -43,7 +42,7 @@ function buildJs(watch) {
   return src("src/popup/index.tsx")
     .pipe(webpack({
       mode: "development",
-      watch: !!watch,
+      watch: watch,
       devtool: 'source-map',
       module: {
         rules: [
@@ -64,11 +63,11 @@ function buildJs(watch) {
 
 exports.manifest = manifest;
 exports.buildJs = buildJs;
-exports.popupHtml = popupHtml;
-exports.default = parallel(manifest, buildJs, popupHtml, sass, assets);
+exports.html = html;
+exports.default = parallel(manifest, buildJs.bind(undefined, false), html, sass, assets);
 exports.watch = parallel(
   watchManifest,
-  watchPopupManifest,
+  watchHtml,
   buildJs.bind(undefined, true),
   watchSass,
   watchAssets
