@@ -41,6 +41,10 @@ function watchSass() {
 function buildJs(watch) {
   return src("src/popup/index.tsx")
     .pipe(webpack({
+      entry: {
+        popup: "./src/popup/index.tsx",
+        auth: "./src/auth/index.tsx"
+      },
       mode: "development",
       watch: watch,
       devtool: 'source-map',
@@ -56,9 +60,9 @@ function buildJs(watch) {
       resolve: {
         extensions: ['.tsx', '.ts', '.js'],
       },
-      output: { filename: "index.js" }
+      output: { filename: "[name].js" }
     }))
-    .pipe(dest("dist/popup/"));
+    .pipe(dest("dist"));
 }
 
 exports.manifest = manifest;
