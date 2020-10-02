@@ -4,7 +4,6 @@ import { ApplicationState } from "./state/state"
 import { rootReducer } from "./state/reducers"
 import { Action, CurrentListChanged } from "./state/actions"
 import StatusDropdown from "../components/StatusDropdown"
-import LoginPrompt from "../components/LoginPrompt"
 import Auth from "../listdata/auth";
 import { browser } from "webextension-polyfill-ts";
 
@@ -29,10 +28,6 @@ function Application() {
         rootReducer(state, action, reducer);
 
     [state, dispatch] = React.useReducer<React.Reducer<ApplicationState, Action>>(reducer, initialValue);
-
-    if (!state.isLoggedIn) {
-        return <LoginPrompt onLoginRequested={() => { Auth.launchAuthentication(); }} />
-    }
 
     return <div>
         <div className="header-bar">
