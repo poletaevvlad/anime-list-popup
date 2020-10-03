@@ -1,12 +1,13 @@
 import * as React from "react";
-import { AnimeStatus } from "../popup/state/state";
+import { AnimeStatus } from "../listdata/api";
 import Dropdown from "./Dropdown";
 
 const statusLabels: { key: AnimeStatus, label: string }[] = [
     { key: "watching", label: "Currently Watching" },
     { key: "completed", label: "Completed" },
     { key: "on-hold", label: "On Hold" },
-    { key: "dropped", label: "Plan to Watch" },
+    { key: "dropped", label: "Dropped" },
+    { key: "plan-to-watch", label: "Plan to Watch" },
 ]
 
 interface StatusDropdownProps {
