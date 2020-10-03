@@ -7,6 +7,7 @@
   },
   "content_security_policy": "default-src 'self' https://myanimelist.net",
   "permissions": [
+    "storage",
     "identity",
     "https://myanimelist.net/v1/*"
   ],

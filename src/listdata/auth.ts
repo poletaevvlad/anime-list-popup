@@ -90,7 +90,6 @@ export default class Auth {
         tokenData.append("code_verifier", codeChallenge);
         tokenData.append("grant_type", "authorization_code");
         tokenData.append("redirect_uri", browser.identity.getRedirectURL());
-        console.log(tokenData.toString());
 
         const tokenResult = await fetch(new Request(tokenBaseUrl), {
             method: "POST",
