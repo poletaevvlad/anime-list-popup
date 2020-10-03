@@ -51,7 +51,7 @@ function extractQueryParams(url: string, param: string): string | null {
 }
 
 export default class Auth {
-    private token: AccessToken;
+    token: AccessToken;
 
     constructor(token: AccessToken) {
         this.token = token;

@@ -5,11 +5,12 @@
   "browser_action": {
     "default_popup": "popup.html"
   },
-  "content_security_policy": "default-src 'self' https://myanimelist.net",
+  "content_security_policy": "default-src 'self' https://myanimelist.net https://api.myanimelist.net",
   "permissions": [
     "storage",
     "identity",
-    "https://myanimelist.net/v1/*"
+    "https://myanimelist.net/v1/*",
+    "https://api.myanimelist.net/v2/*"
   ],
   "browser_specific_settings": {
     "gecko": {
