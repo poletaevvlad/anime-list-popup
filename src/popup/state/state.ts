@@ -5,7 +5,7 @@ import { AnimeStatus } from "../../listdata/api";
 export interface AnimeListEntry {
     series: SeriesInfo;
     episodesWatched: number;
-    assignedScore: boolean;
+    assignedScore: number;
 }
 
 export interface AnimeList {
