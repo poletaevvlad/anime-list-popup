@@ -7,26 +7,37 @@ import StatusDropdown from "../components/StatusDropdown"
 import Auth from "../listdata/auth";
 import { browser } from "webextension-polyfill-ts";
 import AuthToken from "../listdata/token";
+import API from "../listdata/api";
+import middleware from "./state/middleware";
 
-function Application() {
+interface ApplicationProps {
+    api: API
+}
+
+const Application = (props: ApplicationProps) => {
     const initialValue: ApplicationState = {
         isLoggedIn: false,
         userInfo: null,
         currentList: "watching",
         animeLists: {
-            "watching": { entries: [], isLoading: false },
-            "completed": { entries: [], isLoading: false },
-            "on-hold": { entries: [], isLoading: false },
-            "dropped": { entries: [], isLoading: false },
-            "plan-to-watch": { entries: [], isLoading: false },
+            "watching": { entries: [], status: "loading" },
+            "completed": { entries: [], status: "loading" },
+            "on-hold": { entries: [], status: "loading" },
+            "dropped": { entries: [], status: "loading" },
+            "plan-to-watch": { entries: [], status: "loading" },
         },
     }
 
     var state: ApplicationState;
     var dispatch: (action: Action) => void;
 
-    const reducer = (action: Action): ApplicationState =>
-        rootReducer(state, action, reducer);
+    const reducer = (action: Action): ApplicationState => {
+        const newAction = middleware(action, state, props.api);
+        if (newAction == null) {
+            return state;
+        }
+        return rootReducer(state, newAction, reducer);
+    }
 
     [state, dispatch] = React.useReducer<React.Reducer<ApplicationState, Action>>(reducer, initialValue);
 
@@ -47,6 +58,8 @@ document.addEventListener("DOMContentLoaded", () => {
             return;
         }
 
-        render(<Application />, document.getElementById("app"));
+        const auth = new Auth(token);
+        const api = new API(auth);
+        render(<Application api={api} />, document.getElementById("app"));
     });
 });

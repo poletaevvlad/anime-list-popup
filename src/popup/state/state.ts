@@ -10,7 +10,7 @@ export interface AnimeListEntry {
 
 export interface AnimeList {
     entries: AnimeListEntry[];
-    isLoading: boolean;
+    status: "loading" | "all_loaded" | "has_more_items"
 }
 
 export interface ApplicationState {
