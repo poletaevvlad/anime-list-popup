@@ -31,6 +31,25 @@ function constructUrl(baseUrl: string, query: { [key: string]: string }): string
     return baseUrl + "?" + queryParams.join("&");
 }
 
+function extractQueryParams(url: string, param: string): string | null {
+    const separator = url.indexOf("?");
+    if (separator == -1) {
+        return null;
+    }
+    const query = url.substr(separator + 1).split("&");
+    for (var i = 0; i < query.length; i++) {
+        const paramNameSeparator = query[i].indexOf("=")
+        if (paramNameSeparator >= -1) {
+            const paramName = query[i].substring(0, paramNameSeparator);
+            if (paramName == param) {
+                const result = query[i].substring(paramNameSeparator + 1);
+                return decodeURIComponent(result);
+            }
+        }
+    }
+    return null;
+}
+
 export default class Auth {
     private token: AccessToken;
 
@@ -43,7 +62,7 @@ export default class Auth {
         return new Auth(token);
     }
 
-    static launchAuthentication() {
+    static async launchAuthentication(): Promise<AccessToken> {
         const codeChallenge = generateCodeChallenge();
         const baseUrl = "https://myanimelist.net/v1/oauth2/authorize";
         const params = {
@@ -52,13 +71,40 @@ export default class Auth {
             "code_challenge": codeChallenge,
             "code_challenge_method": "plain",
             "redirect_uri": browser.identity.getRedirectURL(),
-        }
+        };
 
-        console.log(constructUrl(baseUrl, params));
-
-        browser.identity.launchWebAuthFlow({
+        const redirectURI = await browser.identity.launchWebAuthFlow({
             url: constructUrl(baseUrl, params),
             interactive: true,
-        }).then((x) => console.log(x));
+        });
+
+        const code = extractQueryParams(redirectURI, "code");
+        if (code == null) {
+            return Promise.reject(extractQueryParams(redirectURI, "hint"));
+        }
+
+        const tokenBaseUrl = "https://myanimelist.net/v1/oauth2/token";
+        const tokenData = new URLSearchParams();
+        tokenData.append("client_id", CLIENT_ID);
+        tokenData.append("code", code);
+        tokenData.append("code_verifier", codeChallenge);
+        tokenData.append("grant_type", "authorization_code");
+        tokenData.append("redirect_uri", browser.identity.getRedirectURL());
+        console.log(tokenData.toString());
+
+        const tokenResult = await fetch(new Request(tokenBaseUrl), {
+            method: "POST",
+            body: tokenData,
+        });
+        const token = await tokenResult.json();
+        if (typeof (token["error"]) != "undefined") {
+            return Promise.reject(token["message"]);
+        }
+        return new AccessToken({
+            accessToken: token["access_token"],
+            refreshToken: token["refresh_token"],
+            expiresIn: token["expires_in"],
+            issuedDate: new Date().getTime(),
+        })
     }
 }
