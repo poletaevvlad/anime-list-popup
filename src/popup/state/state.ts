@@ -1,7 +1,6 @@
 import SeriesInfo from "../../listdata/seriesinfo";
 import UserInfo from "../../listdata/userinfo";
-
-export type AnimeStatus = "watching" | "completed" | "on-hold" | "dropped" | "plan-to-watch";
+import { AnimeStatus } from "../../listdata/api";
 
 export interface AnimeListEntry {
     series: SeriesInfo;

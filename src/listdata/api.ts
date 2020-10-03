@@ -1,5 +1,36 @@
 import Auth from "./auth";
 import UserInfo from "./userinfo";
+import SeriesInfo from "./seriesinfo";
+import { constructUrl } from "./auth";
+
+export type AnimeStatus = "watching" | "completed" | "on-hold" | "dropped" | "plan-to-watch";
+
+const apiStatusNames: { [key in AnimeStatus]: string } = {
+    "watching": "watching",
+    "completed": "completed",
+    "on-hold": "on_hold",
+    "dropped": "dropped",
+    "plan-to-watch": "plan_to_watch",
+}
+
+interface AnimeListResponse {
+    hasMoreItems: boolean,
+    items: {
+        series: SeriesInfo;
+        episodesWatched: number;
+        assignedScore: boolean;
+    }
+}
+
+type SeasonObject = {
+    season: string
+    year: number
+}
+
+function formatSeason(season: SeasonObject): string {
+    const seasonName = season.season.charAt(0).toUpperCase() + season.season.substring(1);
+    return seasonName + " " + season.year.toString();
+}
 
 export default class API {
     private auth: Auth;
@@ -26,5 +57,33 @@ export default class API {
             "https://api.myanimelist.net/v2/users/@me", {}
         );
         return new UserInfo(data["name"] as string, data["picture"] as string);
+    }
+
+    async getAnimeList(status: AnimeStatus, offset: number): Promise<AnimeListResponse> {
+        const url = constructUrl("https://api.myanimelist.net/v2/users/@me/animelist", {
+            "status": apiStatusNames[status],
+            "offset": offset.toString(),
+            "limit": "25",
+            "fields": "alternative_titles,num_episodes,mean,my_list_status{num_episodes_watched,score},start_season",
+        });
+        const values = await this.makeApiCall(url, {});
+        return {
+            hasMoreItems: typeof (values.paging.next) != "undefined",
+            items: values.data.map((item: any) => {
+                const node: any = item.node;
+                return {
+                    episodesWatched: node.my_list_status.num_episodes_watched,
+                    assignedScore: node.my_list_status.score,
+                    series: new SeriesInfo({
+                        name: node.title,
+                        englishName: node.alternative_titles.en,
+                        score: node.mean,
+                        coverUrl: node.main_picture.medium,
+                        totalEpisodes: node.num_episodes,
+                        season: formatSeason(node.start_season),
+                    }),
+                }
+            })
+        }
     }
 }

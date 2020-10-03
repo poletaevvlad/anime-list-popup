@@ -23,7 +23,7 @@ function generateCodeChallenge(): string {
     return result.join("");
 }
 
-function constructUrl(baseUrl: string, query: { [key: string]: string }): string {
+export function constructUrl(baseUrl: string, query: { [key: string]: string }): string {
     const queryParams: string[] = [];
     for (var key in query) {
         queryParams.push(key + "=" + encodeURIComponent(query[key]));
