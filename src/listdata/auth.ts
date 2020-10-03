@@ -80,7 +80,8 @@ export default class Auth {
 
         const code = extractQueryParams(redirectURI, "code");
         if (code == null) {
-            return Promise.reject(extractQueryParams(redirectURI, "hint"));
+            var hint = extractQueryParams(redirectURI, "hint").split("+").join(" ");
+            return Promise.reject("Error: " + hint);
         }
 
         const tokenBaseUrl = "https://myanimelist.net/v1/oauth2/token";
@@ -97,7 +98,7 @@ export default class Auth {
         });
         const token = await tokenResult.json();
         if (typeof (token["error"]) != "undefined") {
-            return Promise.reject(token["message"]);
+            return Promise.reject("Error: " + token["message"]);
         }
         return new AccessToken({
             accessToken: token["access_token"],
