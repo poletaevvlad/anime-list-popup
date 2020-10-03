@@ -1,4 +1,4 @@
-import { AnimeStatus } from "./state";
+import { AnimeStatus } from "../../listdata/api";
 import UserInfo from "../../listdata/userinfo";
 
 export interface Action { }
