@@ -13,7 +13,7 @@ interface AnimeSeriesListProps {
 }
 
 const AnimeSeriesList = (props: AnimeSeriesListProps) => {
-    return <div className="anime-list">
+    return <div className="anime-list content">
         {props.entries.map(entry => {
             return <SeriesCard
                 seriesInfo={entry.series}

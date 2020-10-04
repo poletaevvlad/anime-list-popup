@@ -5,7 +5,7 @@
   "browser_action": {
     "default_popup": "popup.html"
   },
-  "content_security_policy": "default-src 'self' https://myanimelist.net https://api.myanimelist.net",
+  "content_security_policy": "default-src 'self' https://myanimelist.net https://api.myanimelist.net https://api-cdn.myanimelist.net",
   "permissions": [
     "storage",
     "identity",
