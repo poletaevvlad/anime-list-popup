@@ -10,6 +10,7 @@ import AuthToken from "../listdata/token";
 import API, { AnimeStatus, SeriesUpdate } from "../listdata/api";
 import AsyncDispatcher from "./state/asyncDispatcher";
 import UserMenuButton from "../components/UserMenuButton"
+import ProgressIndicator from "../components/ProgressIndicator"
 
 interface ApplicationProps {
     asyncDispatcher: AsyncDispatcher
@@ -56,8 +57,9 @@ const Application = (props: ApplicationProps) => {
     return <div>
         <div className="header-bar">
             <div className="header-right">
-                {state.loadingCounter > 0 ? null :
-                    <div className="header-button icon-refresh" tabIndex={0} onClick={refreshData} />}
+                {state.loadingCounter > 0
+                    ? <div className="header-progress"><ProgressIndicator /></div>
+                    : <div className="header-button icon-refresh" tabIndex={0} onClick={refreshData} />}
                 {state.userInfo == null ? null : <UserMenuButton userInfo={state.userInfo} />}
             </div>
             <StatusDropdown value={state.currentList} onChange={currentListChanged} />
