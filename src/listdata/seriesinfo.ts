@@ -24,4 +24,8 @@ export default class SeriesInfo {
         this.totalEpisodes = props.totalEpisodes;
         this.season = props.season
     }
+
+    get pageUrl(): string {
+        return "https://myanimelist.net/anime/" + this.id.toString();
+    }
 }

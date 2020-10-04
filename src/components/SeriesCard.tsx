@@ -34,7 +34,9 @@ const SeriesCard = (props: SeriesCardProps) =>
                 backgroundSize: "cover"
             }} />
         <div className="series-description">
-            <div className="series-name">{props.seriesInfo.name}</div>
+            <div className="series-name">
+                <a href={props.seriesInfo.pageUrl}>{props.seriesInfo.name}</a>
+            </div>
             <div className="series-english-name">{props.seriesInfo.englishName}</div>
         </div>
         <div className="series-controls">
