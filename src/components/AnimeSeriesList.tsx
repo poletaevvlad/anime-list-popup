@@ -20,9 +20,12 @@ const AnimeSeriesList = (props: AnimeSeriesListProps) => {
                 watched={entry.episodesWatched}
                 assignedScore={entry.assignedScore} />
         })}
-        <div className="anime-list-footer">
-            <ProgressIndicator />
-        </div>
+        {props.isLoading
+            ? <div className="anime-list-footer">
+                <ProgressIndicator />
+            </div>
+            : null}
+
     </div>
 }
 

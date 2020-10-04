@@ -52,6 +52,9 @@ const Application = (props: ApplicationProps) => {
                 value={state.currentList}
                 onChange={(value) => dispatch({ type: "current-list-changed", status: value })} />
         </div>
+        <AnimeSeriesList
+            isLoading={state.animeLists[state.currentList].status == "loading"}
+            entries={state.animeLists[state.currentList].entries} />
     </div>;
 }
 
