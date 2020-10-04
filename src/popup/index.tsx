@@ -2,7 +2,7 @@ import * as React from "react";
 import { render } from "react-dom";
 import { ApplicationState } from "./state/state"
 import { rootReducer } from "./state/reducers"
-import { Action, CurrentListChanged } from "./state/actions"
+import Action from "./state/actions"
 import StatusDropdown from "../components/StatusDropdown"
 import Auth from "../listdata/auth";
 import { browser } from "webextension-polyfill-ts";
@@ -31,21 +31,26 @@ const Application = (props: ApplicationProps) => {
     var state: ApplicationState;
     var dispatch: (action: Action) => void;
 
-    const reducer = (action: Action): ApplicationState => {
-        const newAction = middleware(action, state, props.api);
-        if (newAction == null) {
-            return state;
+    const reducer = (state: ApplicationState, action: Action): ApplicationState => {
+        const actions: Action[] = [action];
+        while (actions.length > 0) {
+            const action = actions.shift();
+            const newAction = middleware(action, state, props.api);
+            if (newAction == null) {
+                continue;
+            }
+            state = rootReducer(state, newAction, actions.push);
         }
-        return rootReducer(state, newAction, reducer);
+        return state;
     }
 
-    [state, dispatch] = React.useReducer<React.Reducer<ApplicationState, Action>>(reducer, initialValue);
+    const [state, dispatch] = React.useReducer(reducer, initialValue);
 
     return <div>
         <div className="header-bar">
             <StatusDropdown
                 value={state.currentList}
-                onChange={(value) => dispatch(new CurrentListChanged(value))} />
+                onChange={(value) => dispatch({ type: "current-list-changed", status: value })} />
         </div>
     </div>;
 }

@@ -1,20 +1,8 @@
 import { AnimeStatus } from "../../listdata/api";
 import UserInfo from "../../listdata/userinfo";
 
-export interface Action { }
+type Action =
+    { type: "current-list-changed", status: AnimeStatus } |
+    { type: "user-info-loaded", userInfo: UserInfo };
 
-export class CurrentListChanged implements Action {
-    readonly newStatus: AnimeStatus;
-
-    constructor(newStatus: AnimeStatus) {
-        this.newStatus = newStatus;
-    }
-}
-
-export class UserInfoLoaded implements Action {
-    readonly userInfo: UserInfo;
-
-    constructor(userInfo: UserInfo) {
-        this.userInfo = userInfo;
-    }
-}
+export default Action;

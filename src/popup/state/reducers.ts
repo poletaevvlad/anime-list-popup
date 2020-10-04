@@ -1,4 +1,4 @@
-import { Action, CurrentListChanged, UserInfoLoaded } from "./actions";
+import Action from "./actions";
 import { ApplicationState } from "./state";
 
 export type Dispatch = (action: Action) => void;
@@ -7,11 +7,12 @@ export type Reducer<T> =
 
 export const rootReducer: Reducer<ApplicationState> =
     (current, action, dispatch) => {
-        if (action instanceof CurrentListChanged) {
-            return { ...current, currentList: action.newStatus }
-        } else if (action instanceof UserInfoLoaded) {
-            return { ...current, userInfo: action.userInfo }
-        } else {
-            return { ...current }
+        switch (action.type) {
+            case "current-list-changed":
+                return { ...current, currentList: action.status };
+            case "user-info-loaded":
+                return { ...current, userInfo: action.userInfo };
+            default:
+                return { ...current };
         }
     }
