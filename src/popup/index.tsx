@@ -54,6 +54,7 @@ const Application = (props: ApplicationProps) => {
         props.asyncDispatcher.loadAnimeList(state.currentList, 0);
     }
 
+    const currentList = state.animeLists[state.currentList];
     return <div>
         <div className="header-bar">
             <div className="header-right">
@@ -64,14 +65,17 @@ const Application = (props: ApplicationProps) => {
             </div>
             <StatusDropdown value={state.currentList} onChange={currentListChanged} />
         </div>
-        <AnimeSeriesList
-            isLoading={state.animeLists[state.currentList].status == "loading"}
-            entries={state.animeLists[state.currentList].entries}
-            watchScrolling={state.animeLists[state.currentList].status == "has_more_items"}
-            onScrolledToBottom={listScrolledToBottom}
-            disabledSeries={state.updatingAnime}
-            onScoreChanged={(id, score) => episodeUpdated(id, { assignedScore: score })}
-            onWatchedEpisodesChanged={(id, episodes) => episodeUpdated(id, { episodesWatched: episodes })} />
+        {currentList.status == "all_loaded" && currentList.entries.length == 0
+            ? <div className="anime-list empty-list">This list is empty</div>
+            : <AnimeSeriesList
+                isLoading={currentList.status == "loading"}
+                entries={currentList.entries}
+                watchScrolling={currentList.status == "has_more_items"}
+                onScrolledToBottom={listScrolledToBottom}
+                disabledSeries={state.updatingAnime}
+                onScoreChanged={(id, score) => episodeUpdated(id, { assignedScore: score })}
+                onWatchedEpisodesChanged={(id, episodes) => episodeUpdated(id, { episodesWatched: episodes })} />
+        }
     </div>;
 }
 
