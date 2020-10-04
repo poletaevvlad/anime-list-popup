@@ -67,13 +67,32 @@ const animeListReducer: Reducer<{ [key in AnimeStatus]: AnimeList }> = (current,
     }
 }
 
+const loadingCounterReducer: Reducer<number> = (current, action) => {
+    switch (action.type) {
+        case "loading-anime-list":
+        case "series-updating":
+            return current + 1;
+
+        case "anime-loading-finished":
+        case "series-update-done":
+            return current - 1;
+
+        default:
+            return current
+    }
+}
+
 export const rootReducer: Reducer<ApplicationState> = (current, action) => {
+    current = {
+        ...current,
+        loadingCounter: loadingCounterReducer(current.loadingCounter, action)
+    };
     switch (action.type) {
         case "current-list-changed":
             const list = current.animeLists[action.status];
             return {
                 ...current,
-                currentList: action.status
+                currentList: action.status,
             };
         case "user-info-loaded":
             return {
