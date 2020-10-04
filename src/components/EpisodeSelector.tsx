@@ -30,6 +30,7 @@ interface GrowableInputFieldProps {
     onSubmit: () => void,
     onCancel: () => void,
     fieldRef: React.MutableRefObject<HTMLInputElement>
+    enabled: boolean
 }
 
 const GrowableInputField = (props: GrowableInputFieldProps) => {
@@ -56,15 +57,16 @@ const GrowableInputField = (props: GrowableInputFieldProps) => {
                 event.preventDefault();
             }
         }}
-        ref={props.fieldRef} />
+        ref={props.fieldRef}
+        disabled={!props.enabled} />
 }
 
 interface EpisodeSelectorProps {
     current: number;
     totalEpisodes: number;
     onChange: (value: number) => void
+    enabled?: boolean
 }
-
 
 const EpisodeSelector = (props: EpisodeSelectorProps) => {
     const [focused, setFocused] = React.useState(false);
@@ -87,7 +89,8 @@ const EpisodeSelector = (props: EpisodeSelectorProps) => {
             onSubmit={() => fieldRef.current.blur()}
             onFocus={() => setFocused(true)}
             onCancel={() => setCurrent(props.current)}
-            fieldRef={fieldRef} />
+            fieldRef={fieldRef}
+            enabled={!!props.enabled} />
         /{props.totalEpisodes}
     </div>
 }

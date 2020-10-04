@@ -4,11 +4,12 @@ interface DropdownProps {
     value: string;
     options: { key: string, label: string }[];
     onChange: (value: string) => void;
+    enabled?: boolean
 }
 
 const Dropdown = (props: DropdownProps) => {
     return <div className="dropdown">
-        <select value={props.value}
+        <select value={props.value} disabled={!props.enabled}
             onChange={event => props.onChange(event.target.value)}>
             {props.options.map(({ key, label }) =>
                 <option key={key} value={key}>{label}</option>

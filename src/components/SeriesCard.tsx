@@ -21,10 +21,11 @@ interface SeriesCardProps {
     seriesInfo: SeriesInfo
     watched: number
     assignedScore: number
+    enabled: boolean
 }
 
 const SeriesCard = (props: SeriesCardProps) =>
-    <div className="card">
+    <div className={props.enabled ? "card" : "card disabled"}>
         <div className="series-cover" style={
             props.seriesInfo.coverUrl == null ? {} : {
                 backgroundImage: `url(${props.seriesInfo.coverUrl})`,
@@ -42,11 +43,13 @@ const SeriesCard = (props: SeriesCardProps) =>
             <Dropdown
                 value={props.assignedScore.toString()}
                 options={SCORE_LABELS}
-                onChange={() => { }} />
+                onChange={() => { }}
+                enabled={props.enabled} />
             <EpisodeSelector
                 current={props.watched}
                 totalEpisodes={props.seriesInfo.totalEpisodes}
-                onChange={() => { }} />
+                onChange={() => { }}
+                enabled={props.enabled} />
         </div>
     </div>
 

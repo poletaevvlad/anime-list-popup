@@ -29,7 +29,8 @@ const AnimeSeriesList = (props: AnimeSeriesListProps) => {
                 key={entry.series.id.toString()}
                 seriesInfo={entry.series}
                 watched={entry.episodesWatched}
-                assignedScore={entry.assignedScore} />
+                assignedScore={entry.assignedScore}
+                enabled={true} />
         })}
         {props.isLoading
             ? <div className="anime-list-footer">
