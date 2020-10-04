@@ -11,7 +11,7 @@ const animeListReducer: Reducer<{ [key in AnimeStatus]: AnimeList }> = (current,
                 ...current,
                 [action.status]: {
                     entries: [...current[action.status].entries, ...action.entries],
-                    status: action.hasMoreEntries ? "has_more_items" : "loading"
+                    status: action.hasMoreEntries ? "has_more_items" : "all_loaded"
                 }
             };
         case "loading-anime-list":
