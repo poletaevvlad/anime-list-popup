@@ -10,6 +10,7 @@ export interface ApplicationState {
     userInfo: UserInfo;
     currentList: AnimeStatus;
     animeLists: { [key in AnimeStatus]: AnimeList };
+    updatingAnime: Set<number>
 }
 
 export const INITIAL_STATE: ApplicationState = {
@@ -22,4 +23,5 @@ export const INITIAL_STATE: ApplicationState = {
         "dropped": { entries: [], status: "has_more_items" },
         "plan-to-watch": { entries: [], status: "has_more_items" },
     },
+    updatingAnime: new Set<number>()
 }

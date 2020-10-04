@@ -12,6 +12,9 @@ interface AnimeSeriesListProps {
         episodesWatched: number;
         assignedScore: number;
     }[]
+    disabledSeries: Set<number>
+    onScoreChanged: (seriesId: number, newScore: number) => void
+    onWatchedEpisodesChanged: (seriesId: number, numEpisodes: number) => void
 }
 
 const AnimeSeriesList = (props: AnimeSeriesListProps) => {
@@ -30,7 +33,10 @@ const AnimeSeriesList = (props: AnimeSeriesListProps) => {
                 seriesInfo={entry.series}
                 watched={entry.episodesWatched}
                 assignedScore={entry.assignedScore}
-                enabled={true} />
+                enabled={!props.disabledSeries.has(entry.series.id)}
+                onScoreChanged={(score) => props.onScoreChanged(entry.series.id, score)}
+                onEpisodesCountChanged={(episodes) =>
+                    props.onWatchedEpisodesChanged(entry.series.id, episodes)} />
         })}
         {props.isLoading
             ? <div className="anime-list-footer">

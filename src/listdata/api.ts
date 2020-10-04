@@ -35,6 +35,11 @@ function formatSeason(season: SeasonObject): string {
     return seasonName + " " + season.year.toString();
 }
 
+export type SeriesUpdate = {
+    episodesWatched?: number
+    assignedScore?: number
+}
+
 export default class API {
     private auth: Auth;
 

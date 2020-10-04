@@ -7,7 +7,7 @@ import AnimeSeriesList from "../components/AnimeSeriesList";
 import Auth from "../listdata/auth";
 import { browser } from "webextension-polyfill-ts";
 import AuthToken from "../listdata/token";
-import API, { AnimeStatus } from "../listdata/api";
+import API, { AnimeStatus, SeriesUpdate } from "../listdata/api";
 import AsyncDispatcher from "./state/asyncDispatcher";
 import UserMenuButton from "../components/UserMenuButton"
 
@@ -38,6 +38,15 @@ const Application = (props: ApplicationProps) => {
         }
     }
 
+    const episodeUpdated = (seriesId: number, update: SeriesUpdate) => {
+        dispatch({
+            type: "series-updating",
+            seriesId: seriesId,
+            status: state.currentList,
+            update: update,
+        });
+    }
+
     return <div>
         <div className="header-bar">
             <div className="header-right">
@@ -49,7 +58,10 @@ const Application = (props: ApplicationProps) => {
             isLoading={state.animeLists[state.currentList].status == "loading"}
             entries={state.animeLists[state.currentList].entries}
             watchScrolling={state.animeLists[state.currentList].status == "has_more_items"}
-            onScrolledToBottom={listScrolledToBottom} />
+            onScrolledToBottom={listScrolledToBottom}
+            disabledSeries={state.updatingAnime}
+            onScoreChanged={(id, score) => episodeUpdated(id, { assignedScore: score })}
+            onWatchedEpisodesChanged={(id, episodes) => episodeUpdated(id, { episodesWatched: episodes })} />
     </div>;
 }
 

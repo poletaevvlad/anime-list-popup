@@ -1,4 +1,4 @@
-import { AnimeStatus } from "../../listdata/api";
+import { AnimeStatus, AnimeListEntry } from "../../listdata/api";
 import Action from "./actions";
 import { ApplicationState, AnimeList } from "./state";
 
@@ -22,6 +22,26 @@ const animeListReducer: Reducer<{ [key in AnimeStatus]: AnimeList }> = (current,
                     status: "loading",
                 }
             }
+        case "series-updating":
+            return {
+                ...current,
+                [action.status]: {
+                    ...current[action.status],
+                    entries: current[action.status].entries.map(entry => {
+                        if (entry.series.id != action.seriesId) {
+                            return entry;
+                        }
+                        const newEntry: AnimeListEntry = {
+                            series: entry.series,
+                            episodesWatched: typeof (action.update.episodesWatched) == "undefined"
+                                ? entry.episodesWatched : action.update.episodesWatched,
+                            assignedScore: typeof (action.update.assignedScore) == "undefined"
+                                ? entry.assignedScore : action.update.assignedScore,
+                        };
+                        return newEntry;
+                    })
+                }
+            }
         default:
             return { ...current };
     }
@@ -40,6 +60,12 @@ export const rootReducer: Reducer<ApplicationState> = (current, action) => {
                 ...current,
                 userInfo: action.userInfo
             };
+        case "series-updating":
+            return {
+                ...current,
+                updatingAnime: new Set([...current.updatingAnime, action.seriesId]),
+                animeLists: animeListReducer(current.animeLists, action),
+            }
         default:
             return {
                 ...current,

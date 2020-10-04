@@ -22,6 +22,8 @@ interface SeriesCardProps {
     watched: number
     assignedScore: number
     enabled: boolean
+    onScoreChanged: (newScore: number) => void
+    onEpisodesCountChanged: (newEpisodesCount: number) => void
 }
 
 const SeriesCard = (props: SeriesCardProps) =>
@@ -43,12 +45,12 @@ const SeriesCard = (props: SeriesCardProps) =>
             <Dropdown
                 value={props.assignedScore.toString()}
                 options={SCORE_LABELS}
-                onChange={() => { }}
+                onChange={value => props.onScoreChanged(parseInt(value))}
                 enabled={props.enabled} />
             <EpisodeSelector
                 current={props.watched}
                 totalEpisodes={props.seriesInfo.totalEpisodes}
-                onChange={() => { }}
+                onChange={value => props.onEpisodesCountChanged(value)}
                 enabled={props.enabled} />
         </div>
     </div>
