@@ -2,6 +2,7 @@ import * as React from "react";
 import SeriesInfo from "../listdata/seriesinfo";
 import SeriesCard from "./SeriesCard";
 import ProgressIndicator from "./ProgressIndicator";
+import { AnimeStatus } from "../listdata/api";
 
 interface AnimeSeriesListProps {
     isLoading: boolean
@@ -15,6 +16,7 @@ interface AnimeSeriesListProps {
     disabledSeries: Set<number>
     onScoreChanged: (seriesId: number, newScore: number) => void
     onWatchedEpisodesChanged: (seriesId: number, numEpisodes: number) => void
+    animeStatus: AnimeStatus
 }
 
 const AnimeSeriesList = (props: AnimeSeriesListProps) => {
@@ -25,7 +27,12 @@ const AnimeSeriesList = (props: AnimeSeriesListProps) => {
         }
     }
 
-    return <div className="anime-list content"
+    const scrollRef = React.useRef<HTMLDivElement>();
+    React.useEffect(() => {
+        scrollRef.current.scrollTo({ top: 0 });
+    }, [props.animeStatus]);
+
+    return <div className="anime-list content" ref={scrollRef}
         onScroll={props.watchScrolling ? onScrolled : undefined}>
         {props.entries.map(entry => {
             return <SeriesCard

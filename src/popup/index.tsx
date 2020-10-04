@@ -74,7 +74,8 @@ const Application = (props: ApplicationProps) => {
                 onScrolledToBottom={listScrolledToBottom}
                 disabledSeries={state.updatingAnime}
                 onScoreChanged={(id, score) => episodeUpdated(id, { assignedScore: score })}
-                onWatchedEpisodesChanged={(id, episodes) => episodeUpdated(id, { episodesWatched: episodes })} />
+                onWatchedEpisodesChanged={(id, episodes) => episodeUpdated(id, { episodesWatched: episodes })}
+                animeStatus={state.currentList} />
         }
     </div>;
 }
