@@ -1,4 +1,4 @@
-import API, { AnimeStatus } from "../../listdata/api";
+import API, { AnimeStatus, SeriesUpdate } from "../../listdata/api";
 import Action from "./actions";
 import { ApplicationState } from "./state";
 
@@ -53,6 +53,18 @@ class AsyncDispatcher {
                 type: "user-info-loaded",
                 userInfo: result
             });
+        })
+    }
+
+    updateSeries(seriesId: number, update: SeriesUpdate) {
+        this.api.updateAnimeEntry(seriesId, update).then(result => {
+            this.dispatch({
+                type: "series-update-done",
+                seriesId: seriesId,
+                status: result.status,
+                score: result.score,
+                episodesWatched: result.episodesWatched,
+            })
         })
     }
 }

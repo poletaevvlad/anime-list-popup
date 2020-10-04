@@ -40,6 +40,12 @@ export type SeriesUpdate = {
     assignedScore?: number
 }
 
+export type SeriesUpdateResult = {
+    status: AnimeStatus
+    score: number
+    episodesWatched: number
+}
+
 export default class API {
     private auth: Auth;
 
@@ -93,6 +99,26 @@ export default class API {
                     }),
                 }
             })
+        }
+    }
+
+    async updateAnimeEntry(
+        seriesId: number,
+        update: SeriesUpdate
+    ): Promise<SeriesUpdateResult> {
+        const url = "https://api.myanimelist.net/v2/anime/" + seriesId.toString() + "/my_list_status";
+        const data = new URLSearchParams();
+        if (typeof (update.assignedScore) != "undefined") {
+            data.append("score", update.assignedScore.toString());
+        }
+        if (typeof (update.episodesWatched) != "undefined") {
+            data.append("num_watched_episodes", update.episodesWatched.toString());
+        }
+        const response = await this.makeApiCall(url, { method: "PATCH", body: data });
+        return {
+            status: response.status,
+            score: response.score,
+            episodesWatched: response.num_episodes_watched,
         }
     }
 }

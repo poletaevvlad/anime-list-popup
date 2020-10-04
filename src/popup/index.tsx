@@ -45,6 +45,7 @@ const Application = (props: ApplicationProps) => {
             status: state.currentList,
             update: update,
         });
+        props.asyncDispatcher.updateSeries(seriesId, update);
     }
 
     return <div>

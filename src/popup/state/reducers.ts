@@ -42,6 +42,24 @@ const animeListReducer: Reducer<{ [key in AnimeStatus]: AnimeList }> = (current,
                     })
                 }
             }
+        case "series-update-done":
+            return {
+                ...current,
+                [action.status]: {
+                    ...current[action.status],
+                    entries: current[action.status].entries.map(entry => {
+                        if (entry.series.id != action.seriesId) {
+                            return entry;
+                        }
+                        return {
+                            series: entry.series,
+                            episodesWatched: action.episodesWatched,
+                            assignedScore: action.score,
+                        };
+                    })
+
+                }
+            }
         default:
             return { ...current };
     }
@@ -64,6 +82,14 @@ export const rootReducer: Reducer<ApplicationState> = (current, action) => {
             return {
                 ...current,
                 updatingAnime: new Set([...current.updatingAnime, action.seriesId]),
+                animeLists: animeListReducer(current.animeLists, action),
+            }
+        case "series-update-done":
+            const updating = new Set(current.updatingAnime);
+            updating.delete(action.seriesId)
+            return {
+                ...current,
+                updatingAnime: updating,
                 animeLists: animeListReducer(current.animeLists, action),
             }
         default:

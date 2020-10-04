@@ -12,6 +12,13 @@ type Action =
         entries: AnimeListEntry[],
         hasMoreEntries: boolean
     } |
-    { type: "series-updating", seriesId: number, update: SeriesUpdate, status: AnimeStatus };
+    { type: "series-updating", seriesId: number, update: SeriesUpdate, status: AnimeStatus } |
+    {
+        type: "series-update-done",
+        seriesId: number,
+        status: AnimeStatus,
+        episodesWatched: number,
+        score: number
+    };
 
 export default Action;
