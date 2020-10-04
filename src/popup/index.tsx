@@ -56,7 +56,8 @@ const Application = (props: ApplicationProps) => {
     return <div>
         <div className="header-bar">
             <div className="header-right">
-                <div className="header-button icon-refresh" tabIndex={0} onClick={refreshData} />
+                {state.loadingCounter > 0 ? null :
+                    <div className="header-button icon-refresh" tabIndex={0} onClick={refreshData} />}
                 {state.userInfo == null ? null : <UserMenuButton userInfo={state.userInfo} />}
             </div>
             <StatusDropdown value={state.currentList} onChange={currentListChanged} />
