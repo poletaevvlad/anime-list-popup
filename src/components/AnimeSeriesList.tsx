@@ -16,6 +16,7 @@ const AnimeSeriesList = (props: AnimeSeriesListProps) => {
     return <div className="anime-list content">
         {props.entries.map(entry => {
             return <SeriesCard
+                key={entry.series.id.toString()}
                 seriesInfo={entry.series}
                 watched={entry.episodesWatched}
                 assignedScore={entry.assignedScore} />

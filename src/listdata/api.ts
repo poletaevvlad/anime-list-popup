@@ -78,6 +78,7 @@ export default class API {
                     episodesWatched: node.my_list_status.num_episodes_watched,
                     assignedScore: node.my_list_status.score,
                     series: new SeriesInfo({
+                        id: node.id,
                         name: node.title,
                         englishName: node.alternative_titles.en,
                         score: node.mean,

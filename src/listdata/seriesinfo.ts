@@ -1,4 +1,5 @@
 export default class SeriesInfo {
+    readonly id: number
     readonly name: string
     readonly englishName: string
     readonly score: number | null
@@ -7,6 +8,7 @@ export default class SeriesInfo {
     readonly season: string
 
     constructor(props: {
+        id: number,
         name: string,
         englishName: string,
         score: number | null,
@@ -14,6 +16,7 @@ export default class SeriesInfo {
         totalEpisodes: number,
         season: string,
     }) {
+        this.id = props.id;
         this.name = props.name;
         this.englishName = props.englishName;
         this.score = props.score;
