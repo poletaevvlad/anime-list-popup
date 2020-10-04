@@ -4,7 +4,7 @@ interface DropdownProps {
     value: string;
     options: { key: string, label: string }[];
     onChange: (value: string) => void;
-    enabled?: boolean
+    enabled: boolean
 }
 
 const Dropdown = (props: DropdownProps) => {

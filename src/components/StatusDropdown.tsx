@@ -19,6 +19,7 @@ const StatusDropdown = (props: StatusDropdownProps) =>
     <Dropdown
         value={props.value}
         options={statusLabels}
-        onChange={props.onChange} />
+        onChange={props.onChange}
+        enabled={true} />
 
 export default StatusDropdown;
