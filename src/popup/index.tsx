@@ -50,6 +50,7 @@ document.addEventListener("DOMContentLoaded", () => {
         const auth = new Auth(token);
         const api = new API(auth);
         const dispatcher = new AsyncDispatcher(api);
+        dispatcher.loadAnimeList(INITIAL_STATE.currentList, 0);
         render(
             <Application asyncDispatcher={dispatcher} />,
             document.getElementById("app")
