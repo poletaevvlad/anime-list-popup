@@ -30,6 +30,14 @@ const Application = (props: ApplicationProps) => {
         }
     }
 
+    const listScrolledToBottom = () => {
+        if (state.animeLists[state.currentList].status == "has_more_items") {
+            props.asyncDispatcher.loadAnimeList(
+                state.currentList, state.animeLists[state.currentList].entries.length
+            );
+        }
+    }
+
     return <div>
         <div className="header-bar">
             <div className="header-right">
@@ -39,7 +47,9 @@ const Application = (props: ApplicationProps) => {
         </div>
         <AnimeSeriesList
             isLoading={state.animeLists[state.currentList].status == "loading"}
-            entries={state.animeLists[state.currentList].entries} />
+            entries={state.animeLists[state.currentList].entries}
+            watchScrolling={state.animeLists[state.currentList].status == "has_more_items"}
+            onScrolledToBottom={listScrolledToBottom} />
     </div>;
 }
 

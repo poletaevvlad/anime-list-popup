@@ -5,6 +5,8 @@ import ProgressIndicator from "./ProgressIndicator";
 
 interface AnimeSeriesListProps {
     isLoading: boolean
+    watchScrolling: boolean
+    onScrolledToBottom: () => void
     entries: {
         series: SeriesInfo;
         episodesWatched: number;
@@ -13,7 +15,15 @@ interface AnimeSeriesListProps {
 }
 
 const AnimeSeriesList = (props: AnimeSeriesListProps) => {
-    return <div className="anime-list content">
+    function onScrolled(event: React.UIEvent<HTMLDivElement, UIEvent>) {
+        const scrollTopMax = event.currentTarget.scrollHeight - event.currentTarget.clientHeight;
+        if (scrollTopMax - event.currentTarget.scrollTop < 300) {
+            props.onScrolledToBottom()
+        }
+    }
+
+    return <div className="anime-list content"
+        onScroll={props.watchScrolling ? onScrolled : undefined}>
         {props.entries.map(entry => {
             return <SeriesCard
                 key={entry.series.id.toString()}
