@@ -6,6 +6,7 @@ import { Action, CurrentListChanged } from "./state/actions"
 import StatusDropdown from "../components/StatusDropdown"
 import Auth from "../listdata/auth";
 import { browser } from "webextension-polyfill-ts";
+import AuthToken from "../listdata/token";
 
 function Application() {
     const initialValue: ApplicationState = {
@@ -39,10 +40,13 @@ function Application() {
 }
 
 document.addEventListener("DOMContentLoaded", () => {
-    browser.tabs.create({
-        active: true,
-        url: "/auth.html",
+    AuthToken.load().then((token) => {
+        if (token == null) {
+            browser.tabs.create({ active: true, url: "/auth.html" });
+            window.close();
+            return;
+        }
+
+        render(<Application />, document.getElementById("app"));
     });
-    window.close();
-    render(<Application />, document.getElementById("app"));
 });
