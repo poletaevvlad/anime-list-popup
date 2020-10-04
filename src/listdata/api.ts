@@ -14,13 +14,16 @@ const apiStatusNames: { [key in AnimeStatus]: string } = {
 }
 
 interface AnimeListResponse {
-    hasMoreItems: boolean,
-    items: {
-        series: SeriesInfo;
-        episodesWatched: number;
-        assignedScore: boolean;
-    }
+    hasMoreEntries: boolean,
+    entries: AnimeListEntry[]
 }
+
+export interface AnimeListEntry {
+    series: SeriesInfo;
+    episodesWatched: number;
+    assignedScore: number;
+}
+
 
 type SeasonObject = {
     season: string
@@ -68,8 +71,8 @@ export default class API {
         });
         const values = await this.makeApiCall(url, {});
         return {
-            hasMoreItems: typeof (values.paging.next) != "undefined",
-            items: values.data.map((item: any) => {
+            hasMoreEntries: typeof (values.paging.next) != "undefined",
+            entries: values.data.map((item: any) => {
                 const node: any = item.node;
                 return {
                     episodesWatched: node.my_list_status.num_episodes_watched,
