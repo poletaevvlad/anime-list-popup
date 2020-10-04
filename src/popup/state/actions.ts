@@ -19,6 +19,7 @@ type Action =
         status: AnimeStatus,
         episodesWatched: number,
         score: number
-    };
+    } |
+    { type: "clear-data" };
 
 export default Action;

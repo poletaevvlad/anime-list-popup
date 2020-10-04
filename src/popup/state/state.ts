@@ -13,15 +13,17 @@ export interface ApplicationState {
     updatingAnime: Set<number>
 }
 
+export const EMPTY_LISTS: { [key in AnimeStatus]: AnimeList } = {
+    "watching": { entries: [], status: "has_more_items" },
+    "completed": { entries: [], status: "has_more_items" },
+    "on-hold": { entries: [], status: "has_more_items" },
+    "dropped": { entries: [], status: "has_more_items" },
+    "plan-to-watch": { entries: [], status: "has_more_items" },
+};
+
 export const INITIAL_STATE: ApplicationState = {
     userInfo: null,
     currentList: "watching",
-    animeLists: {
-        "watching": { entries: [], status: "has_more_items" },
-        "completed": { entries: [], status: "has_more_items" },
-        "on-hold": { entries: [], status: "has_more_items" },
-        "dropped": { entries: [], status: "has_more_items" },
-        "plan-to-watch": { entries: [], status: "has_more_items" },
-    },
+    animeLists: EMPTY_LISTS,
     updatingAnime: new Set<number>()
 }

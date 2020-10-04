@@ -1,11 +1,13 @@
 import { AnimeStatus, AnimeListEntry } from "../../listdata/api";
 import Action from "./actions";
-import { ApplicationState, AnimeList } from "./state";
+import { ApplicationState, AnimeList, EMPTY_LISTS } from "./state";
 
 export type Reducer<T> = (currentState: T, action: Action) => T;
 
 const animeListReducer: Reducer<{ [key in AnimeStatus]: AnimeList }> = (current, action) => {
     switch (action.type) {
+        case "clear-data":
+            return EMPTY_LISTS;
         case "anime-loading-finished":
             return {
                 ...current,

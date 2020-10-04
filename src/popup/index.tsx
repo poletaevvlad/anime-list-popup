@@ -48,9 +48,15 @@ const Application = (props: ApplicationProps) => {
         props.asyncDispatcher.updateSeries(seriesId, update);
     }
 
+    const refreshData = () => {
+        dispatch({ type: "clear-data" });
+        props.asyncDispatcher.loadAnimeList(state.currentList, 0);
+    }
+
     return <div>
         <div className="header-bar">
             <div className="header-right">
+                <div className="header-button icon-refresh" tabIndex={0} onClick={refreshData} />
                 {state.userInfo == null ? null : <UserMenuButton userInfo={state.userInfo} />}
             </div>
             <StatusDropdown value={state.currentList} onChange={currentListChanged} />
