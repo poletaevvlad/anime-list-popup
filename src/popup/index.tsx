@@ -9,6 +9,7 @@ import { browser } from "webextension-polyfill-ts";
 import AuthToken from "../listdata/token";
 import API, { AnimeStatus } from "../listdata/api";
 import AsyncDispatcher from "./state/asyncDispatcher";
+import UserMenuButton from "../components/UserMenuButton"
 
 interface ApplicationProps {
     asyncDispatcher: AsyncDispatcher
@@ -31,6 +32,9 @@ const Application = (props: ApplicationProps) => {
 
     return <div>
         <div className="header-bar">
+            <div className="header-right">
+                {state.userInfo == null ? null : <UserMenuButton userInfo={state.userInfo} />}
+            </div>
             <StatusDropdown value={state.currentList} onChange={currentListChanged} />
         </div>
         <AnimeSeriesList
@@ -51,6 +55,7 @@ document.addEventListener("DOMContentLoaded", () => {
         const api = new API(auth);
         const dispatcher = new AsyncDispatcher(api);
         dispatcher.loadAnimeList(INITIAL_STATE.currentList, 0);
+        dispatcher.loadUserInfo();
         render(
             <Application asyncDispatcher={dispatcher} />,
             document.getElementById("app")

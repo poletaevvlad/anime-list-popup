@@ -46,6 +46,15 @@ class AsyncDispatcher {
             })
         });
     }
+
+    loadUserInfo() {
+        this.api.getUserInfo().then((result) => {
+            this.dispatch({
+                type: "user-info-loaded",
+                userInfo: result
+            });
+        })
+    }
 }
 
 export default AsyncDispatcher;
