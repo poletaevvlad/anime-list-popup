@@ -4,6 +4,7 @@
   "version": "0.1",
   "browser_action": {
     "default_popup": "popup.html",
+    "default_icon": "assets/action-icon.svg",
     "theme_icons": [
       {
         "dark": "assets/action-icon-dark.svg",
