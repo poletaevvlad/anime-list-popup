@@ -60,19 +60,22 @@ export default class API {
         options: { method?: string, body?: any }
     ): Promise<any> {
         const token = await this.auth.getToken()
-        return fetch(url, {
+        const response = await fetch(url, {
             method: options.method || "GET",
             body: options.body,
             headers: {
                 "Authorization": "Bearer " + token
             }
-        }).then(response => response.json());
+        });
+        const json = await response.json();
+        if (typeof (json["error"]) != "undefined") {
+            return Promise.reject("Error: " + json["message"])
+        }
+        return json
     }
 
     async getUserInfo(): Promise<UserInfo> {
-        const data = await this.makeApiCall(
-            "https://api.myanimelist.net/v2/users/@me", {}
-        );
+        const data = await this.makeApiCall("https://api.myanimelist.net/v2/users/@me", {});
         return new UserInfo(data["name"] as string, data["picture"] as string);
     }
 

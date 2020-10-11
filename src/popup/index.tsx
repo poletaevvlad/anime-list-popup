@@ -11,6 +11,7 @@ import API, { AnimeStatus, SeriesUpdate } from "../listdata/api";
 import AsyncDispatcher from "./state/asyncDispatcher";
 import UserMenuButton from "../components/UserMenuButton"
 import ProgressIndicator from "../components/ProgressIndicator"
+import ErrorModal from "../components/ErrorModal";
 
 interface ApplicationProps {
     asyncDispatcher: AsyncDispatcher
@@ -56,6 +57,11 @@ const Application = (props: ApplicationProps) => {
 
     const currentList = state.animeLists[state.currentList];
     return <div>
+        {state.errorMessage == null ? null :
+            <ErrorModal
+                title={state.errorMessage.title}
+                message={state.errorMessage.message}
+                onRetry={() => { console.log("retry") }} />}
         <div className="header-bar">
             <div className="header-right">
                 {state.loadingCounter > 0

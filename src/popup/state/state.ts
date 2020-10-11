@@ -1,9 +1,16 @@
 import UserInfo from "../../listdata/userinfo";
 import { AnimeStatus, AnimeListEntry } from "../../listdata/api";
+import AsyncDispatcher from "./asyncDispatcher"
 
 export interface AnimeList {
     entries: AnimeListEntry[];
     status: "loading" | "all_loaded" | "has_more_items"
+}
+
+export interface ErrorMessage {
+    title: string;
+    message: string;
+    retryAction: (dispatcher: AsyncDispatcher) => void
 }
 
 export interface ApplicationState {
@@ -11,7 +18,8 @@ export interface ApplicationState {
     currentList: AnimeStatus;
     animeLists: { [key in AnimeStatus]: AnimeList };
     updatingAnime: Set<number>;
-    loadingCounter: number
+    loadingCounter: number;
+    errorMessage: ErrorMessage | null;
 }
 
 export const EMPTY_LISTS: { [key in AnimeStatus]: AnimeList } = {
@@ -28,4 +36,5 @@ export const INITIAL_STATE: ApplicationState = {
     animeLists: EMPTY_LISTS,
     updatingAnime: new Set<number>(),
     loadingCounter: 0,
+    errorMessage: null,
 }
