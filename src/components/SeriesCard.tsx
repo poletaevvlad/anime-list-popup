@@ -43,9 +43,11 @@ const SeriesCard = (props: SeriesCardProps) =>
                 onChange={props.onStatusChanged}
                 enabled={props.enabled} />
             <div className="series-name">
-                <a href={props.seriesInfo.pageUrl}>{props.seriesInfo.name}</a>
+                <a href={props.seriesInfo.pageUrl} title={props.seriesInfo.name}>{props.seriesInfo.name}</a>
             </div>
-            <div className="series-english-name">{props.seriesInfo.englishName}</div>
+            <div className="series-english-name" title={props.seriesInfo.englishName}>
+                {props.seriesInfo.englishName}
+            </div>
         </div>
         <div className="series-controls">
             <div className="series-additional-info">
