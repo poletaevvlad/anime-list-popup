@@ -55,15 +55,16 @@ export default class API {
         this.auth = auth;
     }
 
-    private makeApiCall(
+    private async makeApiCall(
         url: string,
         options: { method?: string, body?: any }
     ): Promise<any> {
+        const token = await this.auth.getToken()
         return fetch(url, {
             method: options.method || "GET",
             body: options.body,
             headers: {
-                "Authorization": "Bearer " + this.auth.token.accessToken
+                "Authorization": "Bearer " + token
             }
         }).then(response => response.json());
     }

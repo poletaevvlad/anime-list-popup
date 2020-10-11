@@ -19,6 +19,7 @@
     "webpack-stream": "^6.1.0"
   },
   "dependencies": {
+    "async-mutex": "^0.2.4",
     "react": "^16.13.1",
     "react-dom": "^16.13.1"
   },

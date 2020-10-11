@@ -1,16 +1,16 @@
 import { browser } from "webextension-polyfill-ts";
 
 type AccessTokenProperties = {
-    accessToken: String,
-    refreshToken: String,
+    accessToken: string,
+    refreshToken: string,
     issuedDate: number,
     expiresIn: number
 };
 
 export default class AccessToken {
     readonly issuedDate: number;
-    readonly refreshToken: String;
-    readonly accessToken: String;
+    readonly refreshToken: string;
+    readonly accessToken: string;
     readonly expiresIn: number;
 
     constructor(properties: AccessTokenProperties) {

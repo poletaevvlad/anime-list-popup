@@ -1,4 +1,5 @@
 import { browser } from "webextension-polyfill-ts";
+import { Mutex } from "async-mutex";
 
 import AccessToken from "./token";
 
@@ -51,15 +52,55 @@ function extractQueryParams(url: string, param: string): string | null {
 }
 
 export default class Auth {
-    token: AccessToken;
+    private token: AccessToken;
+    private mutex: Mutex;
 
     constructor(token: AccessToken) {
         this.token = token;
+        this.mutex = new Mutex();
     }
 
-    static async create(): Promise<Auth> {
-        const token = await AccessToken.load();
-        return new Auth(token);
+    async getToken(): Promise<string> {
+        const release = await this.mutex.acquire()
+        try {
+            const currentDate = (new Date().getTime() / 1000) | 0;
+            const expiresDate = (this.token.issuedDate + this.token.expiresIn * 0.9) | 0;
+            if (currentDate > expiresDate) {
+                this.token = await Auth.renewToken(this.token);
+                await this.token.save();
+            }
+            return this.token.accessToken;
+        } finally {
+            release()
+        }
+    }
+
+    private static async tokenFromResponse(response: Response) {
+        const token = await response.json();
+        if (typeof (token["error"]) != "undefined") {
+            return Promise.reject("Error: " + token["message"]);
+        }
+
+        return new AccessToken({
+            accessToken: token["access_token"],
+            refreshToken: token["refresh_token"],
+            expiresIn: token["expires_in"],
+            issuedDate: (new Date().getTime() / 1000) | 0,
+        })
+    }
+
+    private static async renewToken(token: AccessToken): Promise<AccessToken> {
+        const tokenBaseUrl = "https://myanimelist.net/v1/oauth2/token";
+        const tokenData = new URLSearchParams();
+        tokenData.append("client_id", CLIENT_ID);
+        tokenData.append("grant_type", "refresh_token");
+        tokenData.append("refresh_token", token.refreshToken);
+
+        const tokenResult = await fetch(new Request(tokenBaseUrl), {
+            method: "POST",
+            body: tokenData,
+        });
+        return await Auth.tokenFromResponse(tokenResult)
     }
 
     static async launchAuthentication(): Promise<AccessToken> {
@@ -96,15 +137,6 @@ export default class Auth {
             method: "POST",
             body: tokenData,
         });
-        const token = await tokenResult.json();
-        if (typeof (token["error"]) != "undefined") {
-            return Promise.reject("Error: " + token["message"]);
-        }
-        return new AccessToken({
-            accessToken: token["access_token"],
-            refreshToken: token["refresh_token"],
-            expiresIn: token["expires_in"],
-            issuedDate: new Date().getTime(),
-        })
+        return Auth.tokenFromResponse(tokenResult);
     }
 }
