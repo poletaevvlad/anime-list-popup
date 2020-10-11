@@ -18,7 +18,8 @@ type Action =
         seriesId: number,
         status: AnimeStatus,
         episodesWatched: number,
-        score: number
+        score: number,
+        originalStatus: AnimeStatus,
     } |
     { type: "clear-data" };
 

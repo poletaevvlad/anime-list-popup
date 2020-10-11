@@ -46,7 +46,7 @@ const Application = (props: ApplicationProps) => {
             status: state.currentList,
             update: update,
         });
-        props.asyncDispatcher.updateSeries(seriesId, update);
+        props.asyncDispatcher.updateSeries(seriesId, update, state.currentList);
     }
 
     const refreshData = () => {
@@ -75,6 +75,7 @@ const Application = (props: ApplicationProps) => {
                 disabledSeries={state.updatingAnime}
                 onScoreChanged={(id, score) => episodeUpdated(id, { assignedScore: score })}
                 onWatchedEpisodesChanged={(id, episodes) => episodeUpdated(id, { episodesWatched: episodes })}
+                onStatusChanged={(id, status) => episodeUpdated(id, { status: status })}
                 animeStatus={state.currentList} />
         }
     </div>;

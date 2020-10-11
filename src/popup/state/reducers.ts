@@ -39,12 +39,28 @@ const animeListReducer: Reducer<{ [key in AnimeStatus]: AnimeList }> = (current,
                                 ? entry.episodesWatched : action.update.episodesWatched,
                             assignedScore: typeof (action.update.assignedScore) == "undefined"
                                 ? entry.assignedScore : action.update.assignedScore,
+                            status: typeof (action.update.status) == "undefined"
+                                ? entry.status : action.update.status
                         };
                         return newEntry;
                     })
                 }
             }
         case "series-update-done":
+            if (action.originalStatus != action.status) {
+                return {
+                    ...current,
+                    [action.status]: {
+                        entries: [],
+                        status: "has_more_items"
+                    },
+                    [action.originalStatus]: {
+                        ...current[action.originalStatus],
+                        entries: current[action.originalStatus].entries
+                            .filter(entry => entry.series.id != action.seriesId)
+                    }
+                }
+            }
             return {
                 ...current,
                 [action.status]: {

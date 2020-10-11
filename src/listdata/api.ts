@@ -39,6 +39,7 @@ function formatSeason(season: SeasonObject): string {
 export type SeriesUpdate = {
     episodesWatched?: number
     assignedScore?: number
+    status?: AnimeStatus
 }
 
 export type SeriesUpdateResult = {
@@ -116,9 +117,13 @@ export default class API {
         if (typeof (update.episodesWatched) != "undefined") {
             data.append("num_watched_episodes", update.episodesWatched.toString());
         }
+        if (typeof (update.status) != "undefined") {
+            data.append("status", apiStatusNames[update.status])
+        }
         const response = await this.makeApiCall(url, { method: "PATCH", body: data });
         return {
-            status: response.status,
+            status: Object.keys(apiStatusNames).find(
+                (key: AnimeStatus) => apiStatusNames[key] == response.status) as AnimeStatus,
             score: response.score,
             episodesWatched: response.num_episodes_watched,
         }
