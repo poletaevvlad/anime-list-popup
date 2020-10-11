@@ -41,7 +41,7 @@ const SeriesCard = (props: SeriesCardProps) =>
             <ShortStatusDropdown
                 value={props.displayedStatus}
                 onChange={props.onStatusChanged}
-                /*enabled={props.enabled}*/ />
+                enabled={props.enabled} />
             <div className="series-name">
                 <a href={props.seriesInfo.pageUrl} title={props.seriesInfo.name}>{props.seriesInfo.name}</a>
             </div>

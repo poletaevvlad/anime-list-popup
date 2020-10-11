@@ -14,11 +14,13 @@ const shortStatusLabels: { [key in AnimeStatus]: string } = {
 interface ShortStatusDropdownProps {
     value: AnimeStatus
     onChange: (status: AnimeStatus) => void
+    enabled: boolean
 }
 
 const ShortStatusDropdown = (props: ShortStatusDropdownProps) => {
     return <div className="short-dropdown">
         <select
+            disabled={!props.enabled}
             value={props.value} onChange={(e) => props.onChange(e.currentTarget.value as AnimeStatus)}>
             {statusLabels.map(({ key, label }) => <option key={key} value={key}>{label}</option>)}
         </select>
