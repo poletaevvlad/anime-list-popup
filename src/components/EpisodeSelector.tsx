@@ -82,9 +82,11 @@ const EpisodeSelector = (props: EpisodeSelectorProps) => {
             autoFocus={focused}
             onBlur={() => {
                 setFocused(false);
-                if (props.current != current) {
-                    props.onChange(current);
+                const value = Math.min(current, props.totalEpisodes);
+                if (props.current != value) {
+                    props.onChange(value);
                 }
+                setCurrent(value);
             }}
             onSubmit={() => fieldRef.current.blur()}
             onFocus={() => setFocused(true)}
