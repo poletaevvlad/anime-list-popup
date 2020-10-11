@@ -2,7 +2,7 @@ import * as React from "react";
 import SeriesInfo from "../listdata/seriesinfo";
 import Dropdown from "./Dropdown";
 import EpisodeSelector from "./EpisodeSelector";
-import StatusDropdown from "./StatusDropdown";
+import ShortStatusDropdown from "./ShortStatusDropdown";
 import { AnimeStatus } from "../listdata/api"
 
 const SCORE_LABELS = [
@@ -38,10 +38,10 @@ const SeriesCard = (props: SeriesCardProps) =>
                 backgroundSize: "cover"
             }} />
         <div className="series-description">
-            <StatusDropdown
+            <ShortStatusDropdown
                 value={props.displayedStatus}
                 onChange={props.onStatusChanged}
-                enabled={props.enabled} />
+                /*enabled={props.enabled}*/ />
             <div className="series-name">
                 <a href={props.seriesInfo.pageUrl} title={props.seriesInfo.name}>{props.seriesInfo.name}</a>
             </div>

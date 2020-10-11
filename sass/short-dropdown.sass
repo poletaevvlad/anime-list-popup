@@ -1,0 +1,39 @@
+.short-dropdown
+  position: relative
+  height: 16px
+  width: 32px
+  // overflow: hidden
+
+  select
+    position: absolute
+    right: 0
+    top: 0
+    z-index: 2
+    -webkit-appearance: none
+    -moz-appearance: none
+    appearance:
+    height: 16px
+    width: 32px
+    opacity: 0
+
+  .current-value
+    line-height: 16px
+    position: absolute
+    left: 0
+    top: 0
+    font-size: 10px
+    font-weight: bold
+    color: #757575
+
+  .icon
+    position: absolute
+    right: 0
+    top: 6px
+
+    path
+      fill: none
+      stroke: #757575
+      stroke-width: 1.5
+
+.short-dropdown select:focus+.current-value
+  outline: 1px dotted

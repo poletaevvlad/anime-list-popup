@@ -2,7 +2,7 @@ import * as React from "react";
 import { AnimeStatus } from "../listdata/api";
 import Dropdown from "./Dropdown";
 
-const statusLabels: { key: AnimeStatus, label: string }[] = [
+export const statusLabels: { key: AnimeStatus, label: string }[] = [
     { key: "watching", label: "Currently Watching" },
     { key: "completed", label: "Completed" },
     { key: "on-hold", label: "On Hold" },

@@ -7,6 +7,11 @@ interface DropdownProps {
     enabled: boolean
 }
 
+export const DropdownIcon = () =>
+    <svg width={7} height={5} className="icon">
+        <path d="M0.5 0.5L3.5 3.5L6.5 0.5" />
+    </svg>
+
 const Dropdown = (props: DropdownProps) => {
     return <div className="dropdown">
         <select value={props.value} disabled={!props.enabled}
@@ -15,9 +20,7 @@ const Dropdown = (props: DropdownProps) => {
                 <option key={key} value={key}>{label}</option>
             )}
         </select>
-        <svg width={7} height={5} className="icon">
-            <path d="M0.5 0.5L3.5 3.5L6.5 0.5" />
-        </svg>
+        <DropdownIcon />
     </div >
 }
 
