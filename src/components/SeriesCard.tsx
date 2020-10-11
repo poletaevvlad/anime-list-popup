@@ -27,6 +27,7 @@ interface SeriesCardProps {
     displayedStatus: AnimeStatus
     onScoreChanged: (newScore: number) => void
     onEpisodesCountChanged: (newEpisodesCount: number) => void
+    onStatusChanged: (newStatus: AnimeStatus) => void
 }
 
 const SeriesCard = (props: SeriesCardProps) =>
@@ -37,7 +38,10 @@ const SeriesCard = (props: SeriesCardProps) =>
                 backgroundSize: "cover"
             }} />
         <div className="series-description">
-            <StatusDropdown value={props.displayedStatus} onChange={() => { }} />
+            <StatusDropdown
+                value={props.displayedStatus}
+                onChange={props.onStatusChanged}
+                enabled={props.enabled} />
             <div className="series-name">
                 <a href={props.seriesInfo.pageUrl}>{props.seriesInfo.name}</a>
             </div>
