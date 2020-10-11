@@ -22,6 +22,7 @@ export interface AnimeListEntry {
     series: SeriesInfo;
     episodesWatched: number;
     assignedScore: number;
+    status: AnimeStatus
 }
 
 
@@ -88,6 +89,7 @@ export default class API {
                 return {
                     episodesWatched: node.my_list_status.num_episodes_watched,
                     assignedScore: node.my_list_status.score,
+                    status: status,
                     series: new SeriesInfo({
                         id: node.id,
                         name: node.title,

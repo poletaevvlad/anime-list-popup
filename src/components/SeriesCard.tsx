@@ -2,6 +2,8 @@ import * as React from "react";
 import SeriesInfo from "../listdata/seriesinfo";
 import Dropdown from "./Dropdown";
 import EpisodeSelector from "./EpisodeSelector";
+import StatusDropdown from "./StatusDropdown";
+import { AnimeStatus } from "../listdata/api"
 
 const SCORE_LABELS = [
     { key: "0", label: "Select" },
@@ -22,6 +24,7 @@ interface SeriesCardProps {
     watched: number
     assignedScore: number
     enabled: boolean
+    displayedStatus: AnimeStatus
     onScoreChanged: (newScore: number) => void
     onEpisodesCountChanged: (newEpisodesCount: number) => void
 }
@@ -34,6 +37,7 @@ const SeriesCard = (props: SeriesCardProps) =>
                 backgroundSize: "cover"
             }} />
         <div className="series-description">
+            <StatusDropdown value={props.displayedStatus} onChange={() => { }} />
             <div className="series-name">
                 <a href={props.seriesInfo.pageUrl}>{props.seriesInfo.name}</a>
             </div>

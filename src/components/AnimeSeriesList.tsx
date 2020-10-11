@@ -12,6 +12,7 @@ interface AnimeSeriesListProps {
         series: SeriesInfo;
         episodesWatched: number;
         assignedScore: number;
+        status: AnimeStatus;
     }[]
     disabledSeries: Set<number>
     onScoreChanged: (seriesId: number, newScore: number) => void
@@ -38,6 +39,7 @@ const AnimeSeriesList = (props: AnimeSeriesListProps) => {
             return <SeriesCard
                 key={entry.series.id.toString()}
                 seriesInfo={entry.series}
+                displayedStatus={entry.status}
                 watched={entry.episodesWatched}
                 assignedScore={entry.assignedScore}
                 enabled={!props.disabledSeries.has(entry.series.id)}
