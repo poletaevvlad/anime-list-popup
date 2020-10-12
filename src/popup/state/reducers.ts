@@ -129,6 +129,17 @@ export const rootReducer: Reducer<ApplicationState> = (current, action) => {
                 updatingAnime: updating,
                 animeLists: animeListReducer(current.animeLists, action),
             }
+        case "set-error":
+            return {
+                ...current,
+                errorMessage: {
+                    title: action.title,
+                    message: action.message,
+                    retryAction: action.retry,
+                }
+            }
+        case "clear-error":
+            return { ...current, errorMessage: null }
         default:
             return {
                 ...current,

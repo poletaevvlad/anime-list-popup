@@ -55,13 +55,18 @@ const Application = (props: ApplicationProps) => {
         props.asyncDispatcher.loadAnimeList(state.currentList, 0);
     }
 
+    const retryError = () => {
+        dispatch({ type: "clear-error" })
+        state.errorMessage.retryAction(props.asyncDispatcher);
+    }
+
     const currentList = state.animeLists[state.currentList];
     return <div>
         {state.errorMessage == null ? null :
             <ErrorModal
                 title={state.errorMessage.title}
                 message={state.errorMessage.message}
-                onRetry={() => { console.log("retry") }} />}
+                onRetry={retryError} />}
         <div className="header-bar">
             <div className="header-right">
                 {state.loadingCounter > 0
