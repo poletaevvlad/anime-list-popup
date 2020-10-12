@@ -69,7 +69,7 @@ export default class API {
         });
         const json = await response.json();
         if (typeof (json["error"]) != "undefined") {
-            return Promise.reject("Error: " + json["message"])
+            return Promise.reject(`Error: ${json["message"]} (${json["error"]})`)
         }
         return json
     }
