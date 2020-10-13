@@ -60,6 +60,7 @@ const SeriesCard = (props: SeriesCardProps) =>
                 onChange={value => props.onScoreChanged(parseInt(value))}
                 enabled={props.enabled} />
             <EpisodeSelector
+                key={props.watched}
                 current={props.watched}
                 totalEpisodes={props.seriesInfo.totalEpisodes}
                 onChange={value => props.onEpisodesCountChanged(value)}
