@@ -37,34 +37,37 @@ const SeriesCard = (props: SeriesCardProps) =>
                 backgroundImage: `url(${props.seriesInfo.coverUrl})`,
                 backgroundSize: "cover"
             }} />
-        <div className="series-description">
-            <ShortStatusDropdown
-                value={props.displayedStatus}
-                onChange={props.onStatusChanged}
-                enabled={props.enabled} />
-            <div className="series-name">
-                <a href={props.seriesInfo.pageUrl} title={props.seriesInfo.name}>{props.seriesInfo.name}</a>
+        <div className="card-contents">
+            <div className="series-description">
+                <ShortStatusDropdown
+                    value={props.displayedStatus}
+                    onChange={props.onStatusChanged}
+                    enabled={props.enabled} />
+
+                <div className="series-name">
+                    <a href={props.seriesInfo.pageUrl} title={props.seriesInfo.name}>{props.seriesInfo.name}</a>
+                </div>
+                <div className="series-english-name" title={props.seriesInfo.englishName}>
+                    {props.seriesInfo.englishName}
+                </div>
             </div>
-            <div className="series-english-name" title={props.seriesInfo.englishName}>
-                {props.seriesInfo.englishName}
+            <div className="series-controls">
+                <div className="series-additional-info">
+                    <div className="series-season">{props.seriesInfo.season}</div>
+                    <div className="series-score">Score: {props.seriesInfo.score}</div>
+                </div>
+                <Dropdown
+                    value={props.assignedScore.toString()}
+                    options={SCORE_LABELS}
+                    onChange={value => props.onScoreChanged(parseInt(value))}
+                    enabled={props.enabled} />
+                <EpisodeSelector
+                    key={props.watched}
+                    current={props.watched}
+                    totalEpisodes={props.seriesInfo.totalEpisodes}
+                    onChange={value => props.onEpisodesCountChanged(value)}
+                    enabled={props.enabled} />
             </div>
-        </div>
-        <div className="series-controls">
-            <div className="series-additional-info">
-                <div className="series-season">{props.seriesInfo.season}</div>
-                <div className="series-score">Score: {props.seriesInfo.score}</div>
-            </div>
-            <Dropdown
-                value={props.assignedScore.toString()}
-                options={SCORE_LABELS}
-                onChange={value => props.onScoreChanged(parseInt(value))}
-                enabled={props.enabled} />
-            <EpisodeSelector
-                key={props.watched}
-                current={props.watched}
-                totalEpisodes={props.seriesInfo.totalEpisodes}
-                onChange={value => props.onEpisodesCountChanged(value)}
-                enabled={props.enabled} />
         </div>
     </div>
 
