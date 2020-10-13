@@ -16,6 +16,7 @@
     appearance: none
     line-height: 18px
     background: transparent
+    color: var(--text-primary)
 
   .icon
     position: absolute
@@ -24,7 +25,7 @@
 
     path
       fill: none
-      stroke: $accent
+      stroke: var(--text-primary)
       stroke-width: 1.5
 
   .header-bar &
@@ -37,4 +38,6 @@
       stroke: white
 
   .content &
-    border-color: $input-border
+    border-color: var(--field-border)
+    background-color: var(--field-background)
+    box-shadow: var(--field-shadow)
