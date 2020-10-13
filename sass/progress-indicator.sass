@@ -7,14 +7,11 @@
   height: $tile-size * 2 + $tile-spacing
 
   .tile
-    background-color: $accent-dark
+    background-color: var(--progress-indicator)
     width: $tile-size
     height: $tile-size
     position: absolute
     animation: progress-animation 1.5s infinite linear
-
-    .header-bar &
-      background-color: white
 
   .tile-tl
     top: 0
