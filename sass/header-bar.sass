@@ -29,21 +29,12 @@
   background-repeat: no-repeat
   vertical-align: middle
 
-  &:hover
+  &:not(.disabled):hover
     background-color: var(--header-button-hover)
 
-.header-progress
-  width: 32px
-  height: 17px
-  display: inline-block
-  text-align: center
-  padding: 4px 0 3px
-  vertical-align: middle
+  &.disabled
+    opacity: 0.5
 
-  .progress-indicator
-    display: inline-block
-
-.header-button, .header-progress
   .header-right &
     margin-left: 8px
 
