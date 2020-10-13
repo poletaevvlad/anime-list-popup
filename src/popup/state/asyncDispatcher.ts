@@ -50,7 +50,7 @@ class AsyncDispatcher {
                 this.dispatch({
                     type: "set-error",
                     title: "An error has occurred",
-                    message: error,
+                    message: String(error),
                     retry: self => self.loadAnimeList(status, offset)
                 })
             }
@@ -69,7 +69,7 @@ class AsyncDispatcher {
                 this.dispatch({
                     type: "set-error",
                     title: "An error has occurred",
-                    message: error,
+                    message: String(error),
                     retry: self => self.loadUserInfo()
                 })
             }
@@ -92,7 +92,7 @@ class AsyncDispatcher {
                 this.dispatch({
                     type: "set-error",
                     title: "An error has occurred",
-                    message: error,
+                    message: String(error),
                     retry: self => self.updateSeries(seriesId, update, status)
                 })
             }
