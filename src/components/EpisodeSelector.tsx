@@ -1,15 +1,5 @@
 import * as React from "react";
 
-const computeWidth = (content: string) => {
-    const span = document.createElement("span");
-    span.classList.add("episode-list-measurement")
-    span.innerText = content;
-    document.body.appendChild(span);
-    const width = span.getBoundingClientRect().width;
-    span.remove()
-    return width;
-}
-
 const parseField = (value: string): number => {
     let result = 0;
     for (let i = 0; i < value.length; i++) {
@@ -21,46 +11,6 @@ const parseField = (value: string): number => {
     return result;
 }
 
-interface GrowableInputFieldProps {
-    value: number;
-    onChange: (value: number) => void
-    autoFocus: boolean,
-    onBlur: () => void,
-    onFocus: () => void,
-    onSubmit: () => void,
-    onCancel: () => void,
-    fieldRef: React.MutableRefObject<HTMLInputElement>
-    enabled: boolean
-}
-
-const GrowableInputField = (props: GrowableInputFieldProps) => {
-    const valueString = props.value.toString()
-    const width = computeWidth(valueString);
-    return <input
-        type="text"
-        pattern="[0-9]+"
-        placeholder="0"
-        style={{ width: `${width}px` }}
-        value={props.value == 0 ? "" : valueString}
-        onChange={event => {
-            const newValue = parseField(event.target.value);
-            props.onChange(newValue);
-        }}
-        onBlur={props.onBlur}
-        onFocus={props.onFocus}
-        onKeyDown={event => {
-            if (event.key == "Enter") {
-                props.fieldRef.current.blur();
-                event.preventDefault();
-            } else if (event.key == "Escape") {
-                props.onCancel();
-                event.preventDefault();
-            }
-        }}
-        ref={props.fieldRef}
-        disabled={!props.enabled} />
-}
-
 interface EpisodeSelectorProps {
     current: number;
     totalEpisodes: number;
@@ -70,18 +20,35 @@ interface EpisodeSelectorProps {
 
 const EpisodeSelector = (props: EpisodeSelectorProps) => {
     const [focused, setFocused] = React.useState(false);
-    const [current, setCurrent] = React.useState(props.current);
+    const [current, setCurrent] = React.useState<number | null>(props.current);
     const fieldRef = React.useRef<HTMLInputElement>(null);
 
     return <div className={"episode-selector"}>
         <div className={"field" + (focused ? " focused" : "")}
             onClick={event => fieldRef.current.focus()}>
-            <GrowableInputField
-                value={current}
-                onChange={setCurrent}
+            <input
+                value={current == null ? "" : current}
+                ref={fieldRef}
+                type="text"
+                pattern="[0-9]+"
+                onChange={(event) => {
+                    const value = event.currentTarget.value.trim()
+                    setCurrent(value == "" ? null : parseField(value))
+                }}
+                style={{ color: focused ? undefined : "transparent" }}
                 autoFocus={focused}
-                onBlur={() => {
-                    setFocused(false);
+                onKeyDown={event => {
+                    if (event.key == "Enter") {
+                        event.currentTarget.blur()
+                        event.preventDefault()
+                    } else if (event.key == "Escape") {
+                        event.currentTarget.blur()
+                        setCurrent(props.current)
+                        event.preventDefault()
+                    }
+                }}
+                onBlur={(event) => {
+                    setFocused(false)
                     const value = Math.min(current, props.totalEpisodes);
                     if (props.current != value) {
                         props.onChange(value);
@@ -90,10 +57,11 @@ const EpisodeSelector = (props: EpisodeSelectorProps) => {
                 }}
                 onSubmit={() => fieldRef.current.blur()}
                 onFocus={() => setFocused(true)}
-                onCancel={() => setCurrent(props.current)}
-                fieldRef={fieldRef}
-                enabled={!!props.enabled} />
-        /{props.totalEpisodes}
+                disabled={!props.enabled}
+            />
+            <div className="current-value" style={{ display: focused ? "none" : "block" }}>
+                <span className="value">{props.current}</span>/{props.totalEpisodes}
+            </div>
         </div>
         <button
             className={"inc-button" + (!!props.enabled && props.current < props.totalEpisodes ? " enabled" : "")}

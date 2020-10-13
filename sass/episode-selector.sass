@@ -8,21 +8,38 @@
     display: inline-block
     color: #000000b0
     font-size: 12px
-    width: 85px
     text-align: center
     cursor: text
     vertical-align: middle
+    position: relative
+
+    &.focused
+      border-color: $accent
 
   input
     padding: 0
     margin: 0
     border-style: none
     background: transparent
-    text-align: right
+    text-align: center
     font-size: 14px
+    width: 85px
+    position: relative
+    z-index: 2
+    font-family: sans-serif
+    line-height: 22px
 
-  &.focused
-    border-color: $accent
+  .current-value
+    position: absolute
+    left: 0
+    top: 0
+    right: 0
+    bottom: 0
+
+    .value
+      font-size: 14px
+      color: black
+      line-height: 22px
 
   .inc-button
     margin: 0
@@ -42,6 +59,3 @@
       border-color: $accent-dark
       background-color: $accent
       background-image: url("../assets/inc-icon.svg")
-
-.episode-list-measurement
-  font-size: 14px
