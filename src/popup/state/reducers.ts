@@ -73,6 +73,7 @@ const animeListReducer: Reducer<{ [key in AnimeStatus]: AnimeList }> = (current,
                             series: entry.series,
                             episodesWatched: action.episodesWatched,
                             assignedScore: action.score,
+                            status: action.status
                         };
                     })
 
