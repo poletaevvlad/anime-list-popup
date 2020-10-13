@@ -67,14 +67,16 @@ const Application = (props: ApplicationProps) => {
                 title={state.errorMessage.title}
                 message={state.errorMessage.message}
                 onRetry={retryError} />}
-        <div className="header-bar">
-            <div className="header-right">
-                {state.loadingCounter > 0
-                    ? <div className="header-progress"><ProgressIndicator /></div>
-                    : <div className="header-button icon-refresh" tabIndex={0} onClick={refreshData} />}
-                {state.userInfo == null ? null : <UserMenuButton userInfo={state.userInfo} />}
+        <div className="header-bar-container">
+            <div className="header-bar">
+                <div className="header-right">
+                    {state.loadingCounter > 0
+                        ? <div className="header-progress"><ProgressIndicator /></div>
+                        : <div className="header-button icon-refresh" tabIndex={0} onClick={refreshData} />}
+                    {state.userInfo == null ? null : <UserMenuButton userInfo={state.userInfo} />}
+                </div>
+                <StatusDropdown value={state.currentList} onChange={currentListChanged} />
             </div>
-            <StatusDropdown value={state.currentList} onChange={currentListChanged} />
         </div>
         {currentList.status == "all_loaded" && currentList.entries.length == 0
             ? <div className="anime-list empty-list">This list is empty</div>

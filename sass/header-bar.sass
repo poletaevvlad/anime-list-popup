@@ -1,13 +1,21 @@
 @import "theme"
 
-.header-bar
-  background-color: $accent
-  padding: 6px 8px
+.header-bar-container
   position: absolute
   left: 0
   top: 0
   right: 0
-  height: 24px
+  padding: 6px 6px 12px
+  z-index: 2
+  background: linear-gradient(to bottom, var(--bg-main) 42px, transparent)
+
+.header-bar
+  background-color: var(--header-background)
+  padding: 6px 8px
+  box-sizing: border-box
+  height: 36px
+  border-radius: 4px
+  box-shadow: var(--header-shadow)
 
 .header-right
   float: right
