@@ -1,13 +1,17 @@
 .episode-selector
-  line-height: 22px
-  border-radius: 4px
-  border: 1px solid $input-border
-  display: inline-block
-  color: #000000b0
-  font-size: 12px
-  width: 85px
-  text-align: center
-  cursor: text
+
+  .field
+    line-height: 22px
+    border-radius: 4px 0 0 4px
+    border: 1px solid $input-border
+    border-right-style: none
+    display: inline-block
+    color: #000000b0
+    font-size: 12px
+    width: 85px
+    text-align: center
+    cursor: text
+    vertical-align: middle
 
   input
     padding: 0
@@ -19,6 +23,25 @@
 
   &.focused
     border-color: $accent
+
+  .inc-button
+    margin: 0
+    display: inline-block
+    border: 1px solid $input-border
+    background-color: white
+    border-radius: 0 4px 4px 0
+    box-sizing: content-box
+    width: 24px
+    height: 22px
+    vertical-align: middle
+    background-image: url("../assets/inc-icon-disabled.svg")
+    background-position: center
+    background-repeat: no-repeat
+
+    &.enabled
+      border-color: $accent-dark
+      background-color: $accent
+      background-image: url("../assets/inc-icon.svg")
 
 .episode-list-measurement
   font-size: 14px

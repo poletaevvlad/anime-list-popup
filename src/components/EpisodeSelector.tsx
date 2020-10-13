@@ -73,27 +73,32 @@ const EpisodeSelector = (props: EpisodeSelectorProps) => {
     const [current, setCurrent] = React.useState(props.current);
     const fieldRef = React.useRef<HTMLInputElement>(null);
 
-    return <div
-        className={"episode-selector" + (focused ? " focused" : "")}
-        onClick={event => fieldRef.current.focus()}>
-        <GrowableInputField
-            value={current}
-            onChange={setCurrent}
-            autoFocus={focused}
-            onBlur={() => {
-                setFocused(false);
-                const value = Math.min(current, props.totalEpisodes);
-                if (props.current != value) {
-                    props.onChange(value);
-                }
-                setCurrent(value);
-            }}
-            onSubmit={() => fieldRef.current.blur()}
-            onFocus={() => setFocused(true)}
-            onCancel={() => setCurrent(props.current)}
-            fieldRef={fieldRef}
-            enabled={!!props.enabled} />
+    return <div className={"episode-selector"}>
+        <div className={"field" + (focused ? " focused" : "")}
+            onClick={event => fieldRef.current.focus()}>
+            <GrowableInputField
+                value={current}
+                onChange={setCurrent}
+                autoFocus={focused}
+                onBlur={() => {
+                    setFocused(false);
+                    const value = Math.min(current, props.totalEpisodes);
+                    if (props.current != value) {
+                        props.onChange(value);
+                    }
+                    setCurrent(value);
+                }}
+                onSubmit={() => fieldRef.current.blur()}
+                onFocus={() => setFocused(true)}
+                onCancel={() => setCurrent(props.current)}
+                fieldRef={fieldRef}
+                enabled={!!props.enabled} />
         /{props.totalEpisodes}
+        </div>
+        <button
+            className={"inc-button" + (!!props.enabled && props.current < props.totalEpisodes ? " enabled" : "")}
+            disabled={!props.enabled || props.current >= props.totalEpisodes}
+            onClick={() => { props.onChange(props.current + 1) }} />
     </div>
 }
 
