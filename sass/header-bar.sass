@@ -11,7 +11,7 @@
 
 .header-bar
   background-color: var(--header-background)
-  padding: 6px 8px
+  padding: 4px 8px
   box-sizing: border-box
   height: 36px
   border-radius: 4px
@@ -22,13 +22,15 @@
 
 .header-button
   width: 32px
-  height: 24px
+  height: 28px
   display: inline-block
-  background-color: $accent-dark
   border-radius: 4px
   background-position: center
   background-repeat: no-repeat
   vertical-align: middle
+
+  &:hover
+    background-color: var(--header-button-hover)
 
 .header-progress
   width: 32px
@@ -49,7 +51,7 @@
     margin-left: 0
 
 .icon-user-menu
-  background-image: url(../assets/user-menu-button.svg)
+  background-image: var(--icon-menu)
 
 .icon-refresh
-  background-image: url(../assets/refresh-button.svg)
+  background-image: var(--icon-reload)
