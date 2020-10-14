@@ -1,13 +1,21 @@
+.error-modal
+  display: flex
 
-.error-title
-  font-size: 14px
+  .error-icon
+    width: 16px
+    height: 16px
+    background-image: url(../assets/error-icon.svg)
+    background-repeat: no-repeat
+    background-position: center
+    margin-right: 24px
+
+  .error-details
+    color: var(--text-primary)
+
+  .error-title
+    font-weight: 600
+    font-size: 14px
+    margin-bottom: 10px
 
   .error-message
-    font-size: 12px
-    color: #5A5A5A
-    margin: 20px 0
-
-  button
-    margin: 10px 0
-    line-height: 32px
-    font-size: 14px
+    margin-bottom: 20px
