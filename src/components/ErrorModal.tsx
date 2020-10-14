@@ -7,8 +7,8 @@ interface ErrorModalProps {
 }
 
 const ErrorModal = (props: ErrorModalProps) =>
-    <div className="error-modal">
-        <div className="error-box">
+    <div className="modal-background">
+        <div className="modal">
             <div className="error-title">{props.title}</div>
             <div className="error-message">{props.message}</div>
             <button onClick={props.onRetry}>Retry</button>
