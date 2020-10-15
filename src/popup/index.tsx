@@ -119,21 +119,23 @@ const Application = (props: ApplicationProps) => {
         <div className="header-bar-container">
             <div className="header-bar">
                 <div className="header-right">
-                    {state.loadingCounter > 0
+                    {modal != null || state.loadingCounter > 0
                         ? <div className="header-button icon-refresh disabled" />
                         : <div className="header-button icon-refresh" tabIndex={0} onClick={refreshData} />}
-                    {state.userInfo == null
+                    {modal != null || state.userInfo == null
                         ? <div className="header-button icon-user-menu disabled" />
                         : <UserMenuButton userInfo={state.userInfo} onLogout={logOut}
                             isOpened={isMenuOpen} setOpened={setMenuOpen} />}
                 </div>
-                <StatusDropdown value={state.currentList} onChange={currentListChanged} />
+                <StatusDropdown value={state.currentList} onChange={currentListChanged}
+                    enabled={state.updatingAnime.size == 0 && modal == null} />
             </div>
         </div>
         {
             currentList.status == "all_loaded" && currentList.entries.length == 0
                 ? <div className="anime-list empty-list">This list is empty</div>
                 : <AnimeSeriesList
+                    enabled={modal == null}
                     isLoading={currentList.status == "loading"}
                     entries={currentList.entries}
                     watchScrolling={currentList.status == "has_more_items"}

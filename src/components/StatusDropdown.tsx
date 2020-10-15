@@ -13,16 +13,15 @@ export const statusLabels: { key: AnimeStatus, label: string }[] = [
 interface StatusDropdownProps {
     value: AnimeStatus
     onChange: (value: AnimeStatus) => void
-    enabled?: boolean
+    enabled: boolean
 }
 
 const StatusDropdown = (props: StatusDropdownProps) => {
-    const enabled = typeof (props.enabled) == "undefined" ? true : props.enabled
     return <Dropdown
         value={props.value}
         options={statusLabels}
         onChange={props.onChange}
-        enabled={enabled} />
+        enabled={props.enabled} />
 }
 
 export default StatusDropdown;

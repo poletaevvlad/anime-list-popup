@@ -5,6 +5,7 @@ import ProgressIndicator from "./ProgressIndicator";
 import { AnimeStatus } from "../listdata/api";
 
 interface AnimeSeriesListProps {
+    enabled: boolean
     isLoading: boolean
     watchScrolling: boolean
     onScrolledToBottom: () => void
@@ -43,7 +44,7 @@ const AnimeSeriesList = (props: AnimeSeriesListProps) => {
                 displayedStatus={entry.status}
                 watched={entry.episodesWatched}
                 assignedScore={entry.assignedScore}
-                enabled={!props.disabledSeries.has(entry.series.id)}
+                enabled={props.enabled && !props.disabledSeries.has(entry.series.id)}
                 onScoreChanged={(score) => props.onScoreChanged(entry.series, score)}
                 onEpisodesCountChanged={(episodes) =>
                     props.onWatchedEpisodesChanged(entry.series, entry.episodesWatched, episodes)}
