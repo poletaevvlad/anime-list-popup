@@ -2,16 +2,17 @@ import * as React from "react";
 import UserInfo from "../listdata/userinfo"
 
 interface UserMenuButtonProps {
+    isOpened: boolean
+    setOpened: (opened: boolean) => void
     userInfo: UserInfo;
     onLogout: () => {}
 }
 
 const UserMenuButton = (props: UserMenuButtonProps) => {
-    const [isOpened, setOpened] = React.useState(false)
     const menuRef = React.useRef<HTMLUListElement>()
 
     let menu: JSX.Element = null;
-    if (isOpened) {
+    if (props.isOpened) {
         menu = <ul className="user-menu" ref={menuRef}>
             <li><a href={props.userInfo.profileUrl} className="with-avatar">
                 <span className="avatar"
@@ -29,9 +30,10 @@ const UserMenuButton = (props: UserMenuButtonProps) => {
 
     React.useEffect(() => {
         const onClick = (event: MouseEvent) => {
-            if (isOpened && menuRef.current &&
+            if (props.isOpened && menuRef.current &&
                 !menuRef.current.contains(event.target as Node)) {
-                setOpened(false);
+                props.setOpened(false);
+                event.preventDefault();
             }
         }
 
@@ -44,7 +46,7 @@ const UserMenuButton = (props: UserMenuButtonProps) => {
     return <div
         className="header-button user-menu-button icon-user-menu"
         tabIndex={0}
-        onClick={_event => setOpened(true)}>
+        onClick={_event => props.setOpened(true)}>
         {menu}
     </div>
 }

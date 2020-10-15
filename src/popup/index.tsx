@@ -20,6 +20,7 @@ interface ApplicationProps {
 
 const Application = (props: ApplicationProps) => {
     const [state, dispatch] = React.useReducer(rootReducer, INITIAL_STATE);
+    const [isMenuOpen, setMenuOpen] = React.useState(false);
     React.useEffect(() => {
         props.asyncDispatcher.subscribe(dispatch);
         return () => props.asyncDispatcher.unsubscribe(dispatch);
@@ -73,7 +74,7 @@ const Application = (props: ApplicationProps) => {
     const logOut = () => AccessToken.logout().then(logInError)
 
     const currentList = state.animeLists[state.currentList];
-    return <div>
+    return <div className={isMenuOpen ? "notouch" : ""}>
         {state.errorMessage == null ? null :
             <ErrorModal
                 title={state.errorMessage.title}
@@ -89,7 +90,8 @@ const Application = (props: ApplicationProps) => {
                         : <div className="header-button icon-refresh" tabIndex={0} onClick={refreshData} />}
                     {state.userInfo == null
                         ? <div className="header-button icon-user-menu disabled" />
-                        : <UserMenuButton userInfo={state.userInfo} onLogout={logOut} />}
+                        : <UserMenuButton userInfo={state.userInfo} onLogout={logOut}
+                            isOpened={isMenuOpen} setOpened={setMenuOpen} />}
                 </div>
                 <StatusDropdown value={state.currentList} onChange={currentListChanged} />
             </div>
