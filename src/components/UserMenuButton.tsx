@@ -7,23 +7,21 @@ interface UserMenuButtonProps {
 
 const UserMenuButton = (props: UserMenuButtonProps) => {
     const [isOpened, setOpened] = React.useState(false)
-    const menuRef = React.useRef<HTMLDivElement>()
+    const menuRef = React.useRef<HTMLUListElement>()
 
     let menu: JSX.Element = null;
     if (isOpened) {
-        menu = <div className="user-menu" ref={menuRef}>
-            <ul className="user-menu-inner">
-                <li><a href={props.userInfo.profileUrl} className="with-avatar">
-                    <span className="avatar"
-                        style={props.userInfo.profileImageUrl == null ? {} : {
-                            backgroundImage: `url(${props.userInfo.profileImageUrl})`
-                        }} />
-                    {props.userInfo.username}
-                </a></li>
-                <li><a href={props.userInfo.animeListUrl}>Anime list</a></li>
-                <li><a href={props.userInfo.mangaListUrl}>Manga list</a></li>
-            </ul>
-        </div>
+        menu = <ul className="user-menu" ref={menuRef}>
+            <li><a href={props.userInfo.profileUrl} className="with-avatar">
+                <span className="avatar"
+                    style={props.userInfo.profileImageUrl == null ? {} : {
+                        backgroundImage: `url(${props.userInfo.profileImageUrl})`
+                    }} />
+                {props.userInfo.username}
+            </a></li>
+            <li><a href={props.userInfo.animeListUrl}>Anime list</a></li>
+            <li><a href={props.userInfo.mangaListUrl}>Manga list</a></li>
+        </ul>
     }
 
     React.useEffect(() => {

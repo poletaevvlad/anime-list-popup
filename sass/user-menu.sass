@@ -3,30 +3,33 @@
 
 .user-menu
   position: absolute
-  right: -1px
-  top: -1px
+  right: -5px
+  top: -2px
   border-radius: 4px
-  border: 1px solid #00000050
-  overflow: hidden
   z-index: 2
-
-.user-menu-inner
   width: 175px
-  background-color: white
+  background-color: var(--field-background)
+  box-shadow: var(--field-shadow), var(--user-menu-shadow)
+  overflow: hidden
   padding: 6px 0
+  border: 1px solid var(--field-border)
 
 .user-menu a
   display: block
   padding: 8px 12px
   text-decoration: none
-  color: black
+  color: var(--text-primary)
+  border: 1px transparent
+  border-style: solid none
 
   &:hover
-    background-color: #00000020
+    background-color: var(--user-menu-row-background)
+    border-color: var(--user-menu-row-border)
 
   &:active
-    color: $accent-dark
-    background-color: transparentize($accent, 0.8) !important
+    background-color: var(--user-menu-row-background-pressed)
+    border-color: var(--user-menu-row-border-pressed)
+    font-weight: 600
 
   &.with-avatar
     padding: 6px 12px
@@ -43,3 +46,4 @@
   background-size: cover
   background-position: center
   background-image: url(../assets/avatar-placeholder.svg)
+  border: 1px solid var(--thumbnail-border)
