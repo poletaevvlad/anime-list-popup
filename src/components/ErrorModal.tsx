@@ -13,8 +13,8 @@ const ErrorModal = (props: ErrorModalProps) =>
         <div className="modal error-modal">
             <div className="error-icon" />
             <div className="error-details">
-                <div className="error-title">{props.title}</div>
-                <div className="error-message">{props.message}</div>
+                <div className="modal-title">{props.title}</div>
+                <div className="modal-message">{props.message}</div>
                 <div className="buttons-bar">
                     <button className="button primary" onClick={props.onRetry}>Retry</button>
                     <button className="link-button" onClick={props.onReload}>Reload</button>
