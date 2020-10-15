@@ -16,9 +16,9 @@ interface AnimeSeriesListProps {
     }[]
     disabledSeries: Set<number>
     animeStatus: AnimeStatus
-    onScoreChanged: (seriesId: number, newScore: number) => void
-    onWatchedEpisodesChanged: (seriesId: number, numEpisodes: number) => void
-    onStatusChanged: (seriesId: number, newStatus: AnimeStatus) => void
+    onScoreChanged: (series: SeriesInfo, newScore: number) => void
+    onWatchedEpisodesChanged: (series: SeriesInfo, currentNumEpisodes: number, numEpisodes: number) => void
+    onStatusChanged: (series: SeriesInfo, newStatus: AnimeStatus) => void
 }
 
 const AnimeSeriesList = (props: AnimeSeriesListProps) => {
@@ -44,10 +44,10 @@ const AnimeSeriesList = (props: AnimeSeriesListProps) => {
                 watched={entry.episodesWatched}
                 assignedScore={entry.assignedScore}
                 enabled={!props.disabledSeries.has(entry.series.id)}
-                onScoreChanged={(score) => props.onScoreChanged(entry.series.id, score)}
+                onScoreChanged={(score) => props.onScoreChanged(entry.series, score)}
                 onEpisodesCountChanged={(episodes) =>
-                    props.onWatchedEpisodesChanged(entry.series.id, episodes)}
-                onStatusChanged={(status) => props.onStatusChanged(entry.series.id, status)} />
+                    props.onWatchedEpisodesChanged(entry.series, entry.episodesWatched, episodes)}
+                onStatusChanged={(status) => props.onStatusChanged(entry.series, status)} />
         })}
         {props.isLoading
             ? <div className="anime-list-footer">

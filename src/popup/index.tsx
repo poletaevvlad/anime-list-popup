@@ -10,9 +10,10 @@ import AuthToken from "../listdata/token";
 import API, { AnimeStatus, SeriesUpdate } from "../listdata/api";
 import AsyncDispatcher from "./state/asyncDispatcher";
 import UserMenuButton from "../components/UserMenuButton"
-import ProgressIndicator from "../components/ProgressIndicator"
+import StateChangeModal from "../components/StateChangeModal"
 import ErrorModal from "../components/ErrorModal";
 import AccessToken from "../listdata/token";
+import SeriesInfo from "../listdata/seriesinfo";
 
 interface ApplicationProps {
     asyncDispatcher: AsyncDispatcher
@@ -52,6 +53,27 @@ const Application = (props: ApplicationProps) => {
         props.asyncDispatcher.updateSeries(seriesId, update, state.currentList);
     }
 
+    const numWatchedChanged = (series: SeriesInfo, currentWatched: number, numberWatched: number) => {
+        var suggested: AnimeStatus = null
+        if (state.currentList != "completed" && numberWatched == series.totalEpisodes) {
+            suggested = "completed";
+        } else if (state.currentList != "watching" && numberWatched > currentWatched) {
+            suggested = "watching";
+        }
+        if (suggested == null) {
+            episodeUpdated(series.id, { episodesWatched: numberWatched })
+            return
+        }
+        dispatch({
+            type: "set-suggestion",
+            series: series,
+            currentStatus: state.currentList,
+            newStatus: suggested,
+            rejectUpdate: { episodesWatched: numberWatched },
+            acceptUpdate: { episodesWatched: numberWatched, status: suggested }
+        })
+    }
+
     const refreshData = () => {
         dispatch({ type: "clear-data" });
         props.asyncDispatcher.loadAnimeList(state.currentList, 0);
@@ -74,14 +96,26 @@ const Application = (props: ApplicationProps) => {
     const logOut = () => AccessToken.logout().then(logInError)
 
     const currentList = state.animeLists[state.currentList];
+
+    var modal: React.ReactElement = null;
+    if (state.errorMessage != null) {
+        modal = <ErrorModal
+            title={state.errorMessage.title}
+            message={state.errorMessage.message}
+            onRetry={retryError}
+            onReload={reloadError}
+            onLogIn={logInError} />
+    } else if (state.statusSuggestion != null) {
+        modal = <StateChangeModal
+            animeTitle={state.statusSuggestion.series.name}
+            currentStatus={state.statusSuggestion.currentStatus}
+            suggestedStatus={state.statusSuggestion.newStatus}
+            onAccepted={() => episodeUpdated(state.statusSuggestion.series.id, state.statusSuggestion.acceptUpdate)}
+            onRejected={() => episodeUpdated(state.statusSuggestion.series.id, state.statusSuggestion.rejectUpdate)} />
+    }
+
     return <div className={isMenuOpen ? "notouch" : ""}>
-        {state.errorMessage == null ? null :
-            <ErrorModal
-                title={state.errorMessage.title}
-                message={state.errorMessage.message}
-                onRetry={retryError}
-                onReload={reloadError}
-                onLogIn={logInError} />}
+        {modal}
         <div className="header-bar-container">
             <div className="header-bar">
                 <div className="header-right">
@@ -96,20 +130,21 @@ const Application = (props: ApplicationProps) => {
                 <StatusDropdown value={state.currentList} onChange={currentListChanged} />
             </div>
         </div>
-        {currentList.status == "all_loaded" && currentList.entries.length == 0
-            ? <div className="anime-list empty-list">This list is empty</div>
-            : <AnimeSeriesList
-                isLoading={currentList.status == "loading"}
-                entries={currentList.entries}
-                watchScrolling={currentList.status == "has_more_items"}
-                onScrolledToBottom={listScrolledToBottom}
-                disabledSeries={state.updatingAnime}
-                onScoreChanged={(id, score) => episodeUpdated(id, { assignedScore: score })}
-                onWatchedEpisodesChanged={(id, episodes) => episodeUpdated(id, { episodesWatched: episodes })}
-                onStatusChanged={(id, status) => episodeUpdated(id, { status: status })}
-                animeStatus={state.currentList} />
+        {
+            currentList.status == "all_loaded" && currentList.entries.length == 0
+                ? <div className="anime-list empty-list">This list is empty</div>
+                : <AnimeSeriesList
+                    isLoading={currentList.status == "loading"}
+                    entries={currentList.entries}
+                    watchScrolling={currentList.status == "has_more_items"}
+                    onScrolledToBottom={listScrolledToBottom}
+                    disabledSeries={state.updatingAnime}
+                    onScoreChanged={(series, score) => episodeUpdated(series.id, { assignedScore: score })}
+                    onWatchedEpisodesChanged={numWatchedChanged}
+                    onStatusChanged={(series, status) => episodeUpdated(series.id, { status: status })}
+                    animeStatus={state.currentList} />
         }
-    </div>;
+    </div >;
 }
 
 document.addEventListener("DOMContentLoaded", () => {

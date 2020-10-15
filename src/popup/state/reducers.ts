@@ -76,7 +76,6 @@ const animeListReducer: Reducer<{ [key in AnimeStatus]: AnimeList }> = (current,
                             status: action.status
                         };
                     })
-
                 }
             }
         default:
@@ -119,6 +118,7 @@ export const rootReducer: Reducer<ApplicationState> = (current, action) => {
         case "series-updating":
             return {
                 ...current,
+                statusSuggestion: null,
                 updatingAnime: new Set([...current.updatingAnime, action.seriesId]),
                 animeLists: animeListReducer(current.animeLists, action),
             }
@@ -141,6 +141,17 @@ export const rootReducer: Reducer<ApplicationState> = (current, action) => {
             }
         case "clear-error":
             return { ...current, errorMessage: null }
+        case "set-suggestion":
+            return {
+                ...current,
+                statusSuggestion: {
+                    series: action.series,
+                    acceptUpdate: action.acceptUpdate,
+                    rejectUpdate: action.rejectUpdate,
+                    currentStatus: action.currentStatus,
+                    newStatus: action.newStatus,
+                }
+            }
         default:
             return {
                 ...current,

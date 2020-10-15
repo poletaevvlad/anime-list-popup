@@ -1,6 +1,8 @@
 import UserInfo from "../../listdata/userinfo";
-import { AnimeStatus, AnimeListEntry } from "../../listdata/api";
+import { AnimeStatus, AnimeListEntry, SeriesUpdate } from "../../listdata/api";
 import AsyncDispatcher from "./asyncDispatcher"
+import Action from "./actions"
+import SeriesInfo from "../../listdata/seriesinfo";
 
 export interface AnimeList {
     entries: AnimeListEntry[];
@@ -13,6 +15,14 @@ export interface ErrorMessage {
     retryAction: (dispatcher: AsyncDispatcher) => void
 }
 
+export interface StatusChangeSuggestion {
+    series: SeriesInfo
+    acceptUpdate: SeriesUpdate
+    rejectUpdate: SeriesUpdate
+    currentStatus: AnimeStatus
+    newStatus: AnimeStatus
+}
+
 export interface ApplicationState {
     userInfo: UserInfo;
     currentList: AnimeStatus;
@@ -20,6 +30,7 @@ export interface ApplicationState {
     updatingAnime: Set<number>;
     loadingCounter: number;
     errorMessage: ErrorMessage | null;
+    statusSuggestion: StatusChangeSuggestion | null;
 }
 
 export const EMPTY_LISTS: { [key in AnimeStatus]: AnimeList } = {
@@ -37,4 +48,5 @@ export const INITIAL_STATE: ApplicationState = {
     updatingAnime: new Set<number>(),
     loadingCounter: 0,
     errorMessage: null,
+    statusSuggestion: null,
 }

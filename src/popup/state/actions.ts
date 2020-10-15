@@ -2,6 +2,7 @@ import { AnimeStatus } from "../../listdata/api";
 import UserInfo from "../../listdata/userinfo";
 import { AnimeListEntry, SeriesUpdate } from "../../listdata/api";
 import AsyncDispatcher from "./asyncDispatcher"
+import SeriesInfo from "../../listdata/seriesinfo";
 
 type Action =
     { type: "current-list-changed", status: AnimeStatus } |
@@ -24,6 +25,14 @@ type Action =
     } |
     { type: "clear-data" } |
     { type: "set-error", title: string, message: string, retry: (dispatcher: AsyncDispatcher) => void } |
-    { type: "clear-error" };
+    { type: "clear-error" } |
+    {
+        type: "set-suggestion",
+        series: SeriesInfo,
+        acceptUpdate: SeriesUpdate
+        rejectUpdate: SeriesUpdate
+        currentStatus: AnimeStatus
+        newStatus: AnimeStatus
+    };
 
 export default Action;
