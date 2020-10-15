@@ -13,10 +13,10 @@
   width: 60px
   height: 85px
   margin-right: 16px
-  background-color: #eee
-  background-image: url(../assets/missing-cover.svg)
+  background-image: var(--no-cover-image)
   background-repeat: no-repeat
   background-position: center
+  background-size: cover
   box-shadow: 0 0 0 1px var(--thumbnail-border) inset
 
 .card-contents
@@ -46,7 +46,7 @@
       text-decoration: none
 
     a:hover
-      color: $accent-dark
+      color: var(--button-link-active)
       text-decoration: underline
 
     a:active

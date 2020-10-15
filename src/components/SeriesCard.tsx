@@ -35,7 +35,6 @@ const SeriesCard = (props: SeriesCardProps) =>
         <div className="series-cover" style={
             props.seriesInfo.coverUrl == null ? {} : {
                 backgroundImage: `url(${props.seriesInfo.coverUrl})`,
-                backgroundSize: "cover"
             }} />
         <div className="card-contents">
             <div className="series-description">
