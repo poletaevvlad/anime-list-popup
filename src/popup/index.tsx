@@ -12,6 +12,7 @@ import AsyncDispatcher from "./state/asyncDispatcher";
 import UserMenuButton from "../components/UserMenuButton"
 import ProgressIndicator from "../components/ProgressIndicator"
 import ErrorModal from "../components/ErrorModal";
+import AccessToken from "../listdata/token";
 
 interface ApplicationProps {
     asyncDispatcher: AsyncDispatcher
@@ -69,6 +70,8 @@ const Application = (props: ApplicationProps) => {
         window.close();
     }
 
+    const logOut = () => AccessToken.logout().then(logInError)
+
     const currentList = state.animeLists[state.currentList];
     return <div>
         {state.errorMessage == null ? null :
@@ -86,7 +89,7 @@ const Application = (props: ApplicationProps) => {
                         : <div className="header-button icon-refresh" tabIndex={0} onClick={refreshData} />}
                     {state.userInfo == null
                         ? <div className="header-button icon-user-menu disabled" />
-                        : <UserMenuButton userInfo={state.userInfo} />}
+                        : <UserMenuButton userInfo={state.userInfo} onLogout={logOut} />}
                 </div>
                 <StatusDropdown value={state.currentList} onChange={currentListChanged} />
             </div>

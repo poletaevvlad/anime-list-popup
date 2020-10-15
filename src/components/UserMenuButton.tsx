@@ -3,6 +3,7 @@ import UserInfo from "../listdata/userinfo"
 
 interface UserMenuButtonProps {
     userInfo: UserInfo;
+    onLogout: () => {}
 }
 
 const UserMenuButton = (props: UserMenuButtonProps) => {
@@ -21,6 +22,8 @@ const UserMenuButton = (props: UserMenuButtonProps) => {
             </a></li>
             <li><a href={props.userInfo.animeListUrl}>Anime list</a></li>
             <li><a href={props.userInfo.mangaListUrl}>Manga list</a></li>
+            <li className="divider"></li>
+            <li><a href="#" onClick={props.onLogout}>Log out</a></li>
         </ul>
     }
 

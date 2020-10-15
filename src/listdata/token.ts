@@ -48,4 +48,8 @@ export default class AccessToken {
         };
         return browser.storage.local.set({ access_token: properties });
     }
+
+    static logout(): Promise<void> {
+        return browser.storage.local.remove("access_token")
+    }
 }
