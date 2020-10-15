@@ -4,6 +4,8 @@ interface ErrorModalProps {
     title: string
     message: string
     onRetry: () => void
+    onReload: () => void
+    onLogIn: () => void
 }
 
 const ErrorModal = (props: ErrorModalProps) =>
@@ -13,7 +15,11 @@ const ErrorModal = (props: ErrorModalProps) =>
             <div className="error-details">
                 <div className="error-title">{props.title}</div>
                 <div className="error-message">{props.message}</div>
-                <button onClick={props.onRetry}>Retry</button>
+                <div className="buttons-bar">
+                    <button className="button primary" onClick={props.onRetry}>Retry</button>
+                    <button className="link-button" onClick={props.onReload}>Reload</button>
+                    <button className="link-button" onClick={props.onLogIn}>Log in again</button>
+                </div>
             </div>
         </div>
     </div>

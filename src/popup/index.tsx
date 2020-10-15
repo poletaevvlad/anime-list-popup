@@ -60,13 +60,24 @@ const Application = (props: ApplicationProps) => {
         state.errorMessage.retryAction(props.asyncDispatcher);
     }
 
+    const reloadError = () => {
+        location.reload();
+    }
+
+    const logInError = () => {
+        browser.tabs.create({ active: true, url: "/auth.html" });
+        window.close();
+    }
+
     const currentList = state.animeLists[state.currentList];
     return <div>
         {state.errorMessage == null ? null :
             <ErrorModal
                 title={state.errorMessage.title}
                 message={state.errorMessage.message}
-                onRetry={retryError} />}
+                onRetry={retryError}
+                onReload={reloadError}
+                onLogIn={logInError} />}
         <div className="header-bar-container">
             <div className="header-bar">
                 <div className="header-right">
