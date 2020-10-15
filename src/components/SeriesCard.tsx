@@ -44,7 +44,7 @@ const SeriesCard = (props: SeriesCardProps) =>
                     enabled={props.enabled} />
 
                 <div className="series-name">
-                    <a href={props.seriesInfo.pageUrl} title={props.seriesInfo.name}>{props.seriesInfo.name}</a>
+                    <a href={props.enabled ? props.seriesInfo.pageUrl : null} title={props.seriesInfo.name}>{props.seriesInfo.name}</a>
                 </div>
                 <div className="series-english-name" title={props.seriesInfo.englishName}>
                     {props.seriesInfo.englishName}
