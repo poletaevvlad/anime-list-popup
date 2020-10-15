@@ -29,9 +29,10 @@ const Application = () => {
     return <div className="login-prompt">
         <div className="title">Login via MyAnimeList</div>
         <div className="subtitle">To access your anime list you need to login into your MyAnimeList account.</div>
+
         {state.state == "in-progress"
             ? <div className="progress"><ProgressIndicator /></div>
-            : <button onClick={onLoginButtonPressed}>Login</button>
+            : <button className="button primary" onClick={onLoginButtonPressed}>Login</button>
         }
         {state.state == "error"
             ? <div className="error-msg">
