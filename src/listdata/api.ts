@@ -75,7 +75,7 @@ export default class API {
     }
 
     async getUserInfo(): Promise<UserInfo> {
-        const data = await this.makeApiCall("https://api.myanimelist.net/v2/users/@me", {});
+        const data = await this.makeApiCall("https://api.myanimelist.net/v2/use/@me", {});
         return new UserInfo(data["name"] as string, data["picture"] as string);
     }
 
