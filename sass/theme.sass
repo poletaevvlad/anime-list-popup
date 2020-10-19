@@ -1,23 +1,44 @@
+@use "sass:color"
+
+@mixin create-brightness-theme($text-color)
+  --text-primary: #{transparentize($text-color, 0.1)}
+  --text-secondary: #{transparentize($text-color, 0.3)}
+  --clr-separator: #{transparentize($text-color, 0.9)}
+  --clr-separator-light: #{transparentize($text-color, 0.95)}
+
+@mixin create-button-theme($default, $accent)
+  --button: #{$default}
+  --button-primary: #{$accent}
+  --button-hover: #{lighten($default, 3%)}
+  --button-primary-hover: #{lighten($accent, 3%)}
+  --button-pressed: #{lighten($default, 7%)}
+  --button-primary-pressed: #{lighten($accent, 7%)}
+  --button-link-active: #{lighten($accent, 7%)}
+
 #{":root"}
   --bg-main: #383838
-  --clr-separator: #484848
-  --clr-separator-light: #424242
-
-  --text-primary: rgba(255, 255, 255, 0.9)
-  --text-secondary: #C3C3C3
+  --header-text: #{transparentize(white, 0.1)}
 
   --thumbnail-border: #{transparentize(white, 0.85)}
-
   --field-border: #646464
   --field-background: #515151
   --field-shadow: 0 1px 2px rgba(0, 0, 0, 0.25)
-  --field-accent: #E47423
 
   --header-background: #C76016
   --header-shadow: 0 2px 4px rgba(0, 0, 0, 15%)
-  --header-button-hover: #CF7637
-  --header-dropdown-background: #C2570A
-  --header-dropdown-border: #AF4E09
+  --header-button-hover: rgba(255, 255, 255, 0.2)
+  --header-dropdown-background: rgba(0, 0, 0, 0.06)
+  --header-dropdown-border: rgba(0, 0, 0, 0.1)
+
+  --progress-indicator: #C76016
+  --modal-border: #4E4E4E
+  --button-shadow: 0 1px 2px rgba(0, 0, 0, 0.25)
+
+  --user-menu-row-background: #626262
+  --user-menu-row-border: #6D6D6D
+  --user-menu-row-background-pressed: #777777
+  --user-menu-row-border-pressed: #858585
+  --user-menu-shadow: 0 0 0 1000000px rgba(0, 0, 0, 0.2)
 
   --icon-reload: url(../assets/reload-icon.svg)
   --icon-menu: url(../assets/menu-icon.svg)
@@ -26,20 +47,26 @@
   --no-cover-image: url(../assets/no-cover-image.svg)
   --avatar-placeholder: url(../assets/avatar-placeholder.svg)
 
-  --progress-indicator: #DB742A
-  --modal-border: #4E4E4E
+  @include create-brightness-theme(white)
+  @include create-button-theme(#656565, #cf6518)
 
-  --button: #656565
-  --button-primary: #C76016
-  --button-hover: #797979
-  --button-primary-hover: #DE7224
-  --button-pressed: #606060
-  --button-primary-pressed: #BF5E17
-  --button-shadow: 0 1px 2px rgba(0, 0, 0, 0.25)
-  --button-link-active: #F17318
+body.light
+  --bg-main: #EBEBEB
 
-  --user-menu-row-background: #626262
-  --user-menu-row-border: #6D6D6D
-  --user-menu-row-background-pressed: #777777
-  --user-menu-row-border-pressed: #858585
-  --user-menu-shadow: 0 0 0 1000000px rgba(0, 0, 0, 0.2)
+  --field-border: #B1B1B1
+  --field-background: #F4F4F4
+  --field-shadow: 0 1px 2px rgba(0, 0, 0, 0.10)
+
+  --user-menu-row-background: #eaeaea
+  --user-menu-row-border: #dbdbdb
+  --user-menu-row-background-pressed: #e1e1e1
+  --user-menu-row-border-pressed: #c1c1c1
+  --button-shadow: none
+
+  --icon-error: url(../assets/error-icon-light.svg)
+  --icon-arrow-right: url(../assets/arrow-right-icon-light.svg)
+
+  --header-background: #da732a
+  --progress-indicator: #da732a
+  @include create-brightness-theme(black)
+  @include create-button-theme(#cecece, #da732a)

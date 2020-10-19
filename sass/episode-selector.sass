@@ -59,6 +59,14 @@
     background-repeat: no-repeat
 
     &.enabled
-      border-color: var(--field-accent)
-      background-color: var(--field-accent)
+      border-color: var(--button-primary)
+      background-color: var(--button-primary)
       background-image: url("../assets/inc-icon.svg")
+
+      &:hover
+        border-color: var(--button-primary-hover)
+        background-color: var(--button-primary-hover)
+
+      &:active
+        border-color: var(--button-primary-pressed)
+        background-color: var(--button-primary-pressed)
