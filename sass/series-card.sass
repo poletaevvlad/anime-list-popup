@@ -3,16 +3,17 @@
   border-bottom: 1px solid var(--clr-separator)
   padding: 12px 8px
   height: 85px
-  display: flex
+  position: relative
 
   &.disabled>div
     opacity: 0.6
 
 .series-cover
-  flex: 0 0 60px
+  position: absolute
+  left: 8px
+  top: 12px
   width: 60px
   height: 85px
-  margin-right: 16px
   background-image: var(--no-cover-image)
   background-repeat: no-repeat
   background-position: center
@@ -20,7 +21,11 @@
   box-shadow: 0 0 0 1px var(--thumbnail-border) inset
 
 .card-contents
-  flex: 1 1
+  position: absolute
+  top: 12px
+  left: 80px
+  height: 85px
+  right: 8px
   display: flex
   flex-direction: column
 
