@@ -6,17 +6,20 @@
   "author": "Vlad Poletaev",
   "browser_action": {
     "default_popup": "popup.html",
-    "default_icon": "assets/action-icon.svg",
+    "default_icon": {
+      "16": "assets/action-icon-16.png",
+      "32": "assets/action-icon-32.png"
+    },
     "default_title": "Anime List",
     "theme_icons": [
       {
-        "dark": "assets/action-icon-dark.svg",
-        "light": "assets/action-icon-light.svg",
+        "dark": "assets/action-icon-dark-16.png",
+        "light": "assets/action-icon-light-16.png",
         "size": 16
       },
       {
-        "dark": "assets/action-icon-dark.svg",
-        "light": "assets/action-icon-light.svg",
+        "dark": "assets/action-icon-dark-32.png",
+        "light": "assets/action-icon-light-32.png",
         "size": 32
       }
     ]
