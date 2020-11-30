@@ -1,5 +1,7 @@
 # Anime List Popup
 
+![](assets/image-48.png) 
+
 This is an extension for Firefox, Chrome, or Chromium-based browser that shows your anime list from MyAnimeList in the browser's toolbar. 
 
 You can change anime status, rating, and the number of watched episodes. There are also convenient shortcuts for opening anime and manga lists on the MyAnimeList website.
