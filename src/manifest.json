@@ -1,10 +1,13 @@
 {
   "manifest_version": 2,
-  "name": "AnimeList",
+  "name": "Anime List Popup",
+  "description": "Shows your anime list from MyAnimeList in the browser's toolbar.",
   "version": "0.1",
+  "author": "Vlad Poletaev",
   "browser_action": {
     "default_popup": "popup.html",
     "default_icon": "assets/action-icon.svg",
+    "default_title": "Anime List",
     "theme_icons": [
       {
         "dark": "assets/action-icon-dark.svg",
