@@ -1,5 +1,3 @@
-@use "sass:color"
-
 @mixin create-brightness-theme($text-color)
   --text-primary: #{transparentize($text-color, 0.1)}
   --text-secondary: #{transparentize($text-color, 0.3)}
@@ -50,23 +48,24 @@
   @include create-brightness-theme(white)
   @include create-button-theme(#656565, #cf6518)
 
-body.light
-  --bg-main: #EBEBEB
+@media screen and (prefers-color-scheme: light)
+  body
+    --bg-main: #EBEBEB
 
-  --field-border: #B1B1B1
-  --field-background: #F4F4F4
-  --field-shadow: 0 1px 2px rgba(0, 0, 0, 0.10)
+    --field-border: #B1B1B1
+    --field-background: #F4F4F4
+    --field-shadow: 0 1px 2px rgba(0, 0, 0, 0.10)
 
-  --user-menu-row-background: #eaeaea
-  --user-menu-row-border: #dbdbdb
-  --user-menu-row-background-pressed: #e1e1e1
-  --user-menu-row-border-pressed: #c1c1c1
-  --button-shadow: none
+    --user-menu-row-background: #eaeaea
+    --user-menu-row-border: #dbdbdb
+    --user-menu-row-background-pressed: #e1e1e1
+    --user-menu-row-border-pressed: #c1c1c1
+    --button-shadow: none
 
-  --icon-error: url(../assets/error-icon-light.svg)
-  --icon-arrow-right: url(../assets/arrow-right-icon-light.svg)
+    --icon-error: url(../assets/error-icon-light.svg)
+    --icon-arrow-right: url(../assets/arrow-right-icon-light.svg)
 
-  --header-background: #da732a
-  --progress-indicator: #da732a
-  @include create-brightness-theme(black)
-  @include create-button-theme(#cecece, #da732a)
+    --header-background: #da732a
+    --progress-indicator: #da732a
+    @include create-brightness-theme(black)
+    @include create-button-theme(#cecece, #da732a)
