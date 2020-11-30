@@ -38,16 +38,16 @@ function watchSass() {
   return watch("sass/**/*.sass", sass)
 }
 
-function buildJs(watch) {
+function buildJs(watch, release) {
   return src("src/popup/index.tsx")
     .pipe(webpack({
       entry: {
         popup: "./src/popup/index.tsx",
         auth: "./src/auth/index.tsx"
       },
-      mode: "development",
+      mode: release ? "production" : "development",
       watch: watch,
-      devtool: 'source-map',
+      devtool: release ? undefined : 'source-map',
       module: {
         rules: [
           {
@@ -60,6 +60,9 @@ function buildJs(watch) {
       resolve: {
         extensions: ['.tsx', '.ts', '.js'],
       },
+      optimization: {
+        minimize: false
+      },
       output: { filename: "[name].js" }
     }))
     .pipe(dest("dist"));
@@ -68,7 +71,7 @@ function buildJs(watch) {
 exports.manifest = manifest;
 exports.buildJs = buildJs;
 exports.html = html;
-exports.default = parallel(manifest, buildJs.bind(undefined, false), html, sass, assets);
+exports.default = parallel(manifest, buildJs.bind(undefined, false, false), html, sass, assets);
 exports.watch = parallel(
   watchManifest,
   watchHtml,
@@ -76,3 +79,4 @@ exports.watch = parallel(
   watchSass,
   watchAssets
 );
+exports.release = parallel(manifest, buildJs.bind(undefined, false, true), html, sass, assets);
