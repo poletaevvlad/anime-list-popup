@@ -16,3 +16,16 @@ You will be asked to allow this extension access to your account when you first 
 | ![Light theme](screenshots/light.png) | ![Dark theme](screenshots/dark.png) |
 
 The theme is determined based on your browser's preferences.
+
+
+## Building
+
+To build the extension run the following:
+
+```bash
+cd /path/to/source/dir
+npm install
+npm run-script build
+```
+
+Extension files will be generated in the `dist` directory.
