@@ -4,7 +4,7 @@
   "scripts": {
     "build": "npx gulp release",
     "watch": "npx gulp watch",
-    "package": "rm -f dist.zip source.zip && cd dist && zip -r ../dist.zip * && cd .. && zip -r source.zip assets html sass src screenshots package.json package-lock.json test-preprocessor.js tsconfig.json LICENSE gulpfile.js"
+    "package": "rm -f dist.zip source.zip && cd dist && zip -r ../dist.zip * && cd .. && zip -r source.zip assets html sass src screenshots package.json package-lock.json test-preprocessor.js tsconfig.json LICENSE gulpfile.js README.md"
   },
   "devDependencies": {
     "@types/react": "^16.9.49",
