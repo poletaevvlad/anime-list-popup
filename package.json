@@ -2,13 +2,15 @@
   "name": "animelist-ext",
   "version": "0.0.1",
   "scripts": {
-    "build": "npx webpack --mode development"
+    "build": "npx gulp release",
+    "watch": "npx gulp watch"
   },
   "devDependencies": {
     "@types/jest": "^26.0.14",
     "@types/react": "^16.9.49",
     "@types/react-dom": "^16.9.8",
     "gulp": "^4.0.2",
+    "gulp-clean": "^0.4.0",
     "gulp-sass": "^4.1.0",
     "jest": "^26.4.2",
     "ts-loader": "^8.0.4",

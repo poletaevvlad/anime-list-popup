@@ -1,6 +1,11 @@
-const { src, dest, parallel, watch } = require('gulp');
+const { src, dest, parallel, watch, series } = require('gulp');
 const webpack = require('webpack-stream');
-var buildSass = require('gulp-sass');
+const buildSass = require('gulp-sass');
+const gulpClean = require('gulp-clean');
+
+function clean() {
+  return src("dist", { read: false }).pipe(gulpClean());
+}
 
 function manifest() {
   return src("src/manifest.json")
@@ -71,6 +76,7 @@ function buildJs(watch, release) {
 exports.manifest = manifest;
 exports.buildJs = buildJs;
 exports.html = html;
+exports.clean = clean;
 exports.default = parallel(manifest, buildJs.bind(undefined, false, false), html, sass, assets);
 exports.watch = parallel(
   watchManifest,
@@ -79,4 +85,7 @@ exports.watch = parallel(
   watchSass,
   watchAssets
 );
-exports.release = parallel(manifest, buildJs.bind(undefined, false, true), html, sass, assets);
+exports.release = series(
+  clean,
+  parallel(manifest, buildJs.bind(undefined, false, true), html, sass, assets)
+);
