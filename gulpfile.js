@@ -4,7 +4,8 @@ const buildSass = require('gulp-sass');
 const gulpClean = require('gulp-clean');
 
 function clean() {
-  return src("dist", { read: false }).pipe(gulpClean());
+  return src("dist", { read: false, allowEmpty: true })
+    .pipe(gulpClean());
 }
 
 function manifest() {
