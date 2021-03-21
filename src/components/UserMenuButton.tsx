@@ -64,9 +64,9 @@ const UserMenuButton = (props: UserMenuButtonProps) => {
             </a></li>
             <li><a href={props.userInfo.animeListUrl(props.currentList)}>Anime list</a></li>
             <li><a href={props.userInfo.mangaListUrl}>Manga list</a></li>
+            <li><a href="https://myanimelist.net/">Go to MyAnimeList</a></li>
             <li className="divider"></li>
             <li><a href="#" onClick={props.onLogout}>Log out</a></li>
-            <li className="divider"></li>
             <ThemeEditor theme={props.theme} onThemeChanged={props.onThemeChanged} />
         </ul>
     }
