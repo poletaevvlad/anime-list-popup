@@ -1,10 +1,12 @@
 import * as React from "react";
 import UserInfo from "../listdata/userinfo"
+import { AnimeStatus } from "../listdata/api"
 
 interface UserMenuButtonProps {
     isOpened: boolean
     setOpened: (opened: boolean) => void
-    userInfo: UserInfo;
+    currentList: AnimeStatus
+    userInfo: UserInfo
     onLogout: () => {}
 }
 
@@ -21,7 +23,7 @@ const UserMenuButton = (props: UserMenuButtonProps) => {
                     }} />
                 {props.userInfo.username}
             </a></li>
-            <li><a href={props.userInfo.animeListUrl}>Anime list</a></li>
+            <li><a href={props.userInfo.animeListUrl(props.currentList)}>Anime list</a></li>
             <li><a href={props.userInfo.mangaListUrl}>Manga list</a></li>
             <li className="divider"></li>
             <li><a href="#" onClick={props.onLogout}>Log out</a></li>

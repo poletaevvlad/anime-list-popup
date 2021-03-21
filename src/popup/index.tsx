@@ -125,7 +125,7 @@ const Application = (props: ApplicationProps) => {
                     {modal != null || state.userInfo == null
                         ? <div className="header-button icon-user-menu disabled" />
                         : <UserMenuButton userInfo={state.userInfo} onLogout={logOut}
-                            isOpened={isMenuOpen} setOpened={setMenuOpen} />}
+                            isOpened={isMenuOpen} setOpened={setMenuOpen} currentList={state.currentList} />}
                 </div>
                 <StatusDropdown value={state.currentList} onChange={currentListChanged}
                     enabled={state.updatingAnime.size == 0 && modal == null} />
