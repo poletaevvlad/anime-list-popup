@@ -1,9 +1,9 @@
 import * as React from "react";
 import UserInfo from "../listdata/userinfo"
 import { AnimeStatus } from "../listdata/api"
-import { COLORS, ThemeBrightnes, ThemeData, BRIGHTNESES } from "../listdata/theme"
+import { COLORS, ThemeData, BRIGHTNESES } from "../listdata/theme"
 
-const BRIGHTNES_LABELS = { "dark": "Dark", "auto": "Auto", "light": "Light" }
+const BRIGHTNESS_LABELS = { "dark": "Dark", "auto": "Auto", "light": "Light" }
 
 interface ThemeEditorProps {
     theme: ThemeData
@@ -21,16 +21,16 @@ interface UserMenuButtonProps extends ThemeEditorProps {
 const ThemeEditor = (props: ThemeEditorProps) => {
     return <li className="menu-settings">
         <div className="settings-selector">
-            {BRIGHTNESES.map(brightnes => {
+            {BRIGHTNESES.map(brightness => {
                 var className = "item text"
-                if (brightnes == props.theme.brightnes) {
+                if (brightness == props.theme.brightness) {
                     className += " selected"
                 }
                 return <div
                     className={className}
                     tabIndex={0}
-                    onClick={() => props.onThemeChanged(props.theme.with({ brightnes: brightnes }))}>
-                    {BRIGHTNES_LABELS[brightnes]}
+                    onClick={() => props.onThemeChanged(props.theme.with({ brightness: brightness }))}>
+                    {BRIGHTNESS_LABELS[brightness]}
                 </div>
             })}
         </div>

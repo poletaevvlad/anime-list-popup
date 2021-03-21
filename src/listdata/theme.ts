@@ -1,26 +1,26 @@
-export type ThemeBrightnes = "light" | "dark" | "auto"
+export type ThemeBrightness = "light" | "dark" | "auto"
 export type ThemeColor = "orange" | "green" | "purple" | "red" | "cyan" | "blue"
 
 export const COLORS: ThemeColor[] = ["orange", "green", "purple", "red", "cyan", "blue"]
-export const BRIGHTNESES: ThemeBrightnes[] = ["dark", "auto", "light"]
+export const BRIGHTNESES: ThemeBrightness[] = ["dark", "auto", "light"]
 
 export class ThemeData {
-    readonly brightnes: ThemeBrightnes
+    readonly brightness: ThemeBrightness
     readonly color: ThemeColor
 
-    constructor(brightnes: ThemeBrightnes, color: ThemeColor) {
-        this.brightnes = brightnes
+    constructor(brightnes: ThemeBrightness, color: ThemeColor) {
+        this.brightness = brightnes
         this.color = color
     }
 
-    with({ color, brightnes }: { color?: ThemeColor, brightnes?: ThemeBrightnes }): ThemeData {
+    with({ color, brightness }: { color?: ThemeColor, brightness?: ThemeBrightness }): ThemeData {
         return new ThemeData(
-            typeof brightnes == "undefined" ? this.brightnes : brightnes,
+            typeof brightness == "undefined" ? this.brightness : brightness,
             typeof color == "undefined" ? this.color : color,
         )
     }
 
     get rootClassName(): String {
-        return `color-${this.color} brightness-${this.brightnes}`
+        return `color-${this.color} brightness-${this.brightness}`
     }
 }
