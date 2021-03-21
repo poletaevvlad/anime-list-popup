@@ -1,39 +1,40 @@
 import API, { AnimeStatus, SeriesUpdate } from "../../listdata/api";
 import UserInfo from "../../listdata/userinfo";
 import Action from "./actions";
-import { ApplicationState } from "./state";
 
-class AsyncDispatcher {
-    private actions: Action[];
-    private listener: ((action: Action) => void) | null;
-    private api: API;
+class BaseAsyncDispatcher<A> {
+    private actions: A[] = []
+    private listener: ((action: A) => void) | null = null
 
-    constructor(api: API) {
-        this.api = api;
-        this.actions = []
-        this.listener = null
+    protected dispatch(action: A) {
+        if (this.listener == null) {
+            this.actions.push(action);
+        } else {
+            this.listener(action);
+        }
     }
 
-    subscribe(listener: (action: Action) => void) {
+    subscribe(listener: (action: A) => void) {
         while (this.actions.length > 0) {
             listener(this.actions.shift());
         }
         this.listener = listener;
     }
 
-    unsubscribe(listener: (action: Action) => void) {
+    unsubscribe(listener: (action: A) => void) {
         if (this.listener != listener) {
             console.error("Trying to remove listener different from the current listener");
         }
         this.listener = null;
     }
+}
 
-    private dispatch(action: Action) {
-        if (this.listener == null) {
-            this.actions.push(action);
-        } else {
-            this.listener(action);
-        }
+class AsyncDispatcher extends BaseAsyncDispatcher<Action> {
+    private api: API;
+
+    constructor(api: API) {
+        super();
+        this.api = api;
     }
 
     loadAnimeList(status: AnimeStatus, offset: number) {
