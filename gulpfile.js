@@ -2,6 +2,8 @@ const { src, dest, parallel, watch, series } = require('gulp');
 const webpack = require('webpack-stream');
 const buildSass = require('gulp-sass');
 const gulpClean = require('gulp-clean');
+const replace = require('gulp-replace');
+const fs = require('fs')
 
 function clean() {
   return src("dist", { read: false, allowEmpty: true })
@@ -9,7 +11,9 @@ function clean() {
 }
 
 function manifest() {
+  const packageJson = JSON.parse(fs.readFileSync("./package.json"));
   return src("src/manifest.json")
+    .pipe(replace("{#VERSION#}", packageJson.version))
     .pipe(dest("dist"));
 }
 
