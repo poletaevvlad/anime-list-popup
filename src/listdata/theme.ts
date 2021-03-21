@@ -2,6 +2,7 @@ export type ThemeBrightnes = "light" | "dark" | "auto"
 export type ThemeColor = "orange" | "green" | "purple" | "red" | "cyan" | "blue"
 
 export const COLORS: ThemeColor[] = ["orange", "green", "purple", "red", "cyan", "blue"]
+export const BRIGHTNESES: ThemeBrightnes[] = ["dark", "auto", "light"]
 
 export class ThemeData {
     readonly brightnes: ThemeBrightnes

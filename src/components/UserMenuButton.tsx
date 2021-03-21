@@ -1,7 +1,9 @@
 import * as React from "react";
 import UserInfo from "../listdata/userinfo"
 import { AnimeStatus } from "../listdata/api"
-import { COLORS, ThemeData } from "../listdata/theme"
+import { COLORS, ThemeBrightnes, ThemeData, BRIGHTNESES } from "../listdata/theme"
+
+const BRIGHTNES_LABELS = { "dark": "Dark", "auto": "Auto", "light": "Light" }
 
 interface ThemeEditorProps {
     theme: ThemeData
@@ -17,17 +19,34 @@ interface UserMenuButtonProps extends ThemeEditorProps {
 }
 
 const ThemeEditor = (props: ThemeEditorProps) => {
-    return <div className="menu-settings">
+    return <li className="menu-settings">
+        <div className="settings-selector">
+            {BRIGHTNESES.map(brightnes => {
+                var className = "item text"
+                if (brightnes == props.theme.brightnes) {
+                    className += " selected"
+                }
+                return <div
+                    className={className}
+                    tabIndex={0}
+                    onClick={() => props.onThemeChanged(props.theme.with({ brightnes: brightnes }))}>
+                    {BRIGHTNES_LABELS[brightnes]}
+                </div>
+            })}
+        </div>
         <div className="settings-selector">
             {COLORS.map(color => {
                 var className = "item color color-" + color
                 if (color == props.theme.color) {
                     className += " selected"
                 }
-                return <div className={className} onClick={() => props.onThemeChanged(props.theme.with({ color: color }))} />
+                return <div
+                    className={className}
+                    tabIndex={0}
+                    onClick={() => props.onThemeChanged(props.theme.with({ color: color }))} />
             })}
         </div>
-    </div>
+    </li>
 }
 
 const UserMenuButton = (props: UserMenuButtonProps) => {
@@ -47,6 +66,7 @@ const UserMenuButton = (props: UserMenuButtonProps) => {
             <li><a href={props.userInfo.mangaListUrl}>Manga list</a></li>
             <li className="divider"></li>
             <li><a href="#" onClick={props.onLogout}>Log out</a></li>
+            <li className="divider"></li>
             <ThemeEditor theme={props.theme} onThemeChanged={props.onThemeChanged} />
         </ul>
     }

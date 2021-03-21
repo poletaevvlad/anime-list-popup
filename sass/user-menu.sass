@@ -56,13 +56,22 @@
 .menu-settings
   .settings-selector
     display: flex
-    margin: 0 5px
+    margin: 5px 5px
 
   .item
     flex: 1 1
-    height: 24px
+    height: 20px
     @include user-menu-link
     border-style: solid
+    text-align: center
+    line-height: 20px
+    cursor: pointer
+
+  .text
+    color: var(--text-primary-opaque)
+
+    &.selected, &:active
+      color: var(--text-primary)
 
   .color
     position: relative

@@ -1,5 +1,6 @@
 @mixin create-brightness-theme($text-color)
   --text-primary: #{transparentize($text-color, 0.1)}
+  --text-primary-opaque: #{transparentize($text-color, 0.5)}
   --text-secondary: #{transparentize($text-color, 0.3)}
   --clr-separator: #{transparentize($text-color, 0.9)}
   --clr-separator-light: #{transparentize($text-color, 0.95)}
