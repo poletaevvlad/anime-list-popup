@@ -1,3 +1,5 @@
+$accent-colors: ( orange: #C76016, green: #3f945b, purple: #8e47a0, red: #eb4a4a, cyan: #26a594, blue: #4b7dbd )
+
 @mixin create-brightness-theme($text-color)
   --text-primary: #{transparentize($text-color, 0.1)}
   --text-primary-opaque: #{transparentize($text-color, 0.5)}
@@ -18,12 +20,8 @@
   --button-link-active: #{lighten($accent, 7%)}
 
 #{":root"}
-  --accent-orange: #C76016
-  --accent-green: #3f945b
-  --accent-purple: #8e47a0
-  --accent-red: #eb4a4a
-  --accent-cyan: #26a594
-  --accent-blue: #4b7dbd
+  @each $name, $color in $accent-colors
+    --accent-#{$name}: #{$color}
 
   --bg-main: #383838
   --header-text: #{transparentize(white, 0.1)}
@@ -60,20 +58,9 @@
   @include create-brightness-theme(white)
   @include create-button-theme(#656565)
 
-.color-green
-  @include set-accent(#3f945b)
-
-.color-purple
-  @include set-accent(#8e47a0)
-
-.color-red
-  @include set-accent(#eb4a4a)
-
-.color-cyan
-  @include set-accent(#26a594)
-
-.color-blue
-  @include set-accent(#4b7dbd)
+@each $color, $value in $accent-colors
+  .color-#{$color}
+    @include set-accent($value)
 
 @mixin light-theme
   --bg-main: #EBEBEB
@@ -92,9 +79,14 @@
   --icon-arrow-right: url(../assets/arrow-right-icon-light.svg)
   --icon-inc-disabled: url("../assets/inc-icon-disabled-light.svg")
 
-  @include set-accent(#da732a)
   @include create-brightness-theme(black)
   @include create-button-theme(#cecece)
+
+  @each $color, $value in $accent-colors
+    --accent-#{$color}: #{lighten($value, 7%)}
+
+    &.color-#{$color}
+      @include set-accent(lighten($value, 7%))
 
 @media screen and (prefers-color-scheme: light)
   .brightness-auto

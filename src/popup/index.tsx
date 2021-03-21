@@ -24,7 +24,7 @@ interface ApplicationProps {
 const Application = (props: ApplicationProps) => {
     const [state, dispatch] = React.useReducer(rootReducer, INITIAL_STATE);
     const [isMenuOpen, setMenuOpen] = React.useState(true);
-    const [theme, setTheme] = React.useState(() => new ThemeData("dark", "orange"));
+    const [theme, setTheme] = React.useState(() => new ThemeData("auto", "orange"));
 
     React.useEffect(() => {
         const body = document.getElementsByTagName("body")[0]
