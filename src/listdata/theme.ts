@@ -18,4 +18,8 @@ export class ThemeData {
             typeof color == "undefined" ? this.color : color,
         )
     }
+
+    get rootClassName(): String {
+        return `color-${this.color} brightness-${this.brightnes}`
+    }
 }

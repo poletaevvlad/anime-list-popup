@@ -24,7 +24,7 @@ interface ApplicationProps {
 const Application = (props: ApplicationProps) => {
     const [state, dispatch] = React.useReducer(rootReducer, INITIAL_STATE);
     const [isMenuOpen, setMenuOpen] = React.useState(true);
-    const [theme, setTheme] = React.useState(() => new ThemeData("dark", "green"));
+    const [theme, setTheme] = React.useState(() => new ThemeData("dark", "orange"));
 
     React.useEffect(() => {
         props.asyncDispatcher.subscribe(dispatch);
@@ -121,7 +121,7 @@ const Application = (props: ApplicationProps) => {
             onRejected={() => episodeUpdated(state.statusSuggestion.series.id, state.statusSuggestion.rejectUpdate)} />
     }
 
-    return <div className={isMenuOpen ? "notouch" : ""}>
+    return <div className={(isMenuOpen ? "notouch " : " ") + theme.rootClassName}>
         {modal}
         <div className="header-bar-container">
             <div className="header-bar">
