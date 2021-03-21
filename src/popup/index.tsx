@@ -27,6 +27,9 @@ const Application = (props: ApplicationProps) => {
     const [theme, setTheme] = React.useState(() => new ThemeData("dark", "orange"));
 
     React.useEffect(() => {
+        const body = document.getElementsByTagName("body")[0]
+        body.setAttribute("class", "popup " + theme.rootClassName)
+
         props.asyncDispatcher.subscribe(dispatch);
         return () => props.asyncDispatcher.unsubscribe(dispatch);
     });
@@ -121,7 +124,7 @@ const Application = (props: ApplicationProps) => {
             onRejected={() => episodeUpdated(state.statusSuggestion.series.id, state.statusSuggestion.rejectUpdate)} />
     }
 
-    return <div className={(isMenuOpen ? "notouch " : " ") + theme.rootClassName}>
+    return <div className={isMenuOpen ? "notouch" : ""}>
         {modal}
         <div className="header-bar-container">
             <div className="header-bar">

@@ -75,24 +75,30 @@
 .color-blue
   @include set-accent(#4b7dbd)
 
+@mixin light-theme
+  --bg-main: #EBEBEB
+
+  --field-border: #B1B1B1
+  --field-background: #F4F4F4
+  --field-shadow: 0 1px 2px rgba(0, 0, 0, 0.10)
+
+  --user-menu-row-background: #eaeaea
+  --user-menu-row-border: #dbdbdb
+  --user-menu-row-background-pressed: #e1e1e1
+  --user-menu-row-border-pressed: #c1c1c1
+  --button-shadow: none
+
+  --icon-error: url(../assets/error-icon-light.svg)
+  --icon-arrow-right: url(../assets/arrow-right-icon-light.svg)
+  --icon-inc-disabled: url("../assets/inc-icon-disabled-light.svg")
+
+  @include set-accent(#da732a)
+  @include create-brightness-theme(black)
+  @include create-button-theme(#cecece)
+
 @media screen and (prefers-color-scheme: light)
-  body
-    --bg-main: #EBEBEB
+  .brightness-auto
+    @include light-theme
 
-    --field-border: #B1B1B1
-    --field-background: #F4F4F4
-    --field-shadow: 0 1px 2px rgba(0, 0, 0, 0.10)
-
-    --user-menu-row-background: #eaeaea
-    --user-menu-row-border: #dbdbdb
-    --user-menu-row-background-pressed: #e1e1e1
-    --user-menu-row-border-pressed: #c1c1c1
-    --button-shadow: none
-
-    --icon-error: url(../assets/error-icon-light.svg)
-    --icon-arrow-right: url(../assets/arrow-right-icon-light.svg)
-    --icon-inc-disabled: url("../assets/inc-icon-disabled-light.svg")
-
-    @include set-accent(#da732a)
-    @include create-brightness-theme(black)
-    @include create-button-theme(#cecece)
+.brightness-light
+  @include light-theme
