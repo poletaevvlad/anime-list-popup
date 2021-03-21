@@ -19,13 +19,8 @@
     margin: 5px 0
     background-color: var(--field-border)
 
-.user-menu a
-  display: block
-  padding: 6px 12px
-  text-decoration: none
-  color: var(--text-primary)
+@mixin user-menu-link
   border: 1px transparent
-  border-style: solid none
 
   &:hover
     background-color: var(--user-menu-row-background)
@@ -34,6 +29,14 @@
   &:active
     background-color: var(--user-menu-row-background-pressed)
     border-color: var(--user-menu-row-border-pressed)
+
+.user-menu a
+  display: block
+  padding: 6px 12px
+  text-decoration: none
+  color: var(--text-primary)
+  @include user-menu-link
+  border-style: solid none
 
   &.with-avatar
     padding: 6px 12px
@@ -49,3 +52,51 @@
   background-position: center
   background-image: var(--avatar-placeholder)
   box-shadow: 0 0 0 1px var(--thumbnail-border) inset
+
+.menu-settings
+  .settings-selector
+    display: flex
+    margin: 0 5px
+
+  .item
+    flex: 1 1
+    height: 24px
+    @include user-menu-link
+    border-style: solid
+
+  .color
+    position: relative
+    $size: 8px
+
+    &::after
+      content: ""
+      display: inline-block
+      width: $size
+      height: $size
+      position: absolute
+      left: 50%
+      top: 50%
+      margin: -$size / 2
+      border-radius: $size / 2
+
+    &.selected::before
+      $outer-size: $size + 6px
+      content: ""
+      display: inline-block
+      width: $outer-size
+      height: $outer-size
+      position: absolute
+      left: 50%
+      top: 50%
+      margin: -$outer-size / 2
+      border-radius: $outer-size / 2
+      box-sizing: border-box
+
+    $colors: [orange, green, purple, red, cyan, blue]
+    @each $color in $colors
+      &.color-#{$color}
+        &::after
+          background-color: var(--accent-#{$color})
+
+        &::before
+          border: 1px solid var(--accent-#{$color})

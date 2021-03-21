@@ -15,6 +15,7 @@ import ErrorModal from "../components/ErrorModal";
 import AccessToken from "../listdata/token";
 import SeriesInfo from "../listdata/seriesinfo";
 import UserInfo from "../listdata/userinfo";
+import { ThemeData } from "../listdata/theme";
 
 interface ApplicationProps {
     asyncDispatcher: AsyncDispatcher
@@ -22,7 +23,9 @@ interface ApplicationProps {
 
 const Application = (props: ApplicationProps) => {
     const [state, dispatch] = React.useReducer(rootReducer, INITIAL_STATE);
-    const [isMenuOpen, setMenuOpen] = React.useState(false);
+    const [isMenuOpen, setMenuOpen] = React.useState(true);
+    const [theme, setTheme] = React.useState(() => new ThemeData("dark", "green"));
+
     React.useEffect(() => {
         props.asyncDispatcher.subscribe(dispatch);
         return () => props.asyncDispatcher.unsubscribe(dispatch);
@@ -128,7 +131,7 @@ const Application = (props: ApplicationProps) => {
                         : <div className="header-button icon-refresh" tabIndex={0} onClick={refreshData} />}
                     {modal != null || state.userInfo == null
                         ? <div className="header-button icon-user-menu disabled" />
-                        : <UserMenuButton userInfo={state.userInfo} onLogout={logOut}
+                        : <UserMenuButton userInfo={state.userInfo} onLogout={logOut} theme={theme} onThemeChanged={setTheme}
                             isOpened={isMenuOpen} setOpened={setMenuOpen} currentList={state.currentList} />}
                 </div>
                 <StatusDropdown value={state.currentList} onChange={currentListChanged}

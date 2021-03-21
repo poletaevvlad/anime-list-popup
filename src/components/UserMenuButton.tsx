@@ -1,13 +1,33 @@
 import * as React from "react";
 import UserInfo from "../listdata/userinfo"
 import { AnimeStatus } from "../listdata/api"
+import { COLORS, ThemeData } from "../listdata/theme"
 
-interface UserMenuButtonProps {
+interface ThemeEditorProps {
+    theme: ThemeData
+    onThemeChanged: (newTheme: ThemeData) => void
+}
+
+interface UserMenuButtonProps extends ThemeEditorProps {
     isOpened: boolean
     setOpened: (opened: boolean) => void
     currentList: AnimeStatus
     userInfo: UserInfo
     onLogout: () => {}
+}
+
+const ThemeEditor = (props: ThemeEditorProps) => {
+    return <div className="menu-settings">
+        <div className="settings-selector">
+            {COLORS.map(color => {
+                var className = "item color color-" + color
+                if (color == props.theme.color) {
+                    className += " selected"
+                }
+                return <div className={className} onClick={() => props.onThemeChanged(props.theme.with({ color: color }))} />
+            })}
+        </div>
+    </div>
 }
 
 const UserMenuButton = (props: UserMenuButtonProps) => {
@@ -27,6 +47,7 @@ const UserMenuButton = (props: UserMenuButtonProps) => {
             <li><a href={props.userInfo.mangaListUrl}>Manga list</a></li>
             <li className="divider"></li>
             <li><a href="#" onClick={props.onLogout}>Log out</a></li>
+            <ThemeEditor theme={props.theme} onThemeChanged={props.onThemeChanged} />
         </ul>
     }
 
