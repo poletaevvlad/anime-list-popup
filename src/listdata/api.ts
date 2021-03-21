@@ -85,6 +85,7 @@ export default class API {
             "offset": offset.toString(),
             "limit": "25",
             "fields": "alternative_titles,num_episodes,mean,my_list_status{num_episodes_watched,score},start_season",
+            "nsfw": "true",
         });
         const values = await this.makeApiCall(url, {});
         return {
