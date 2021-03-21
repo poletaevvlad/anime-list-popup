@@ -23,12 +23,11 @@ interface ApplicationProps {
 
 const Application = (props: ApplicationProps) => {
     const [state, dispatch] = React.useReducer(rootReducer, INITIAL_STATE);
-    const [isMenuOpen, setMenuOpen] = React.useState(true);
-    const [theme, setTheme] = React.useState(() => new ThemeData("auto", "orange"));
+    const [isMenuOpen, setMenuOpen] = React.useState(false);
 
     React.useEffect(() => {
         const body = document.getElementsByTagName("body")[0]
-        body.setAttribute("class", "popup " + theme.rootClassName)
+        body.setAttribute("class", "popup " + state.theme.rootClassName)
 
         props.asyncDispatcher.subscribe(dispatch);
         return () => props.asyncDispatcher.unsubscribe(dispatch);
@@ -105,6 +104,11 @@ const Application = (props: ApplicationProps) => {
         UserInfo.removeFromCache(),
     ]).then(logInError)
 
+    const changeTheme = (theme: ThemeData) => {
+        dispatch({ type: "set-theme", theme: theme })
+        theme.save()
+    }
+
     const currentList = state.animeLists[state.currentList];
 
     var modal: React.ReactElement = null;
@@ -134,8 +138,14 @@ const Application = (props: ApplicationProps) => {
                         : <div className="header-button icon-refresh" tabIndex={0} onClick={refreshData} />}
                     {modal != null || state.userInfo == null
                         ? <div className="header-button icon-user-menu disabled" />
-                        : <UserMenuButton userInfo={state.userInfo} onLogout={logOut} theme={theme} onThemeChanged={setTheme}
-                            isOpened={isMenuOpen} setOpened={setMenuOpen} currentList={state.currentList} />}
+                        : <UserMenuButton
+                            userInfo={state.userInfo}
+                            onLogout={logOut}
+                            theme={state.theme}
+                            onThemeChanged={changeTheme}
+                            isOpened={isMenuOpen}
+                            setOpened={setMenuOpen}
+                            currentList={state.currentList} />}
                 </div>
                 <StatusDropdown value={state.currentList} onChange={currentListChanged}
                     enabled={state.updatingAnime.size == 0 && modal == null} />
@@ -172,6 +182,9 @@ document.addEventListener("DOMContentLoaded", () => {
         const dispatcher = new AsyncDispatcher(api);
         dispatcher.loadAnimeList(INITIAL_STATE.currentList, 0);
         dispatcher.loadUserInfo();
+        dispatcher.dispatchLater(ThemeData.load().then(
+            theme => { return { type: "set-theme", theme: theme } }
+        ))
         render(
             <Application asyncDispatcher={dispatcher} />,
             document.getElementById("app")

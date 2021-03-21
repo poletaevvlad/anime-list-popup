@@ -1,8 +1,8 @@
 import UserInfo from "../../listdata/userinfo";
 import { AnimeStatus, AnimeListEntry, SeriesUpdate } from "../../listdata/api";
 import AsyncDispatcher from "./asyncDispatcher"
-import Action from "./actions"
 import SeriesInfo from "../../listdata/seriesinfo";
+import { ThemeData } from "../../listdata/theme";
 
 export interface AnimeList {
     entries: AnimeListEntry[];
@@ -31,6 +31,7 @@ export interface ApplicationState {
     loadingCounter: number;
     errorMessage: ErrorMessage | null;
     statusSuggestion: StatusChangeSuggestion | null;
+    theme: ThemeData;
 }
 
 export const EMPTY_LISTS: { [key in AnimeStatus]: AnimeList } = {
@@ -49,4 +50,5 @@ export const INITIAL_STATE: ApplicationState = {
     loadingCounter: 0,
     errorMessage: null,
     statusSuggestion: null,
+    theme: ThemeData.DEFAULT_THEME,
 }

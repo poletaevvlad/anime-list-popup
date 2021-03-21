@@ -152,6 +152,8 @@ export const rootReducer: Reducer<ApplicationState> = (current, action) => {
                     newStatus: action.newStatus,
                 }
             }
+        case "set-theme":
+            return { ...current, theme: action.theme }
         default:
             return {
                 ...current,

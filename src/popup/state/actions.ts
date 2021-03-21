@@ -3,6 +3,7 @@ import UserInfo from "../../listdata/userinfo";
 import { AnimeListEntry, SeriesUpdate } from "../../listdata/api";
 import AsyncDispatcher from "./asyncDispatcher"
 import SeriesInfo from "../../listdata/seriesinfo";
+import { ThemeData } from "../../listdata/theme";
 
 type Action =
     { type: "current-list-changed", status: AnimeStatus } |
@@ -33,6 +34,7 @@ type Action =
         rejectUpdate: SeriesUpdate
         currentStatus: AnimeStatus
         newStatus: AnimeStatus
-    };
+    } |
+    { type: "set-theme", theme: ThemeData };
 
 export default Action;

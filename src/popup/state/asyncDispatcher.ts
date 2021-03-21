@@ -27,6 +27,14 @@ class BaseAsyncDispatcher<A> {
         }
         this.listener = null;
     }
+
+    dispatchLater(promise: Promise<A>) {
+        promise.then((action) => {
+            if (typeof (action) != "undefined" && action != null) {
+                this.dispatch(action);
+            }
+        });
+    }
 }
 
 class AsyncDispatcher extends BaseAsyncDispatcher<Action> {
