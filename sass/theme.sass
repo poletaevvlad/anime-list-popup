@@ -4,12 +4,15 @@
   --clr-separator: #{transparentize($text-color, 0.9)}
   --clr-separator-light: #{transparentize($text-color, 0.95)}
 
-@mixin create-button-theme($default, $accent)
+@mixin create-button-theme($default)
   --button: #{$default}
-  --button-primary: #{$accent}
   --button-hover: #{lighten($default, 3%)}
-  --button-primary-hover: #{lighten($accent, 3%)}
   --button-pressed: #{lighten($default, 7%)}
+
+@mixin set-accent($accent)
+  --header-background: #{$accent}
+  --button-primary: #{$accent}
+  --button-primary-hover: #{lighten($accent, 3%)}
   --button-primary-pressed: #{lighten($accent, 7%)}
   --button-link-active: #{lighten($accent, 7%)}
 
@@ -22,13 +25,12 @@
   --field-background: #515151
   --field-shadow: 0 1px 2px rgba(0, 0, 0, 0.25)
 
-  --header-background: #C76016
+  @include set-accent(#C76016)
+
   --header-shadow: 0 2px 4px rgba(0, 0, 0, 15%)
   --header-button-hover: rgba(255, 255, 255, 0.2)
   --header-dropdown-background: rgba(0, 0, 0, 0.06)
   --header-dropdown-border: rgba(0, 0, 0, 0.1)
-
-  --progress-indicator: #C76016
   --modal-border: #4E4E4E
   --button-shadow: 0 1px 2px rgba(0, 0, 0, 0.25)
 
@@ -48,7 +50,22 @@
   --avatar-placeholder: url(../assets/avatar-placeholder.svg)
 
   @include create-brightness-theme(white)
-  @include create-button-theme(#656565, #cf6518)
+  @include create-button-theme(#656565)
+
+.color-green
+  @include set-accent(#3f945b)
+
+.color-purple
+  @include set-accent(#8e47a0)
+
+.color-red
+  @include set-accent(#eb4a4a)
+
+.color-cyan
+  @include set-accent(#26a594)
+
+.color-blue
+  @include set-accent(#4b7dbd)
 
 @media screen and (prefers-color-scheme: light)
   body
@@ -68,7 +85,6 @@
     --icon-arrow-right: url(../assets/arrow-right-icon-light.svg)
     --icon-inc-disabled: url("../assets/inc-icon-disabled-light.svg")
 
-    --header-background: #da732a
-    --progress-indicator: #da732a
+    @include set-accent(#da732a)
     @include create-brightness-theme(black)
-    @include create-button-theme(#cecece, #da732a)
+    @include create-button-theme(#cecece)
