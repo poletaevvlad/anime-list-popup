@@ -14,6 +14,7 @@ import StateChangeModal from "../components/StateChangeModal"
 import ErrorModal from "../components/ErrorModal";
 import AccessToken from "../listdata/token";
 import SeriesInfo from "../listdata/seriesinfo";
+import UserInfo from "../listdata/userinfo";
 
 interface ApplicationProps {
     asyncDispatcher: AsyncDispatcher
@@ -93,7 +94,10 @@ const Application = (props: ApplicationProps) => {
         window.close();
     }
 
-    const logOut = () => AccessToken.logout().then(logInError)
+    const logOut = () => Promise.all([
+        AccessToken.logout(),
+        UserInfo.removeFromCache(),
+    ]).then(logInError)
 
     const currentList = state.animeLists[state.currentList];
 

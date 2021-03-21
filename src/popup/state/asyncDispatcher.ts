@@ -1,4 +1,5 @@
 import API, { AnimeStatus, SeriesUpdate } from "../../listdata/api";
+import UserInfo from "../../listdata/userinfo";
 import Action from "./actions";
 import { ApplicationState } from "./state";
 
@@ -58,22 +59,31 @@ class AsyncDispatcher {
     }
 
     loadUserInfo() {
-        this.api.getUserInfo().then(
-            result => {
+        UserInfo.loadCached().then(cached => {
+            if (cached != null) {
                 this.dispatch({
                     type: "user-info-loaded",
-                    userInfo: result
-                });
-            },
-            error => {
-                this.dispatch({
-                    type: "set-error",
-                    title: "An error has occurred",
-                    message: String(error),
-                    retry: self => self.loadUserInfo()
+                    userInfo: cached
                 })
             }
-        )
+            this.api.getUserInfo().then(
+                result => {
+                    this.dispatch({
+                        type: "user-info-loaded",
+                        userInfo: result
+                    })
+                    result.saveIntoCache()
+                },
+                error => {
+                    this.dispatch({
+                        type: "set-error",
+                        title: "An error has occurred",
+                        message: String(error),
+                        retry: self => self.loadUserInfo()
+                    })
+                }
+            )
+        })
     }
 
     updateSeries(seriesId: number, update: SeriesUpdate, status: AnimeStatus) {
