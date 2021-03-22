@@ -61,6 +61,7 @@
     background-image: var(--icon-inc-disabled)
     background-position: center
     background-repeat: no-repeat
+    position: relative
 
     &.enabled
       border-color: var(--button-primary)
@@ -74,3 +75,17 @@
       &:active
         border-color: var(--button-primary-pressed)
         background-color: var(--button-primary-pressed)
+
+      &:focus
+        outline: none
+
+        &::after
+          content: ""
+          position: absolute
+          left: 1px
+          top: 1px
+          right: 1px
+          bottom: 1px
+          border-top-right-radius: 2px
+          border-bottom-right-radius: 2px
+          border: 1px dotted var(--text-secondary)
