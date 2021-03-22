@@ -4,6 +4,7 @@
   "description": "Shows your anime list from MyAnimeList in the browser's toolbar.",
   "version": "{#VERSION#}",
   "author": "Vlad Poletaev",
+  "homepage_url": "https://github.com/poletaevvlad/anime-list-popup",
   "browser_action": {
     "default_popup": "popup.html",
     "default_icon": {
