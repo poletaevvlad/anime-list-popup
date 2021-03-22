@@ -135,7 +135,11 @@ const Application = (props: ApplicationProps) => {
                 <div className="header-right">
                     {modal != null || state.loadingCounter > 0
                         ? <div className="header-button icon-refresh disabled" />
-                        : <div className="header-button icon-refresh" tabIndex={0} onClick={refreshData} />}
+                        : <div
+                            className="header-button icon-refresh"
+                            tabIndex={0}
+                            onClick={refreshData}
+                            onKeyPress={event => event.key == "Enter" && refreshData()} />}
                     {modal != null || state.userInfo == null
                         ? <div className="header-button icon-user-menu disabled" />
                         : <UserMenuButton
