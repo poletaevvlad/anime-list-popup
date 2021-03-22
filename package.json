@@ -2,7 +2,8 @@
   "name": "animelist-ext",
   "version": "1.0.0",
   "scripts": {
-    "build": "npx gulp release",
+    "build": "rm -r dist && npx gulp release",
+    "lint": "npx addons-linter dist",
     "watch": "npx gulp watch",
     "package": "rm -f dist.zip source.zip && cd dist && zip -r ../dist.zip * && cd .. && zip -r source.zip assets html sass src screenshots package.json package-lock.json test-preprocessor.js tsconfig.json LICENSE gulpfile.js README.md"
   },
