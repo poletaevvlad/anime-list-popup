@@ -25,8 +25,11 @@
     ]
   },
   "icons": {
-    "48": "./assets/image-48.png",
-    "96": "./assets/image-96.png"
+    "16": "./assets/icon-16.png",
+    "32": "./assets/icon-32.png",
+    "48": "./assets/icon-48.png",
+    "64": "./assets/icon-64.png",
+    "128": "./assets/icon-128.png"
   },
   "content_security_policy": "script-src 'self'; default-src https://myanimelist.net https://api.myanimelist.net; img-src https://api-cdn.myanimelist.net; object-src 'none'",
   "permissions": [
