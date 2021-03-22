@@ -13,9 +13,12 @@ export const DropdownIcon = () =>
     </svg>
 
 const Dropdown = (props: DropdownProps) => {
-    return <div className="dropdown">
+    const [focused, setFocused] = React.useState(false)
+    return <div className={"dropdown" + (focused ? " focused" : "")}>
         <select value={props.value} disabled={!props.enabled}
-            onChange={event => props.onChange(event.target.value)}>
+            onChange={event => props.onChange(event.target.value)}
+            onFocus={() => setFocused(true)}
+            onBlur={() => setFocused(false)}>
             {props.options.map(({ key, label }) =>
                 <option key={key} value={key}>{label}</option>
             )}
