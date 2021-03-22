@@ -29,7 +29,7 @@ export class ThemeData {
         )
     }
 
-    get rootClassName(): String {
+    get rootClassName(): string {
         return `color-${this.color} brightness-${this.brightness}`
     }
 

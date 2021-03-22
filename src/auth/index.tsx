@@ -3,12 +3,12 @@ import { render } from "react-dom";
 import ProgressIndicator from "../components/ProgressIndicator"
 import Auth from "../listdata/auth"
 import { browser } from "webextension-polyfill-ts";
+import { ThemeData } from "../listdata/theme"
 
 type CurrentState =
     { state: "not-authenticated" } |
     { state: "in-progress" } |
     { state: "error", message: string };
-
 
 const Application = () => {
     const [state, setState] = React.useState<CurrentState>({ state: "not-authenticated" });
@@ -45,5 +45,9 @@ const Application = () => {
 }
 
 document.addEventListener("DOMContentLoaded", () => {
+    ThemeData.load().then(theme =>
+        document.getElementsByTagName("body")[0].setAttribute("class", theme.rootClassName)
+    )
+
     render(<Application />, document.getElementById("app"));
 });
