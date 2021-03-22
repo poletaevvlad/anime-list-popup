@@ -29,7 +29,8 @@ const ThemeEditor = (props: ThemeEditorProps) => {
                 return <div
                     className={className}
                     tabIndex={0}
-                    onClick={() => props.onThemeChanged(props.theme.with({ brightness: brightness }))}>
+                    onClick={() => props.onThemeChanged(props.theme.with({ brightness: brightness }))}
+                    onKeyPress={event => event.key == "Enter" && props.onThemeChanged(props.theme.with({ brightness: brightness }))}>
                     {BRIGHTNESS_LABELS[brightness]}
                 </div>
             })}
@@ -43,7 +44,8 @@ const ThemeEditor = (props: ThemeEditorProps) => {
                 return <div
                     className={className}
                     tabIndex={0}
-                    onClick={() => props.onThemeChanged(props.theme.with({ color: color }))} />
+                    onClick={() => props.onThemeChanged(props.theme.with({ color: color }))}
+                    onKeyPress={event => event.key == "Enter" && props.onThemeChanged(props.theme.with({ color: color }))} />
             })}
         </div>
     </li>
