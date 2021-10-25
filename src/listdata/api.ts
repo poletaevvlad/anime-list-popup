@@ -103,7 +103,9 @@ export default class API {
                         score: node.mean,
                         coverUrl: node.main_picture.medium,
                         totalEpisodes: node.num_episodes,
-                        season: formatSeason(node.start_season),
+                        season: typeof node.start_season != "undefined" 
+                            ? formatSeason(node.start_season)
+                            : undefined,
                     }),
                 }
             })

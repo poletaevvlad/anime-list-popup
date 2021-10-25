@@ -5,7 +5,7 @@ export default class SeriesInfo {
     readonly score: number | null
     readonly coverUrl: string | null
     readonly totalEpisodes: number
-    readonly season: string
+    readonly season?: string
 
     constructor(props: {
         id: number,
@@ -14,7 +14,7 @@ export default class SeriesInfo {
         score: number | null,
         coverUrl: string | null,
         totalEpisodes: number,
-        season: string,
+        season?: string,
     }) {
         this.id = props.id;
         this.name = props.name;
