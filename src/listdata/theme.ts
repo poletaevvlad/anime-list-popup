@@ -1,4 +1,4 @@
-import { browser } from "webextension-polyfill-ts";
+import * as browser from "webextension-polyfill";
 
 export type ThemeBrightness = "light" | "dark" | "auto"
 export type ThemeColor = "orange" | "green" | "purple" | "red" | "cyan" | "blue"

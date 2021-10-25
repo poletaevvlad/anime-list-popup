@@ -5,7 +5,7 @@ import { rootReducer } from "./state/reducers";
 import StatusDropdown from "../components/StatusDropdown";
 import AnimeSeriesList from "../components/AnimeSeriesList";
 import Auth from "../listdata/auth";
-import { browser } from "webextension-polyfill-ts";
+import * as browser from "webextension-polyfill";
 import AuthToken from "../listdata/token";
 import API, { AnimeStatus, SeriesUpdate } from "../listdata/api";
 import AsyncDispatcher from "./state/asyncDispatcher";

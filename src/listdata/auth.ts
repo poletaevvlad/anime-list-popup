@@ -1,4 +1,4 @@
-import { browser } from "webextension-polyfill-ts";
+import * as browser from "webextension-polyfill";
 import { Mutex } from "async-mutex";
 
 import AccessToken from "./token";

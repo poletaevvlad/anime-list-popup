@@ -1,5 +1,5 @@
 import { AnimeStatus } from "./api"
-import { browser } from "webextension-polyfill-ts";
+import * as browser from "webextension-polyfill";
 
 const statusUrlParams: { [key in AnimeStatus]: number } = {
     "watching": 1,

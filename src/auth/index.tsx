@@ -2,7 +2,7 @@ import * as React from "react";
 import { render } from "react-dom";
 import ProgressIndicator from "../components/ProgressIndicator"
 import Auth from "../listdata/auth"
-import { browser } from "webextension-polyfill-ts";
+import * as browser from "webextension-polyfill";
 import { ThemeData } from "../listdata/theme"
 
 type CurrentState =
