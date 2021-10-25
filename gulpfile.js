@@ -1,6 +1,6 @@
 const { src, dest, parallel, watch, series } = require('gulp');
 const webpack = require('webpack-stream');
-const buildSass = require('gulp-sass');
+const buildSass = require('gulp-sass')(require('sass'));
 const gulpClean = require('gulp-clean');
 const replace = require('gulp-replace');
 const fs = require('fs')

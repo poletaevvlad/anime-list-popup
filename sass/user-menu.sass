@@ -1,3 +1,5 @@
+@use 'sass:math'
+
 .user-menu-button
   position: relative
 
@@ -94,8 +96,8 @@
       position: absolute
       left: 50%
       top: 50%
-      margin: -$size / 2
-      border-radius: $size / 2
+      margin: math.div(-$size, 2)
+      border-radius: math.div($size, 2)
 
     &.selected::before
       $outer-size: $size + 6px
@@ -106,11 +108,11 @@
       position: absolute
       left: 50%
       top: 50%
-      margin: -$outer-size / 2
-      border-radius: $outer-size / 2
+      margin: math.div(-$outer-size, 2)
+      border-radius: math.div($outer-size, 2)
       box-sizing: border-box
 
-    $colors: [orange, green, purple, red, cyan, blue]
+    $colors: ["orange", "green", "purple", "red", "cyan", "blue"]
     @each $color in $colors
       &.color-#{$color}
         &::after
