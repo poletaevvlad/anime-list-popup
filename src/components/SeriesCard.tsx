@@ -53,7 +53,12 @@ const SeriesCard = (props: SeriesCardProps) =>
             <div className="series-controls">
                 <div className="series-additional-info">
                     <div className="series-season">{props.seriesInfo.season}</div>
-                    <div className="series-score">Score: {props.seriesInfo.score}</div>
+                    <div className="series-score">
+                        {props.seriesInfo.score != null
+                            ? `Score: ${props.seriesInfo.score}`
+                            : "No score"
+                        }
+                    </div>
                 </div>
                 <Dropdown
                     value={props.assignedScore.toString()}

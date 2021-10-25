@@ -100,7 +100,7 @@ export default class API {
                         id: node.id,
                         name: node.title,
                         englishName: node.alternative_titles.en,
-                        score: node.mean,
+                        score: typeof node.mean != "undefined" ? node.mean : null,
                         coverUrl: node.main_picture.medium,
                         totalEpisodes: node.num_episodes,
                         season: typeof node.start_season != "undefined" 
