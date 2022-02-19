@@ -61,7 +61,11 @@ const Application = (props: ApplicationProps) => {
 
     const numWatchedChanged = (series: SeriesInfo, currentWatched: number, numberWatched: number) => {
         var suggested: AnimeStatus = null
-        if (state.currentList != "completed" && numberWatched == series.totalEpisodes) {
+        if (
+            state.currentList != "completed" &&
+            series.totalEpisodes != 0 &&
+            numberWatched == series.totalEpisodes
+        ) {
             suggested = "completed";
         } else if (state.currentList != "watching" && numberWatched > currentWatched) {
             suggested = "watching";
