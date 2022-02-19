@@ -49,11 +49,9 @@ const EpisodeSelector = (props: EpisodeSelectorProps) => {
                 }}
                 onBlur={(event) => {
                     setFocused(false)
-                    const value = Math.min(current, props.totalEpisodes);
-                    if (props.current != value) {
-                        props.onChange(value);
+                    if (props.current != current) {
+                        props.onChange(current);
                     }
-                    setCurrent(value);
                 }}
                 onSubmit={() => fieldRef.current.blur()}
                 onFocus={() => setFocused(true)}
@@ -64,8 +62,10 @@ const EpisodeSelector = (props: EpisodeSelectorProps) => {
             </div>
         </div>
         <button
-            className={"inc-button" + (!!props.enabled && props.current < props.totalEpisodes ? " enabled" : "")}
-            disabled={!props.enabled || props.current >= props.totalEpisodes}
+            className={"inc-button" + (!!props.enabled && (
+                props.current < props.totalEpisodes || props.totalEpisodes == 0
+            ) ? " enabled" : "")}
+            disabled={!props.enabled || (props.current >= props.totalEpisodes && props.totalEpisodes != 0)}
             onClick={() => { props.onChange(props.current + 1) }} />
     </div>
 }
