@@ -58,7 +58,9 @@ const EpisodeSelector = (props: EpisodeSelectorProps) => {
                 disabled={!props.enabled}
             />
             <div className="current-value" style={{ display: focused ? "none" : "block" }}>
-                <span className="value">{props.current}</span>/{props.totalEpisodes}
+                <span className="value">{props.current}</span>/{
+                    props.totalEpisodes == 0 ? "?" : props.totalEpisodes
+                }
             </div>
         </div>
         <button
