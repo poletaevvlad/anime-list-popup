@@ -1,9 +1,9 @@
 import * as React from "react";
-import SeriesInfo from "../listdata/seriesinfo";
+import SeriesInfo from "../model/seriesinfo";
 import Dropdown from "./Dropdown";
 import EpisodeSelector from "./EpisodeSelector";
 import ShortStatusDropdown from "./ShortStatusDropdown";
-import { AnimeStatus } from "../listdata/api";
+import { AnimeStatus } from "../model/api";
 
 const SCORE_LABELS = [
   { key: "0", label: "Select" },

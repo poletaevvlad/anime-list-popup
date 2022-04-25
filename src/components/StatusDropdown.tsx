@@ -1,5 +1,5 @@
 import * as React from "react";
-import { AnimeStatus } from "../listdata/api";
+import { AnimeStatus } from "../model/api";
 import Dropdown from "./Dropdown";
 
 export const statusLabels: { key: AnimeStatus; label: string }[] = [

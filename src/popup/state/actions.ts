@@ -1,9 +1,9 @@
-import { AnimeStatus } from "../../listdata/api";
-import UserInfo from "../../listdata/userinfo";
-import { AnimeListEntry, SeriesUpdate } from "../../listdata/api";
+import { AnimeStatus } from "../../model/api";
+import UserInfo from "../../model/userinfo";
+import { AnimeListEntry, SeriesUpdate } from "../../model/api";
 import AsyncDispatcher from "./asyncDispatcher";
-import SeriesInfo from "../../listdata/seriesinfo";
-import { ThemeData } from "../../listdata/theme";
+import SeriesInfo from "../../model/seriesinfo";
+import { ThemeData } from "../../model/theme";
 
 type Action =
   | { type: "current-list-changed"; status: AnimeStatus }

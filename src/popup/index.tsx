@@ -4,18 +4,18 @@ import { INITIAL_STATE } from "./state/state";
 import { rootReducer } from "./state/reducers";
 import StatusDropdown from "../components/StatusDropdown";
 import AnimeSeriesList from "../components/AnimeSeriesList";
-import Auth from "../listdata/auth";
+import Auth from "../model/auth";
 import * as browser from "webextension-polyfill";
-import AuthToken from "../listdata/token";
-import API, { AnimeStatus, SeriesUpdate } from "../listdata/api";
+import AuthToken from "../model/token";
+import API, { AnimeStatus, SeriesUpdate } from "../model/api";
 import AsyncDispatcher from "./state/asyncDispatcher";
 import UserMenuButton from "../components/UserMenuButton";
 import StateChangeModal from "../components/StateChangeModal";
 import ErrorModal from "../components/ErrorModal";
-import AccessToken from "../listdata/token";
-import SeriesInfo from "../listdata/seriesinfo";
-import UserInfo from "../listdata/userinfo";
-import { ThemeData } from "../listdata/theme";
+import AccessToken from "../model/token";
+import SeriesInfo from "../model/seriesinfo";
+import UserInfo from "../model/userinfo";
+import { ThemeData } from "../model/theme";
 
 interface ApplicationProps {
   asyncDispatcher: AsyncDispatcher;

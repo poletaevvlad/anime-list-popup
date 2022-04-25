@@ -1,8 +1,8 @@
 import * as React from "react";
-import SeriesInfo from "../listdata/seriesinfo";
+import SeriesInfo from "../model/seriesinfo";
 import SeriesCard from "./SeriesCard";
 import ProgressIndicator from "./ProgressIndicator";
-import { AnimeStatus } from "../listdata/api";
+import { AnimeStatus } from "../model/api";
 
 interface AnimeSeriesListProps {
   enabled: boolean;

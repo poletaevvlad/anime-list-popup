@@ -1,8 +1,8 @@
-import UserInfo from "../../listdata/userinfo";
-import { AnimeStatus, AnimeListEntry, SeriesUpdate } from "../../listdata/api";
+import UserInfo from "../../model/userinfo";
+import { AnimeStatus, AnimeListEntry, SeriesUpdate } from "../../model/api";
 import AsyncDispatcher from "./asyncDispatcher";
-import SeriesInfo from "../../listdata/seriesinfo";
-import { ThemeData } from "../../listdata/theme";
+import SeriesInfo from "../../model/seriesinfo";
+import { ThemeData } from "../../model/theme";
 
 export interface AnimeList {
   entries: AnimeListEntry[];

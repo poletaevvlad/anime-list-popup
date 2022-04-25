@@ -1,4 +1,4 @@
-import { AnimeStatus, AnimeListEntry } from "../../listdata/api";
+import { AnimeStatus, AnimeListEntry } from "../../model/api";
 import Action from "./actions";
 import { ApplicationState, AnimeList, EMPTY_LISTS } from "./state";
 

@@ -1,5 +1,5 @@
-import API, { AnimeStatus, SeriesUpdate } from "../../listdata/api";
-import UserInfo from "../../listdata/userinfo";
+import API, { AnimeStatus, SeriesUpdate } from "../../model/api";
+import UserInfo from "../../model/userinfo";
 import Action from "./actions";
 
 class BaseAsyncDispatcher<A> {

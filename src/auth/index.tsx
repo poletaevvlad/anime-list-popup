@@ -1,9 +1,9 @@
 import * as React from "react";
 import { render } from "react-dom";
 import ProgressIndicator from "../components/ProgressIndicator";
-import Auth from "../listdata/auth";
+import Auth from "../model/auth";
 import * as browser from "webextension-polyfill";
-import { ThemeData } from "../listdata/theme";
+import { ThemeData } from "../model/theme";
 
 type CurrentState =
   | { state: "not-authenticated" }
