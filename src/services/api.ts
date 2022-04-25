@@ -1,13 +1,13 @@
 import Auth, { constructUrl } from "../services/auth";
-import UserInfo from "./userinfo";
-import SeriesInfo from "./seriesinfo";
+import UserInfo from "../model/userinfo";
+import SeriesInfo from "../model/seriesinfo";
 import {
   UserResponse,
   PaginatedResponse,
   UserAnimeListEdge,
   AnimeStatusEntry,
-} from "./api_schema";
-import { AnimeStatus } from ".";
+} from "../model/api_schema";
+import { AnimeStatus } from "../model";
 
 interface AnimeListResponse {
   hasMoreEntries: boolean;

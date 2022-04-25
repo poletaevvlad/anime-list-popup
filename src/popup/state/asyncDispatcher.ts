@@ -1,4 +1,4 @@
-import API, { SeriesUpdate } from "../../model/api";
+import API, { SeriesUpdate } from "../../services/api";
 import { AnimeStatus } from "../../model";
 import UserInfo from "../../model/userinfo";
 import Action from "./actions";

@@ -6,7 +6,7 @@ import StatusDropdown from "../components/StatusDropdown";
 import AnimeSeriesList from "../components/AnimeSeriesList";
 import Auth, { AccessToken } from "../services/auth";
 import * as browser from "webextension-polyfill";
-import API, { SeriesUpdate } from "../model/api";
+import API, { SeriesUpdate } from "../services/api";
 import { AnimeStatus } from "../model";
 import AsyncDispatcher from "./state/asyncDispatcher";
 import UserMenuButton from "../components/UserMenuButton";
