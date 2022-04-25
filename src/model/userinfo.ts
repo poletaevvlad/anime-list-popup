@@ -1,13 +1,13 @@
-import { AnimeStatus } from "./api";
+import { AnimeStatus } from ".";
 import * as browser from "webextension-polyfill";
 import { UserResponse } from "./api_schema";
 
-const statusUrlParams: { [key in AnimeStatus]: number } = {
-  watching: 1,
-  completed: 2,
-  "on-hold": 3,
-  dropped: 4,
-  "plan-to-watch": 6,
+const statusUrlParams: Record<AnimeStatus, number> = {
+  [AnimeStatus.Watching]: 1,
+  [AnimeStatus.Completed]: 2,
+  [AnimeStatus.OnHold]: 3,
+  [AnimeStatus.Dropped]: 4,
+  [AnimeStatus.PlanToWatch]: 6,
 };
 
 interface UserInfoCache {

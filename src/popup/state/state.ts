@@ -1,5 +1,6 @@
 import UserInfo from "../../model/userinfo";
-import { AnimeStatus, AnimeListEntry, SeriesUpdate } from "../../model/api";
+import { AnimeListEntry, SeriesUpdate } from "../../model/api";
+import { AnimeStatus } from "../../model";
 import AsyncDispatcher from "./asyncDispatcher";
 import SeriesInfo from "../../model/seriesinfo";
 import { ThemeData } from "../../model/theme";
@@ -26,7 +27,7 @@ export interface StatusChangeSuggestion {
 export interface ApplicationState {
   userInfo: UserInfo;
   currentList: AnimeStatus;
-  animeLists: { [key in AnimeStatus]: AnimeList };
+  animeLists: Record<AnimeStatus, AnimeList>;
   updatingAnime: Set<number>;
   loadingCounter: number;
   errorMessage: ErrorMessage | null;
@@ -34,17 +35,17 @@ export interface ApplicationState {
   theme: ThemeData;
 }
 
-export const EMPTY_LISTS: { [key in AnimeStatus]: AnimeList } = {
-  watching: { entries: [], status: "has_more_items" },
-  completed: { entries: [], status: "has_more_items" },
-  "on-hold": { entries: [], status: "has_more_items" },
-  dropped: { entries: [], status: "has_more_items" },
-  "plan-to-watch": { entries: [], status: "has_more_items" },
+export const EMPTY_LISTS: Record<AnimeStatus, AnimeList> = {
+  [AnimeStatus.Watching]: { entries: [], status: "has_more_items" },
+  [AnimeStatus.Completed]: { entries: [], status: "has_more_items" },
+  [AnimeStatus.OnHold]: { entries: [], status: "has_more_items" },
+  [AnimeStatus.Dropped]: { entries: [], status: "has_more_items" },
+  [AnimeStatus.PlanToWatch]: { entries: [], status: "has_more_items" },
 };
 
 export const INITIAL_STATE: ApplicationState = {
   userInfo: null,
-  currentList: "watching",
+  currentList: AnimeStatus.Watching,
   animeLists: EMPTY_LISTS,
   updatingAnime: new Set<number>(),
   loadingCounter: 0,

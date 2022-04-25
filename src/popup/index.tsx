@@ -7,7 +7,8 @@ import AnimeSeriesList from "../components/AnimeSeriesList";
 import Auth from "../model/auth";
 import * as browser from "webextension-polyfill";
 import AuthToken from "../model/token";
-import API, { AnimeStatus, SeriesUpdate } from "../model/api";
+import API, { SeriesUpdate } from "../model/api";
+import { AnimeStatus } from "../model";
 import AsyncDispatcher from "./state/asyncDispatcher";
 import UserMenuButton from "../components/UserMenuButton";
 import StateChangeModal from "../components/StateChangeModal";
@@ -70,16 +71,16 @@ const Application = (props: ApplicationProps) => {
   ) => {
     let suggested: AnimeStatus = null;
     if (
-      state.currentList != "completed" &&
+      state.currentList != AnimeStatus.Completed &&
       series.totalEpisodes != 0 &&
       numberWatched == series.totalEpisodes
     ) {
-      suggested = "completed";
+      suggested = AnimeStatus.Completed;
     } else if (
-      state.currentList != "watching" &&
+      state.currentList != AnimeStatus.Watching &&
       numberWatched > currentWatched
     ) {
-      suggested = "watching";
+      suggested = AnimeStatus.Watching;
     }
     if (suggested == null) {
       episodeUpdated(series.id, { episodesWatched: numberWatched });

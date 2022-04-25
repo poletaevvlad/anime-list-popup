@@ -3,7 +3,7 @@ import SeriesInfo from "../model/seriesinfo";
 import Dropdown from "./Dropdown";
 import EpisodeSelector from "./EpisodeSelector";
 import ShortStatusDropdown from "./ShortStatusDropdown";
-import { AnimeStatus } from "../model/api";
+import { AnimeStatus } from "../model";
 
 const SCORE_LABELS = [
   { key: "0", label: "Select" },

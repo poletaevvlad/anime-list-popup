@@ -8,21 +8,7 @@ import {
   UserAnimeListEdge,
   AnimeStatusEntry,
 } from "./api_schema";
-
-export type AnimeStatus =
-  | "watching"
-  | "completed"
-  | "on-hold"
-  | "dropped"
-  | "plan-to-watch";
-
-const apiStatusNames: { [key in AnimeStatus]: string } = {
-  watching: "watching",
-  completed: "completed",
-  "on-hold": "on_hold",
-  dropped: "dropped",
-  "plan-to-watch": "plan_to_watch",
-};
+import { AnimeStatus } from ".";
 
 interface AnimeListResponse {
   hasMoreEntries: boolean;
@@ -100,7 +86,7 @@ export default class API {
     const url = constructUrl(
       "https://api.myanimelist.net/v2/users/@me/animelist",
       {
-        status: apiStatusNames[status],
+        status,
         offset: offset.toString(),
         limit: "25",
         fields:
@@ -152,16 +138,14 @@ export default class API {
       data.append("num_watched_episodes", update.episodesWatched.toString());
     }
     if (typeof update.status != "undefined") {
-      data.append("status", apiStatusNames[update.status]);
+      data.append("status", update.status);
     }
     const response = await this.makeApiCall<AnimeStatusEntry>(url, {
       method: "PATCH",
       body: data,
     });
     return {
-      status: Object.keys(apiStatusNames).find(
-        (key: AnimeStatus) => apiStatusNames[key] == response.status
-      ) as AnimeStatus,
+      status: response.status as AnimeStatus,
       score: response.score,
       episodesWatched: response.num_episodes_watched,
     };

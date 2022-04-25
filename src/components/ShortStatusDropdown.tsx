@@ -1,14 +1,14 @@
 import * as React from "react";
-import { AnimeStatus } from "../model/api";
+import { AnimeStatus } from "../model";
 import { DropdownIcon } from "./Dropdown";
 import { statusLabels } from "./StatusDropdown";
 
-const shortStatusLabels: { [key in AnimeStatus]: string } = {
-  watching: "CW",
-  completed: "Cm",
-  "on-hold": "OH",
-  dropped: "Dr",
-  "plan-to-watch": "PW",
+const shortStatusLabels: Record<AnimeStatus, string> = {
+  [AnimeStatus.Watching]: "CW",
+  [AnimeStatus.Completed]: "Cm",
+  [AnimeStatus.OnHold]: "OH",
+  [AnimeStatus.Dropped]: "Dr",
+  [AnimeStatus.PlanToWatch]: "PW",
 };
 
 interface ShortStatusDropdownProps {

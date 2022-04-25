@@ -1,10 +1,11 @@
-import { AnimeStatus, AnimeListEntry } from "../../model/api";
+import { AnimeListEntry } from "../../model/api";
+import { AnimeStatus } from "../../model";
 import Action from "./actions";
 import { ApplicationState, AnimeList, EMPTY_LISTS } from "./state";
 
 export type Reducer<T> = (currentState: T, action: Action) => T;
 
-const animeListReducer: Reducer<{ [key in AnimeStatus]: AnimeList }> = (
+const animeListReducer: Reducer<Record<AnimeStatus, AnimeList>> = (
   current,
   action
 ) => {

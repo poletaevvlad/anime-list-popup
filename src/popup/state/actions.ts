@@ -1,4 +1,4 @@
-import { AnimeStatus } from "../../model/api";
+import { AnimeStatus } from "../../model";
 import UserInfo from "../../model/userinfo";
 import { AnimeListEntry, SeriesUpdate } from "../../model/api";
 import AsyncDispatcher from "./asyncDispatcher";

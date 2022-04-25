@@ -1,5 +1,5 @@
 import * as React from "react";
-import { AnimeStatus } from "../model/api";
+import { AnimeStatus } from "../model";
 import { statusLabels } from "./StatusDropdown";
 
 interface StateChangeModalProps {

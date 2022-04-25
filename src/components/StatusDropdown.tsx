@@ -1,13 +1,13 @@
 import * as React from "react";
-import { AnimeStatus } from "../model/api";
+import { AnimeStatus } from "../model";
 import Dropdown from "./Dropdown";
 
 export const statusLabels: { key: AnimeStatus; label: string }[] = [
-  { key: "watching", label: "Currently Watching" },
-  { key: "completed", label: "Completed" },
-  { key: "on-hold", label: "On Hold" },
-  { key: "dropped", label: "Dropped" },
-  { key: "plan-to-watch", label: "Plan to Watch" },
+  { key: AnimeStatus.Watching, label: "Currently Watching" },
+  { key: AnimeStatus.Completed, label: "Completed" },
+  { key: AnimeStatus.OnHold, label: "On Hold" },
+  { key: AnimeStatus.Dropped, label: "Dropped" },
+  { key: AnimeStatus.PlanToWatch, label: "Plan to Watch" },
 ];
 
 interface StatusDropdownProps {

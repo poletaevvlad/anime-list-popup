@@ -1,6 +1,6 @@
 import * as React from "react";
 import UserInfo from "../model/userinfo";
-import { AnimeStatus } from "../model/api";
+import { AnimeStatus } from "../model";
 import { COLORS, ThemeData, BRIGHTNESES } from "../model/theme";
 
 const BRIGHTNESS_LABELS = { dark: "Dark", auto: "Auto", light: "Light" };
