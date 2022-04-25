@@ -1,13 +1,12 @@
-const { src, dest, parallel, watch, series } = require('gulp');
-const webpack = require('webpack-stream');
-const buildSass = require('gulp-sass')(require('sass'));
-const gulpClean = require('gulp-clean');
-const replace = require('gulp-replace');
-const fs = require('fs')
+const { src, dest, parallel, watch, series } = require("gulp");
+const webpack = require("webpack-stream");
+const buildSass = require("gulp-sass")(require("sass"));
+const gulpClean = require("gulp-clean");
+const replace = require("gulp-replace");
+const fs = require("fs");
 
 function clean() {
-  return src("dist", { read: false, allowEmpty: true })
-    .pipe(gulpClean());
+  return src("dist", { read: false, allowEmpty: true }).pipe(gulpClean());
 }
 
 function manifest() {
@@ -22,12 +21,11 @@ function watchManifest() {
 }
 
 function assets() {
-  return src("assets/**/*")
-    .pipe(dest("dist/assets"))
+  return src("assets/**/*").pipe(dest("dist/assets"));
 }
 
 function watchAssets() {
-  return watch("assets/**/*", assets)
+  return watch("assets/**/*", assets);
 }
 
 function html() {
@@ -39,42 +37,42 @@ function watchHtml() {
 }
 
 function sass() {
-  return src("sass/styles.sass")
-    .pipe(buildSass())
-    .pipe(dest("dist/assets"));
+  return src("sass/styles.sass").pipe(buildSass()).pipe(dest("dist/assets"));
 }
 
 function watchSass() {
-  return watch("sass/**/*.sass", sass)
+  return watch("sass/**/*.sass", sass);
 }
 
 function buildJs(watch, release) {
   return src("src/popup/index.tsx")
-    .pipe(webpack({
-      entry: {
-        popup: "./src/popup/index.tsx",
-        auth: "./src/auth/index.tsx"
-      },
-      mode: release ? "production" : "development",
-      watch: watch,
-      devtool: release ? undefined : 'source-map',
-      module: {
-        rules: [
-          {
-            test: /\.tsx?$/,
-            use: 'ts-loader',
-            exclude: /node_modules/,
-          },
-        ],
-      },
-      resolve: {
-        extensions: ['.tsx', '.ts', '.js'],
-      },
-      optimization: {
-        minimize: false
-      },
-      output: { filename: "[name].js" }
-    }))
+    .pipe(
+      webpack({
+        entry: {
+          popup: "./src/popup/index.tsx",
+          auth: "./src/auth/index.tsx",
+        },
+        mode: release ? "production" : "development",
+        watch: watch,
+        devtool: release ? undefined : "source-map",
+        module: {
+          rules: [
+            {
+              test: /\.tsx?$/,
+              use: "ts-loader",
+              exclude: /node_modules/,
+            },
+          ],
+        },
+        resolve: {
+          extensions: [".tsx", ".ts", ".js"],
+        },
+        optimization: {
+          minimize: false,
+        },
+        output: { filename: "[name].js" },
+      })
+    )
     .pipe(dest("dist"));
 }
 
@@ -82,7 +80,13 @@ exports.manifest = manifest;
 exports.buildJs = buildJs;
 exports.html = html;
 exports.clean = clean;
-exports.default = parallel(manifest, buildJs.bind(undefined, false, false), html, sass, assets);
+exports.default = parallel(
+  manifest,
+  buildJs.bind(undefined, false, false),
+  html,
+  sass,
+  assets
+);
 exports.watch = parallel(
   watchManifest,
   watchHtml,
