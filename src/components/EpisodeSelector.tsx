@@ -27,7 +27,7 @@ const EpisodeSelector = (props: EpisodeSelectorProps) => {
     <div className={"episode-selector"}>
       <div
         className={"field" + (focused ? " focused" : "")}
-        onClick={(event) => fieldRef.current.focus()}
+        onClick={() => fieldRef.current.focus()}
       >
         <input
           value={current == null ? "" : current}
@@ -50,7 +50,7 @@ const EpisodeSelector = (props: EpisodeSelectorProps) => {
               event.preventDefault();
             }
           }}
-          onBlur={(event) => {
+          onBlur={() => {
             setFocused(false);
             if (props.current != current) {
               props.onChange(current);

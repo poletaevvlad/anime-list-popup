@@ -12,12 +12,12 @@ function generateCodeChallenge(): string {
   const randomVals = new Uint8Array(96);
   crypto.getRandomValues(randomVals);
 
-  for (var i = 0; i < randomVals.length; i += 3) {
-    var accumulator =
+  for (let i = 0; i < randomVals.length; i += 3) {
+    const accumulator =
       (randomVals[i] << 16) | (randomVals[i + 1] << 8) | randomVals[i + 2];
 
-    var offset = 18;
-    for (var j = 0; j < 4; j++) {
+    let offset = 18;
+    for (let j = 0; j < 4; j++) {
       result.push(CODE_CHALLENGE[(accumulator >> offset) & 63]);
       offset -= 6;
     }
@@ -31,7 +31,7 @@ export function constructUrl(
   query: { [key: string]: string }
 ): string {
   const queryParams: string[] = [];
-  for (var key in query) {
+  for (const key in query) {
     queryParams.push(key + "=" + encodeURIComponent(query[key]));
   }
   return baseUrl + "?" + queryParams.join("&");
@@ -43,7 +43,7 @@ function extractQueryParams(url: string, param: string): string | null {
     return null;
   }
   const query = url.substr(separator + 1).split("&");
-  for (var i = 0; i < query.length; i++) {
+  for (let i = 0; i < query.length; i++) {
     const paramNameSeparator = query[i].indexOf("=");
     if (paramNameSeparator >= -1) {
       const paramName = query[i].substring(0, paramNameSeparator);
@@ -127,7 +127,7 @@ export default class Auth {
 
     const code = extractQueryParams(redirectURI, "code");
     if (code == null) {
-      var hint = extractQueryParams(redirectURI, "hint").split("+").join(" ");
+      const hint = extractQueryParams(redirectURI, "hint").split("+").join(" ");
       return Promise.reject("Error: " + hint);
     }
 

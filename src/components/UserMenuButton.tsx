@@ -15,7 +15,7 @@ interface UserMenuButtonProps extends ThemeEditorProps {
   setOpened: (opened: boolean) => void;
   currentList: AnimeStatus;
   userInfo: UserInfo;
-  onLogout: () => {};
+  onLogout: () => void;
 }
 
 const ThemeEditor = (props: ThemeEditorProps) => {
@@ -23,12 +23,13 @@ const ThemeEditor = (props: ThemeEditorProps) => {
     <li className="menu-settings">
       <div className="settings-selector">
         {BRIGHTNESES.map((brightness) => {
-          var className = "item text";
+          let className = "item text";
           if (brightness == props.theme.brightness) {
             className += " selected";
           }
           return (
             <div
+              key={brightness}
               className={className}
               tabIndex={0}
               onClick={() =>
@@ -50,12 +51,13 @@ const ThemeEditor = (props: ThemeEditorProps) => {
       </div>
       <div className="settings-selector">
         {COLORS.map((color) => {
-          var className = "item color color-" + color;
+          let className = "item color color-" + color;
           if (color == props.theme.color) {
             className += " selected";
           }
           return (
             <div
+              key={color}
               className={className}
               tabIndex={0}
               onClick={() =>
@@ -142,7 +144,7 @@ const UserMenuButton = (props: UserMenuButtonProps) => {
     <div
       className="header-button user-menu-button icon-user-menu"
       tabIndex={0}
-      onClick={(_event) => props.setOpened(true)}
+      onClick={() => props.setOpened(true)}
       onKeyPress={(event) => event.key == "Enter" && props.setOpened(true)}
     >
       {menu}

@@ -115,7 +115,6 @@ export const rootReducer: Reducer<ApplicationState> = (current, action) => {
   };
   switch (action.type) {
     case "current-list-changed":
-      const list = current.animeLists[action.status];
       return {
         ...current,
         currentList: action.status,
@@ -132,7 +131,7 @@ export const rootReducer: Reducer<ApplicationState> = (current, action) => {
         updatingAnime: new Set([...current.updatingAnime, action.seriesId]),
         animeLists: animeListReducer(current.animeLists, action),
       };
-    case "series-update-done":
+    case "series-update-done": {
       const updating = new Set(current.updatingAnime);
       updating.delete(action.seriesId);
       return {
@@ -140,6 +139,7 @@ export const rootReducer: Reducer<ApplicationState> = (current, action) => {
         updatingAnime: updating,
         animeLists: animeListReducer(current.animeLists, action),
       };
+    }
     case "set-error":
       return {
         ...current,

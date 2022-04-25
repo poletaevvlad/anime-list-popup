@@ -1,6 +1,6 @@
 import * as React from "react";
 import { render } from "react-dom";
-import { ApplicationState, INITIAL_STATE } from "./state/state";
+import { INITIAL_STATE } from "./state/state";
 import { rootReducer } from "./state/reducers";
 import StatusDropdown from "../components/StatusDropdown";
 import AnimeSeriesList from "../components/AnimeSeriesList";
@@ -68,7 +68,7 @@ const Application = (props: ApplicationProps) => {
     currentWatched: number,
     numberWatched: number
   ) => {
-    var suggested: AnimeStatus = null;
+    let suggested: AnimeStatus = null;
     if (
       state.currentList != "completed" &&
       series.totalEpisodes != 0 &&
@@ -126,7 +126,7 @@ const Application = (props: ApplicationProps) => {
 
   const currentList = state.animeLists[state.currentList];
 
-  var modal: React.ReactElement = null;
+  let modal: React.ReactElement = null;
   if (state.errorMessage != null) {
     modal = (
       <ErrorModal
