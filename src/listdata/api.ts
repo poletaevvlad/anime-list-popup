@@ -2,6 +2,12 @@ import Auth from "./auth";
 import UserInfo from "./userinfo";
 import SeriesInfo from "./seriesinfo";
 import { constructUrl } from "./auth";
+import {
+  UserResponse,
+  PaginatedResponse,
+  UserAnimeListEdge,
+  AnimeStatusEntry,
+} from "./api_schema";
 
 export type AnimeStatus =
   | "watching"
@@ -60,10 +66,10 @@ export default class API {
     this.auth = auth;
   }
 
-  private async makeApiCall(
+  private async makeApiCall<TResult>(
     url: string,
-    options: { method?: string; body?: any }
-  ): Promise<any> {
+    options: { method?: string; body?: BodyInit }
+  ): Promise<TResult> {
     const token = await this.auth.getToken();
     const response = await fetch(url, {
       method: options.method || "GET",
@@ -76,15 +82,15 @@ export default class API {
     if (typeof json["error"] != "undefined") {
       return Promise.reject(`Error: ${json["message"]} (${json["error"]})`);
     }
-    return json;
+    return json as TResult;
   }
 
   async getUserInfo(): Promise<UserInfo> {
-    const data = await this.makeApiCall(
+    const data = await this.makeApiCall<UserResponse>(
       "https://api.myanimelist.net/v2/users/@me",
       {}
     );
-    return new UserInfo(data["name"] as string, data["picture"] as string);
+    return UserInfo.fromResponse(data);
   }
 
   async getAnimeList(
@@ -102,11 +108,13 @@ export default class API {
         nsfw: "true",
       }
     );
-    const values = await this.makeApiCall(url, {});
+    const values = await this.makeApiCall<PaginatedResponse<UserAnimeListEdge>>(
+      url,
+      {}
+    );
     return {
       hasMoreEntries: typeof values.paging.next != "undefined",
-      entries: values.data.map((item: any) => {
-        const node: any = item.node;
+      entries: values.data.map(({ node }) => {
         return {
           episodesWatched: node.my_list_status.num_episodes_watched,
           assignedScore: node.my_list_status.score,
@@ -146,7 +154,7 @@ export default class API {
     if (typeof update.status != "undefined") {
       data.append("status", apiStatusNames[update.status]);
     }
-    const response = await this.makeApiCall(url, {
+    const response = await this.makeApiCall<AnimeStatusEntry>(url, {
       method: "PATCH",
       body: data,
     });

@@ -1,5 +1,6 @@
 import { AnimeStatus } from "./api";
 import * as browser from "webextension-polyfill";
+import { UserResponse } from "./api_schema";
 
 const statusUrlParams: { [key in AnimeStatus]: number } = {
   watching: 1,
@@ -15,12 +16,10 @@ interface UserInfoCache {
 }
 
 export default class UserInfo {
-  readonly username: string;
-  readonly profileImageUrl?: string;
+  constructor(readonly username: string, readonly profileImageUrl?: string) {}
 
-  constructor(username: string, profileImageUrl?: string) {
-    this.username = username;
-    this.profileImageUrl = profileImageUrl;
+  static fromResponse(response: UserResponse): UserInfo {
+    return new UserInfo(response.name, response.picture);
   }
 
   get profileUrl(): string {
