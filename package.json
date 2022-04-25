@@ -5,7 +5,12 @@
     "build": "rm -rf dist && npx gulp release",
     "lint": "npx addons-linter dist",
     "watch": "npx gulp watch",
-    "package": "rm -f dist.zip source.zip && cd dist && zip -r ../dist.zip * && cd .. && zip -r source.zip assets html sass src screenshots package.json package-lock.json test-preprocessor.js tsconfig.json LICENSE gulpfile.js README.md"
+    "package": "rm -f dist.zip source.zip && cd dist && zip -r ../dist.zip * && cd .. && zip -r source.zip assets html sass src screenshots package.json package-lock.json test-preprocessor.js tsconfig.json LICENSE gulpfile.js README.md",
+    "prepare": "husky install",
+    "format": "prettier --write ."
+  },
+  "lint-staged": {
+    "**/*": "prettier --write --ignore-unknown"
   },
   "devDependencies": {
     "@types/react": "^17.0.2",
@@ -15,6 +20,8 @@
     "gulp-clean": "^0.4.0",
     "gulp-replace": "^1.0.0",
     "gulp-sass": "^5.0.0",
+    "husky": "^7.0.4",
+    "lint-staged": "^12.4.0",
     "prettier": "2.6.2",
     "sass": "^1.43.3",
     "ts-loader": "^9.2.6",
