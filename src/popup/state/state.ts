@@ -1,6 +1,5 @@
-import UserInfo from "../../model/userinfo";
 import { AnimeListEntry, SeriesUpdate } from "../../services/api";
-import { AnimeStatus } from "../../model";
+import { AnimeStatus, User } from "../../model";
 import AsyncDispatcher from "./asyncDispatcher";
 import SeriesInfo from "../../model/seriesinfo";
 import { ThemeData } from "../../model/theme";
@@ -25,7 +24,7 @@ export interface StatusChangeSuggestion {
 }
 
 export interface ApplicationState {
-  userInfo: UserInfo;
+  user: User;
   currentList: AnimeStatus;
   animeLists: Record<AnimeStatus, AnimeList>;
   updatingAnime: Set<number>;
@@ -44,7 +43,7 @@ export const EMPTY_LISTS: Record<AnimeStatus, AnimeList> = {
 };
 
 export const INITIAL_STATE: ApplicationState = {
-  userInfo: null,
+  user: null,
   currentList: AnimeStatus.Watching,
   animeLists: EMPTY_LISTS,
   updatingAnime: new Set<number>(),

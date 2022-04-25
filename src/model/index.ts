@@ -5,3 +5,5 @@ export enum AnimeStatus {
   Dropped = "dropped",
   PlanToWatch = "plan_to_watch",
 }
+
+export { default as User } from "./user";

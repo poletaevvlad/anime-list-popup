@@ -1,6 +1,5 @@
 import * as React from "react";
-import UserInfo from "../model/userinfo";
-import { AnimeStatus } from "../model";
+import { User, AnimeStatus } from "../model";
 import { COLORS, ThemeData, BRIGHTNESES } from "../model/theme";
 
 const BRIGHTNESS_LABELS = { dark: "Dark", auto: "Auto", light: "Light" };
@@ -14,7 +13,7 @@ interface UserMenuButtonProps extends ThemeEditorProps {
   isOpened: boolean;
   setOpened: (opened: boolean) => void;
   currentList: AnimeStatus;
-  userInfo: UserInfo;
+  user: User;
   onLogout: () => void;
 }
 
@@ -83,27 +82,25 @@ const UserMenuButton = (props: UserMenuButtonProps) => {
     menu = (
       <ul className="user-menu" ref={menuRef}>
         <li>
-          <a href={props.userInfo.profileUrl} className="with-avatar">
+          <a href={props.user.profileUrl} className="with-avatar">
             <span
               className="avatar"
               style={
-                props.userInfo.profileImageUrl == null
+                props.user.profileImageUrl == null
                   ? {}
                   : {
-                      backgroundImage: `url(${props.userInfo.profileImageUrl})`,
+                      backgroundImage: `url(${props.user.profileImageUrl})`,
                     }
               }
             />
-            {props.userInfo.username}
+            {props.user.username}
           </a>
         </li>
         <li>
-          <a href={props.userInfo.animeListUrl(props.currentList)}>
-            Anime list
-          </a>
+          <a href={props.user.animeListUrl(props.currentList)}>Anime list</a>
         </li>
         <li>
-          <a href={props.userInfo.mangaListUrl}>Manga list</a>
+          <a href={props.user.mangaListUrl}>Manga list</a>
         </li>
         <li>
           <a href="https://myanimelist.net/">Go to MyAnimeList</a>

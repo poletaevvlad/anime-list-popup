@@ -7,13 +7,12 @@ import AnimeSeriesList from "../components/AnimeSeriesList";
 import Auth, { AccessToken } from "../services/auth";
 import * as browser from "webextension-polyfill";
 import API, { SeriesUpdate } from "../services/api";
-import { AnimeStatus } from "../model";
+import { AnimeStatus, User } from "../model";
 import AsyncDispatcher from "./state/asyncDispatcher";
 import UserMenuButton from "../components/UserMenuButton";
 import StateChangeModal from "../components/StateChangeModal";
 import ErrorModal from "../components/ErrorModal";
 import SeriesInfo from "../model/seriesinfo";
-import UserInfo from "../model/userinfo";
 import { ThemeData } from "../model/theme";
 
 interface ApplicationProps {
@@ -114,7 +113,7 @@ const Application = (props: ApplicationProps) => {
   };
 
   const logOut = () =>
-    Promise.all([AccessToken.logout(), UserInfo.removeFromCache()]).then(
+    Promise.all([AccessToken.logout(), User.removeFromCache()]).then(
       logInError
     );
 
@@ -174,11 +173,11 @@ const Application = (props: ApplicationProps) => {
                 onKeyPress={(event) => event.key == "Enter" && refreshData()}
               />
             )}
-            {modal != null || state.userInfo == null ? (
+            {modal != null || state.user == null ? (
               <div className="header-button icon-user-menu disabled" />
             ) : (
               <UserMenuButton
-                userInfo={state.userInfo}
+                user={state.user}
                 onLogout={logOut}
                 theme={state.theme}
                 onThemeChanged={changeTheme}
@@ -231,7 +230,7 @@ document.addEventListener("DOMContentLoaded", () => {
     const api = new API(auth);
     const dispatcher = new AsyncDispatcher(api);
     dispatcher.loadAnimeList(INITIAL_STATE.currentList, 0);
-    dispatcher.loadUserInfo();
+    dispatcher.loadUser();
     dispatcher.dispatchLater(
       ThemeData.load().then((theme) => {
         return { type: "set-theme", theme: theme };

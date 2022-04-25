@@ -15,11 +15,11 @@ interface UserInfoCache {
   profileImageUrl?: string;
 }
 
-export default class UserInfo {
+export default class User {
   constructor(readonly username: string, readonly profileImageUrl?: string) {}
 
-  static fromResponse(response: UserResponse): UserInfo {
-    return new UserInfo(response.name, response.picture);
+  static fromResponse(response: UserResponse): User {
+    return new User(response.name, response.picture);
   }
 
   get profileUrl(): string {
@@ -38,14 +38,14 @@ export default class UserInfo {
     return `https://myanimelist.net/mangalist/${this.username}`;
   }
 
-  static loadCached(): Promise<UserInfo | null> {
+  static loadCached(): Promise<User | null> {
     return browser.storage.local.get("user_info").then(
       (results) => {
         if (typeof results["user_info"] == "undefined") {
           return null;
         }
         const cache = results["user_info"] as UserInfoCache;
-        return new UserInfo(cache.username, cache.profileImageUrl);
+        return new User(cache.username, cache.profileImageUrl);
       },
       () => null
     );

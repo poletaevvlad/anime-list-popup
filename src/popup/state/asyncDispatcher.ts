@@ -1,6 +1,5 @@
 import API, { SeriesUpdate } from "../../services/api";
-import { AnimeStatus } from "../../model";
-import UserInfo from "../../model/userinfo";
+import { AnimeStatus, User } from "../../model";
 import Action from "./actions";
 
 class BaseAsyncDispatcher<A> {
@@ -70,19 +69,19 @@ class AsyncDispatcher extends BaseAsyncDispatcher<Action> {
     );
   }
 
-  loadUserInfo() {
-    UserInfo.loadCached().then((cached) => {
+  loadUser() {
+    User.loadCached().then((cached) => {
       if (cached != null) {
         this.dispatch({
           type: "user-info-loaded",
-          userInfo: cached,
+          user: cached,
         });
       }
       this.api.getUserInfo().then(
         (result) => {
           this.dispatch({
             type: "user-info-loaded",
-            userInfo: result,
+            user: result,
           });
           result.saveIntoCache();
         },
@@ -91,7 +90,7 @@ class AsyncDispatcher extends BaseAsyncDispatcher<Action> {
             type: "set-error",
             title: "An error has occurred",
             message: String(error),
-            retry: (self) => self.loadUserInfo(),
+            retry: (self) => self.loadUser(),
           });
         }
       );

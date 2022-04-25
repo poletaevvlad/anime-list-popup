@@ -123,7 +123,7 @@ export const rootReducer: Reducer<ApplicationState> = (current, action) => {
     case "user-info-loaded":
       return {
         ...current,
-        userInfo: action.userInfo,
+        user: action.user,
       };
     case "series-updating":
       return {

@@ -1,5 +1,4 @@
-import { AnimeStatus } from "../../model";
-import UserInfo from "../../model/userinfo";
+import { AnimeStatus, User } from "../../model";
 import { AnimeListEntry, SeriesUpdate } from "../../services/api";
 import AsyncDispatcher from "./asyncDispatcher";
 import SeriesInfo from "../../model/seriesinfo";
@@ -7,7 +6,7 @@ import { ThemeData } from "../../model/theme";
 
 type Action =
   | { type: "current-list-changed"; status: AnimeStatus }
-  | { type: "user-info-loaded"; userInfo: UserInfo }
+  | { type: "user-info-loaded"; user: User }
   | { type: "loading-anime-list"; status: AnimeStatus }
   | {
       type: "anime-loading-finished";

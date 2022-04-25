@@ -1,5 +1,5 @@
 import Auth, { constructUrl } from "../services/auth";
-import UserInfo from "../model/userinfo";
+import { User } from "../model";
 import SeriesInfo from "../model/seriesinfo";
 import {
   UserResponse,
@@ -70,12 +70,12 @@ export default class API {
     return json as TResult;
   }
 
-  async getUserInfo(): Promise<UserInfo> {
+  async getUserInfo(): Promise<User> {
     const data = await this.makeApiCall<UserResponse>(
       "https://api.myanimelist.net/v2/users/@me",
       {}
     );
-    return UserInfo.fromResponse(data);
+    return User.fromResponse(data);
   }
 
   async getAnimeList(
