@@ -10,12 +10,17 @@
     "format": "prettier --write ."
   },
   "lint-staged": {
-    "**/*": "prettier --write --ignore-unknown"
+    "**/*": "prettier --write --ignore-unknown",
+    "**/*.{ts,tsx}": "eslint"
   },
   "devDependencies": {
     "@types/react": "^17.0.2",
     "@types/react-dom": "^17.0.2",
     "@types/webextension-polyfill": "^0.8.1",
+    "@typescript-eslint/eslint-plugin": "^5.21.0",
+    "@typescript-eslint/parser": "^5.21.0",
+    "eslint": "^8.14.0",
+    "eslint-plugin-react": "^7.29.4",
     "gulp": "^4.0.2",
     "gulp-clean": "^0.4.0",
     "gulp-replace": "^1.0.0",
