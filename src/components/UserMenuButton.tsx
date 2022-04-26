@@ -87,10 +87,8 @@ const UserMenuButton = (props: UserMenuButtonProps) => {
               className="avatar"
               style={
                 props.user.profileImageUrl
-                  ? {}
-                  : {
-                      backgroundImage: `url(${props.user.profileImageUrl})`,
-                    }
+                  ? { backgroundImage: `url(${props.user.profileImageUrl})` }
+                  : {}
               }
             />
             {props.user.username}
