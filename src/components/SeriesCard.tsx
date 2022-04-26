@@ -63,7 +63,7 @@ const SeriesCard = (props: SeriesCardProps) => (
       </div>
       <div className="series-controls">
         <div className="series-additional-info">
-          <div className="series-season">{props.series.seasonFmt}</div>
+          <div className="series-season">{props.series.seasonFmt || ""}</div>
           <div className="series-score">
             {props.series.score != null
               ? `Score: ${props.series.score}`

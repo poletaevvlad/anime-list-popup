@@ -42,7 +42,10 @@ export default class Series {
     return "https://myanimelist.net/anime/" + this.id.toString();
   }
 
-  get seasonFmt(): string {
+  get seasonFmt(): string | null {
+    if (!this.season) {
+      return null;
+    }
     const seasonName =
       this.season.season.charAt(0).toUpperCase() +
       this.season.season.substring(1);

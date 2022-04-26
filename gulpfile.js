@@ -90,7 +90,7 @@ exports.default = parallel(
 exports.watch = parallel(
   watchManifest,
   watchHtml,
-  buildJs.bind(undefined, true),
+  buildJs.bind(undefined, true, true),
   watchSass,
   watchAssets
 );
