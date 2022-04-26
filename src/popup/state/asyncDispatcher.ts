@@ -1,5 +1,5 @@
-import API, { SeriesUpdate } from "../../services/api";
-import { AnimeStatus, User } from "../../model";
+import API from "../../services/api";
+import { AnimeStatus, User, SeriesUpdate } from "../../model";
 import Action from "./actions";
 
 class BaseAsyncDispatcher<A> {
@@ -50,13 +50,8 @@ class AsyncDispatcher extends BaseAsyncDispatcher<Action> {
   loadAnimeList(status: AnimeStatus, offset: number) {
     this.dispatch({ type: "loading-anime-list", status: status });
     this.api.getAnimeList(status, offset).then(
-      (result) => {
-        this.dispatch({
-          type: "anime-loading-finished",
-          status: status,
-          entries: result.entries,
-          hasMoreEntries: result.hasMoreEntries,
-        });
+      (list) => {
+        this.dispatch({ type: "anime-loading-finished", status, list });
       },
       (error) => {
         this.dispatch({

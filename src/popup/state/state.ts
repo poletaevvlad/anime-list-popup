@@ -1,11 +1,16 @@
-import { AnimeListEntry, SeriesUpdate } from "../../services/api";
-import { AnimeStatus, User, Series } from "../../model";
+import {
+  AnimeStatus,
+  SeriesUpdate,
+  User,
+  Series,
+  AnimeList,
+} from "../../model";
 import AsyncDispatcher from "./asyncDispatcher";
 import { ThemeData } from "../../model/theme";
 
-export interface AnimeList {
-  entries: AnimeListEntry[];
-  status: "loading" | "all_loaded" | "has_more_items";
+export interface AnimeListState {
+  entries: AnimeList;
+  isLoading: boolean;
 }
 
 export interface ErrorMessage {
@@ -25,7 +30,7 @@ export interface StatusChangeSuggestion {
 export interface ApplicationState {
   user: User;
   currentList: AnimeStatus;
-  animeLists: Record<AnimeStatus, AnimeList>;
+  animeLists: Record<AnimeStatus, AnimeListState>;
   updatingAnime: Set<number>;
   loadingCounter: number;
   errorMessage: ErrorMessage | null;
@@ -33,12 +38,12 @@ export interface ApplicationState {
   theme: ThemeData;
 }
 
-export const EMPTY_LISTS: Record<AnimeStatus, AnimeList> = {
-  [AnimeStatus.Watching]: { entries: [], status: "has_more_items" },
-  [AnimeStatus.Completed]: { entries: [], status: "has_more_items" },
-  [AnimeStatus.OnHold]: { entries: [], status: "has_more_items" },
-  [AnimeStatus.Dropped]: { entries: [], status: "has_more_items" },
-  [AnimeStatus.PlanToWatch]: { entries: [], status: "has_more_items" },
+export const EMPTY_LISTS: Record<AnimeStatus, AnimeListState> = {
+  [AnimeStatus.Watching]: { entries: AnimeList.INITIAL, isLoading: false },
+  [AnimeStatus.Completed]: { entries: AnimeList.INITIAL, isLoading: false },
+  [AnimeStatus.OnHold]: { entries: AnimeList.INITIAL, isLoading: false },
+  [AnimeStatus.Dropped]: { entries: AnimeList.INITIAL, isLoading: false },
+  [AnimeStatus.PlanToWatch]: { entries: AnimeList.INITIAL, isLoading: false },
 };
 
 export const INITIAL_STATE: ApplicationState = {

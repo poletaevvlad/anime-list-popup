@@ -1,6 +1,6 @@
 import { AnimeStatus } from ".";
 
-export interface UserResponse {
+export interface User {
   /**
    * GET /users/{user_name}
    */

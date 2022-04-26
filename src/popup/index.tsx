@@ -6,8 +6,8 @@ import StatusDropdown from "../components/StatusDropdown";
 import AnimeSeriesList from "../components/AnimeSeriesList";
 import Auth, { AccessToken } from "../services/auth";
 import * as browser from "webextension-polyfill";
-import API, { SeriesUpdate } from "../services/api";
-import { AnimeStatus, User, Series } from "../model";
+import API from "../services/api";
+import { AnimeStatus, User, Series, SeriesUpdate } from "../model";
 import AsyncDispatcher from "./state/asyncDispatcher";
 import UserMenuButton from "../components/UserMenuButton";
 import StateChangeModal from "../components/StateChangeModal";
@@ -35,14 +35,16 @@ const Application = (props: ApplicationProps) => {
     const currentList = state.animeLists[status];
     if (
       currentList.entries.length == 0 &&
-      currentList.status == "has_more_items"
+      !currentList.entries.isComplete &&
+      !currentList.isLoading
     ) {
       props.asyncDispatcher.loadAnimeList(status, 0);
     }
   };
 
   const listScrolledToBottom = () => {
-    if (state.animeLists[state.currentList].status == "has_more_items") {
+    const list = state.animeLists[state.currentList];
+    if (!list.isLoading && !list.entries.isComplete) {
       props.asyncDispatcher.loadAnimeList(
         state.currentList,
         state.animeLists[state.currentList].entries.length
@@ -193,14 +195,18 @@ const Application = (props: ApplicationProps) => {
           />
         </div>
       </div>
-      {currentList.status == "all_loaded" && currentList.entries.length == 0 ? (
+      {!currentList.isLoading &&
+      currentList.entries.isComplete &&
+      currentList.entries.length == 0 ? (
         <div className="anime-list empty-list">This list is empty</div>
       ) : (
         <AnimeSeriesList
           enabled={modal == null}
-          isLoading={currentList.status == "loading"}
-          entries={currentList.entries}
-          watchScrolling={currentList.status == "has_more_items"}
+          isLoading={currentList.isLoading}
+          entries={currentList.entries.entries}
+          watchScrolling={
+            !currentList.entries.isComplete && !currentList.isLoading
+          }
           onScrolledToBottom={listScrolledToBottom}
           disabledSeries={state.updatingAnime}
           onScoreChanged={(series, score) =>

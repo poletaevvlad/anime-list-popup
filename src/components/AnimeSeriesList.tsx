@@ -1,19 +1,14 @@
 import * as React from "react";
 import SeriesCard from "./SeriesCard";
 import ProgressIndicator from "./ProgressIndicator";
-import { AnimeStatus, Series } from "../model";
+import { AnimeStatus, Series, AnimeListEntry } from "../model";
 
 interface AnimeSeriesListProps {
   enabled: boolean;
   isLoading: boolean;
   watchScrolling: boolean;
   onScrolledToBottom: () => void;
-  entries: {
-    series: Series;
-    episodesWatched: number;
-    assignedScore: number;
-    status: AnimeStatus;
-  }[];
+  entries: AnimeListEntry[];
   disabledSeries: Set<number>;
   animeStatus: AnimeStatus;
   onScoreChanged: (series: Series, newScore: number) => void;

@@ -1,6 +1,6 @@
 import { AnimeStatus } from ".";
 import * as browser from "webextension-polyfill";
-import { UserResponse } from "./api_schema";
+import * as schema from "./api_schema";
 
 const statusUrlParams: Record<AnimeStatus, number> = {
   [AnimeStatus.Watching]: 1,
@@ -18,7 +18,7 @@ interface UserInfoCache {
 export default class User {
   constructor(readonly username: string, readonly profileImageUrl?: string) {}
 
-  static fromResponse(response: UserResponse): User {
+  static fromResponse(response: schema.User): User {
     return new User(response.name, response.picture);
   }
 

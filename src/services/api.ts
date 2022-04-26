@@ -1,30 +1,7 @@
 import Auth, { constructUrl } from "../services/auth";
-import { User, Series } from "../model";
-import {
-  UserResponse,
-  PaginatedResponse,
-  UserAnimeListEdge,
-  AnimeStatusEntry,
-} from "../model/api_schema";
-import { AnimeStatus } from "../model";
-
-interface AnimeListResponse {
-  hasMoreEntries: boolean;
-  entries: AnimeListEntry[];
-}
-
-export interface AnimeListEntry {
-  series: Series;
-  episodesWatched: number;
-  assignedScore: number;
-  status: AnimeStatus;
-}
-
-export type SeriesUpdate = {
-  episodesWatched?: number;
-  assignedScore?: number;
-  status?: AnimeStatus;
-};
+import { User, AnimeListEntry, AnimeList } from "../model";
+import * as schema from "../model/api_schema";
+import { AnimeStatus, SeriesUpdate } from "../model";
 
 export type SeriesUpdateResult = {
   status: AnimeStatus;
@@ -32,21 +9,21 @@ export type SeriesUpdateResult = {
   episodesWatched: number;
 };
 
-export default class API {
-  private auth: Auth;
+type AnimeListResponse = schema.PaginatedResponse<schema.UserAnimeListEdge>;
 
-  constructor(auth: Auth) {
-    this.auth = auth;
-  }
+export default class API {
+  static readonly BASE_URL = "https://api.myanimelist.net/v2";
+
+  constructor(private auth: Auth) {}
 
   private async makeApiCall<TResult>(
     url: string,
-    options: { method?: string; body?: BodyInit }
+    { method = "GET", body }: { method?: string; body?: BodyInit } = {}
   ): Promise<TResult> {
     const token = await this.auth.getToken();
     const response = await fetch(url, {
-      method: options.method || "GET",
-      body: options.body,
+      method,
+      body,
       headers: {
         Authorization: "Bearer " + token,
       },
@@ -59,53 +36,34 @@ export default class API {
   }
 
   async getUserInfo(): Promise<User> {
-    const data = await this.makeApiCall<UserResponse>(
-      "https://api.myanimelist.net/v2/users/@me",
-      {}
+    const data = await this.makeApiCall<schema.User>(
+      `${API.BASE_URL}/users/@me`
     );
     return User.fromResponse(data);
   }
 
-  async getAnimeList(
-    status: AnimeStatus,
-    offset: number
-  ): Promise<AnimeListResponse> {
-    const url = constructUrl(
-      "https://api.myanimelist.net/v2/users/@me/animelist",
-      {
-        status,
-        offset: offset.toString(),
-        limit: "25",
-        fields:
-          "alternative_titles,num_episodes,mean,my_list_status{num_episodes_watched,score},start_season",
-        nsfw: "true",
-      }
+  async getAnimeList(status: AnimeStatus, offset: number): Promise<AnimeList> {
+    const url = constructUrl(`${API.BASE_URL}/users/@me/animelist`, {
+      status,
+      offset: offset.toString(),
+      limit: "25",
+      fields:
+        "alternative_titles,num_episodes,mean,my_list_status{num_episodes_watched,score},start_season",
+      nsfw: "true",
+    });
+    const values = await this.makeApiCall<AnimeListResponse>(url);
+
+    return new AnimeList(
+      values.data.map(({ node }) => AnimeListEntry.fromResponse(node)),
+      !values.paging.next
     );
-    const values = await this.makeApiCall<PaginatedResponse<UserAnimeListEdge>>(
-      url,
-      {}
-    );
-    return {
-      hasMoreEntries: typeof values.paging.next != "undefined",
-      entries: values.data.map(({ node }) => {
-        return {
-          episodesWatched: node.my_list_status.num_episodes_watched,
-          assignedScore: node.my_list_status.score,
-          status: status,
-          series: Series.fromResponse(node),
-        };
-      }),
-    };
   }
 
   async updateAnimeEntry(
     seriesId: number,
     update: SeriesUpdate
   ): Promise<SeriesUpdateResult> {
-    const url =
-      "https://api.myanimelist.net/v2/anime/" +
-      seriesId.toString() +
-      "/my_list_status";
+    const url = `${API.BASE_URL}/anime/${seriesId}/my_list_status`;
     const data = new URLSearchParams();
     if (typeof update.assignedScore != "undefined") {
       data.append("score", update.assignedScore.toString());
@@ -116,7 +74,7 @@ export default class API {
     if (typeof update.status != "undefined") {
       data.append("status", update.status);
     }
-    const response = await this.makeApiCall<AnimeStatusEntry>(url, {
+    const response = await this.makeApiCall<schema.AnimeStatusEntry>(url, {
       method: "PATCH",
       body: data,
     });

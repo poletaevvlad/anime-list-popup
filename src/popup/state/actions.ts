@@ -1,5 +1,10 @@
-import { AnimeStatus, User, Series } from "../../model";
-import { AnimeListEntry, SeriesUpdate } from "../../services/api";
+import {
+  AnimeStatus,
+  User,
+  Series,
+  AnimeList,
+  SeriesUpdate,
+} from "../../model";
 import AsyncDispatcher from "./asyncDispatcher";
 import { ThemeData } from "../../model/theme";
 
@@ -10,8 +15,7 @@ type Action =
   | {
       type: "anime-loading-finished";
       status: AnimeStatus;
-      entries: AnimeListEntry[];
-      hasMoreEntries: boolean;
+      list: AnimeList;
     }
   | {
       type: "series-updating";

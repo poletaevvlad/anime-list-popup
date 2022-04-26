@@ -1,11 +1,10 @@
-import { AnimeListEntry } from "../../services/api";
 import { AnimeStatus } from "../../model";
 import Action from "./actions";
-import { ApplicationState, AnimeList, EMPTY_LISTS } from "./state";
+import { AnimeListState, ApplicationState, EMPTY_LISTS } from "./state";
 
 export type Reducer<T> = (currentState: T, action: Action) => T;
 
-const animeListReducer: Reducer<Record<AnimeStatus, AnimeList>> = (
+const animeListReducer: Reducer<Record<AnimeStatus, AnimeListState>> = (
   current,
   action
 ) => {
@@ -16,8 +15,8 @@ const animeListReducer: Reducer<Record<AnimeStatus, AnimeList>> = (
       return {
         ...current,
         [action.status]: {
-          entries: [...current[action.status].entries, ...action.entries],
-          status: action.hasMoreEntries ? "has_more_items" : "all_loaded",
+          entries: current[action.status].entries.extend(action.list),
+          isLoading: false,
         },
       };
     case "loading-anime-list":
@@ -25,7 +24,7 @@ const animeListReducer: Reducer<Record<AnimeStatus, AnimeList>> = (
         ...current,
         [action.status]: {
           ...current[action.status],
-          status: "loading",
+          isLoading: true,
         },
       };
     case "series-updating":
@@ -33,27 +32,10 @@ const animeListReducer: Reducer<Record<AnimeStatus, AnimeList>> = (
         ...current,
         [action.status]: {
           ...current[action.status],
-          entries: current[action.status].entries.map((entry) => {
-            if (entry.series.id != action.seriesId) {
-              return entry;
-            }
-            const newEntry: AnimeListEntry = {
-              series: entry.series,
-              episodesWatched:
-                typeof action.update.episodesWatched == "undefined"
-                  ? entry.episodesWatched
-                  : action.update.episodesWatched,
-              assignedScore:
-                typeof action.update.assignedScore == "undefined"
-                  ? entry.assignedScore
-                  : action.update.assignedScore,
-              status:
-                typeof action.update.status == "undefined"
-                  ? entry.status
-                  : action.update.status,
-            };
-            return newEntry;
-          }),
+          entries: current[action.status].entries.updateEntry(
+            action.seriesId,
+            action.update
+          ),
         },
       };
     case "series-update-done":
@@ -66,8 +48,8 @@ const animeListReducer: Reducer<Record<AnimeStatus, AnimeList>> = (
           },
           [action.originalStatus]: {
             ...current[action.originalStatus],
-            entries: current[action.originalStatus].entries.filter(
-              (entry) => entry.series.id != action.seriesId
+            entries: current[action.originalStatus].entries.remove(
+              action.seriesId
             ),
           },
         };
@@ -76,16 +58,10 @@ const animeListReducer: Reducer<Record<AnimeStatus, AnimeList>> = (
         ...current,
         [action.status]: {
           ...current[action.status],
-          entries: current[action.status].entries.map((entry) => {
-            if (entry.series.id != action.seriesId) {
-              return entry;
-            }
-            return {
-              series: entry.series,
-              episodesWatched: action.episodesWatched,
-              assignedScore: action.score,
-              status: action.status,
-            };
+          entries: current[action.status].entries.updateEntry(action.seriesId, {
+            status: action.status,
+            assignedScore: action.score,
+            episodesWatched: action.episodesWatched,
           }),
         },
       };
