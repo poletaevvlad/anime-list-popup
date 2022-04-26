@@ -34,11 +34,9 @@ const SeriesCard = (props: SeriesCardProps) => (
     <div
       className="series-cover"
       style={
-        props.series.coverUrl == null
-          ? {}
-          : {
-              backgroundImage: `url(${props.series.coverUrl})`,
-            }
+        props.series.coverUrl
+          ? { backgroundImage: `url(${props.series.coverUrl})` }
+          : {}
       }
     />
     <div className="card-contents">
@@ -65,7 +63,7 @@ const SeriesCard = (props: SeriesCardProps) => (
         <div className="series-additional-info">
           <div className="series-season">{props.series.seasonFmt || ""}</div>
           <div className="series-score">
-            {props.series.score != null
+            {typeof props.series.score == "number"
               ? `Score: ${props.series.score}`
               : "No score"}
           </div>

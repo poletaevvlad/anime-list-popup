@@ -9,8 +9,8 @@ export default class Series {
   readonly id: number;
   readonly name: string;
   readonly englishName: string;
-  readonly score: number | null;
-  readonly coverUrl: string | null;
+  readonly score?: number;
+  readonly coverUrl?: string;
   readonly totalEpisodes: number;
   readonly season?: Season;
 
@@ -18,8 +18,8 @@ export default class Series {
     id: number;
     name: string;
     englishName: string;
-    score: number | null;
-    coverUrl: string | null;
+    score?: number;
+    coverUrl?: string;
     totalEpisodes: number;
     season?: Season;
   }) {
@@ -31,8 +31,8 @@ export default class Series {
       id: series.id,
       name: series.title,
       englishName: series.alternative_titles.en,
-      score: typeof series.mean != "undefined" ? series.mean : null,
-      coverUrl: series.main_picture.medium,
+      score: series.mean,
+      coverUrl: series.main_picture?.medium,
       totalEpisodes: series.num_episodes,
       season: series.start_season,
     });

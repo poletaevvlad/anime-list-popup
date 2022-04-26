@@ -86,7 +86,7 @@ const UserMenuButton = (props: UserMenuButtonProps) => {
             <span
               className="avatar"
               style={
-                props.user.profileImageUrl == null
+                props.user.profileImageUrl
                   ? {}
                   : {
                       backgroundImage: `url(${props.user.profileImageUrl})`,
