@@ -1,6 +1,5 @@
 import Auth, { constructUrl } from "../services/auth";
-import { User } from "../model";
-import SeriesInfo from "../model/seriesinfo";
+import { User, Series } from "../model";
 import {
   UserResponse,
   PaginatedResponse,
@@ -15,21 +14,10 @@ interface AnimeListResponse {
 }
 
 export interface AnimeListEntry {
-  series: SeriesInfo;
+  series: Series;
   episodesWatched: number;
   assignedScore: number;
   status: AnimeStatus;
-}
-
-type SeasonObject = {
-  season: string;
-  year: number;
-};
-
-function formatSeason(season: SeasonObject): string {
-  const seasonName =
-    season.season.charAt(0).toUpperCase() + season.season.substring(1);
-  return seasonName + " " + season.year.toString();
 }
 
 export type SeriesUpdate = {
@@ -104,18 +92,7 @@ export default class API {
           episodesWatched: node.my_list_status.num_episodes_watched,
           assignedScore: node.my_list_status.score,
           status: status,
-          series: new SeriesInfo({
-            id: node.id,
-            name: node.title,
-            englishName: node.alternative_titles.en,
-            score: typeof node.mean != "undefined" ? node.mean : null,
-            coverUrl: node.main_picture.medium,
-            totalEpisodes: node.num_episodes,
-            season:
-              typeof node.start_season != "undefined"
-                ? formatSeason(node.start_season)
-                : undefined,
-          }),
+          series: Series.fromResponse(node),
         };
       }),
     };

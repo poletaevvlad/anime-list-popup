@@ -1,9 +1,4 @@
-export type AnimeStatus =
-  | "watching"
-  | "completed"
-  | "on-hold"
-  | "dropped"
-  | "plan-to-watch";
+import { AnimeStatus } from ".";
 
 export interface UserResponse {
   /**
@@ -38,7 +33,7 @@ export interface AnimeStatusEntry {
   updated_at: string;
 }
 
-export interface UserAnimeEntry {
+export interface Series {
   id: number;
   title: string;
   main_picture: {
@@ -61,5 +56,5 @@ export interface UserAnimeListEdge {
    * GET /users/{user_name}/animelist
    */
 
-  node: UserAnimeEntry;
+  node: Series;
 }

@@ -1,7 +1,6 @@
-import { AnimeStatus, User } from "../../model";
+import { AnimeStatus, User, Series } from "../../model";
 import { AnimeListEntry, SeriesUpdate } from "../../services/api";
 import AsyncDispatcher from "./asyncDispatcher";
-import SeriesInfo from "../../model/seriesinfo";
 import { ThemeData } from "../../model/theme";
 
 type Action =
@@ -38,7 +37,7 @@ type Action =
   | { type: "clear-error" }
   | {
       type: "set-suggestion";
-      series: SeriesInfo;
+      series: Series;
       acceptUpdate: SeriesUpdate;
       rejectUpdate: SeriesUpdate;
       currentStatus: AnimeStatus;

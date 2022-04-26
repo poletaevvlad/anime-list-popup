@@ -1,8 +1,7 @@
 import * as React from "react";
-import SeriesInfo from "../model/seriesinfo";
 import SeriesCard from "./SeriesCard";
 import ProgressIndicator from "./ProgressIndicator";
-import { AnimeStatus } from "../model";
+import { AnimeStatus, Series } from "../model";
 
 interface AnimeSeriesListProps {
   enabled: boolean;
@@ -10,20 +9,20 @@ interface AnimeSeriesListProps {
   watchScrolling: boolean;
   onScrolledToBottom: () => void;
   entries: {
-    series: SeriesInfo;
+    series: Series;
     episodesWatched: number;
     assignedScore: number;
     status: AnimeStatus;
   }[];
   disabledSeries: Set<number>;
   animeStatus: AnimeStatus;
-  onScoreChanged: (series: SeriesInfo, newScore: number) => void;
+  onScoreChanged: (series: Series, newScore: number) => void;
   onWatchedEpisodesChanged: (
-    series: SeriesInfo,
+    series: Series,
     currentNumEpisodes: number,
     numEpisodes: number
   ) => void;
-  onStatusChanged: (series: SeriesInfo, newStatus: AnimeStatus) => void;
+  onStatusChanged: (series: Series, newStatus: AnimeStatus) => void;
 }
 
 const AnimeSeriesList = (props: AnimeSeriesListProps) => {
@@ -50,7 +49,7 @@ const AnimeSeriesList = (props: AnimeSeriesListProps) => {
         return (
           <SeriesCard
             key={entry.series.id.toString()}
-            seriesInfo={entry.series}
+            series={entry.series}
             displayedStatus={entry.status}
             watched={entry.episodesWatched}
             assignedScore={entry.assignedScore}

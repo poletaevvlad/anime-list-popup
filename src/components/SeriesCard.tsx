@@ -1,9 +1,8 @@
 import * as React from "react";
-import SeriesInfo from "../model/seriesinfo";
 import Dropdown from "./Dropdown";
 import EpisodeSelector from "./EpisodeSelector";
 import ShortStatusDropdown from "./ShortStatusDropdown";
-import { AnimeStatus } from "../model";
+import { AnimeStatus, Series } from "../model";
 
 const SCORE_LABELS = [
   { key: "0", label: "Select" },
@@ -20,7 +19,7 @@ const SCORE_LABELS = [
 ];
 
 interface SeriesCardProps {
-  seriesInfo: SeriesInfo;
+  series: Series;
   watched: number;
   assignedScore: number;
   enabled: boolean;
@@ -35,10 +34,10 @@ const SeriesCard = (props: SeriesCardProps) => (
     <div
       className="series-cover"
       style={
-        props.seriesInfo.coverUrl == null
+        props.series.coverUrl == null
           ? {}
           : {
-              backgroundImage: `url(${props.seriesInfo.coverUrl})`,
+              backgroundImage: `url(${props.series.coverUrl})`,
             }
       }
     />
@@ -52,25 +51,22 @@ const SeriesCard = (props: SeriesCardProps) => (
 
         <div className="series-name">
           <a
-            href={props.enabled ? props.seriesInfo.pageUrl : null}
-            title={props.seriesInfo.name}
+            href={props.enabled ? props.series.pageUrl : null}
+            title={props.series.name}
           >
-            {props.seriesInfo.name}
+            {props.series.name}
           </a>
         </div>
-        <div
-          className="series-english-name"
-          title={props.seriesInfo.englishName}
-        >
-          {props.seriesInfo.englishName}
+        <div className="series-english-name" title={props.series.englishName}>
+          {props.series.englishName}
         </div>
       </div>
       <div className="series-controls">
         <div className="series-additional-info">
-          <div className="series-season">{props.seriesInfo.season}</div>
+          <div className="series-season">{props.series.seasonFmt}</div>
           <div className="series-score">
-            {props.seriesInfo.score != null
-              ? `Score: ${props.seriesInfo.score}`
+            {props.series.score != null
+              ? `Score: ${props.series.score}`
               : "No score"}
           </div>
         </div>
@@ -83,7 +79,7 @@ const SeriesCard = (props: SeriesCardProps) => (
         <EpisodeSelector
           key={props.watched}
           current={props.watched}
-          totalEpisodes={props.seriesInfo.totalEpisodes}
+          totalEpisodes={props.series.totalEpisodes}
           onChange={(value) => props.onEpisodesCountChanged(value)}
           enabled={props.enabled}
         />

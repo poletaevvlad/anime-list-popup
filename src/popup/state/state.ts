@@ -1,7 +1,6 @@
 import { AnimeListEntry, SeriesUpdate } from "../../services/api";
-import { AnimeStatus, User } from "../../model";
+import { AnimeStatus, User, Series } from "../../model";
 import AsyncDispatcher from "./asyncDispatcher";
-import SeriesInfo from "../../model/seriesinfo";
 import { ThemeData } from "../../model/theme";
 
 export interface AnimeList {
@@ -16,7 +15,7 @@ export interface ErrorMessage {
 }
 
 export interface StatusChangeSuggestion {
-  series: SeriesInfo;
+  series: Series;
   acceptUpdate: SeriesUpdate;
   rejectUpdate: SeriesUpdate;
   currentStatus: AnimeStatus;
