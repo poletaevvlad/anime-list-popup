@@ -1,4 +1,4 @@
-import { AnimeStatus } from "../../model";
+import { AnimeStatus, AnimeList } from "../../model";
 import Action from "./actions";
 import { AnimeListState, ApplicationState, EMPTY_LISTS } from "./state";
 
@@ -39,12 +39,12 @@ const animeListReducer: Reducer<Record<AnimeStatus, AnimeListState>> = (
         },
       };
     case "series-update-done":
-      if (action.originalStatus != action.status) {
+      if (action.originalStatus != action.seriesStatus.status) {
         return {
           ...current,
-          [action.status]: {
-            entries: [],
-            status: "has_more_items",
+          [action.seriesStatus.status]: {
+            entries: AnimeList.INITIAL,
+            isLoading: false,
           },
           [action.originalStatus]: {
             ...current[action.originalStatus],
@@ -56,13 +56,12 @@ const animeListReducer: Reducer<Record<AnimeStatus, AnimeListState>> = (
       }
       return {
         ...current,
-        [action.status]: {
-          ...current[action.status],
-          entries: current[action.status].entries.updateEntry(action.seriesId, {
-            status: action.status,
-            assignedScore: action.score,
-            episodesWatched: action.episodesWatched,
-          }),
+        [action.seriesStatus.status]: {
+          ...current[action.seriesStatus.status],
+          entries: current[action.seriesStatus.status].entries.updateEntry(
+            action.seriesId,
+            action.seriesStatus
+          ),
         },
       };
     default:

@@ -1,13 +1,7 @@
 import Auth, { constructUrl } from "../services/auth";
 import { User, AnimeListEntry, AnimeList } from "../model";
 import * as schema from "../model/api_schema";
-import { AnimeStatus, SeriesUpdate } from "../model";
-
-export type SeriesUpdateResult = {
-  status: AnimeStatus;
-  score: number;
-  episodesWatched: number;
-};
+import { AnimeStatus, SeriesUpdate, SeriesStatus } from "../model";
 
 type AnimeListResponse = schema.PaginatedResponse<schema.UserAnimeListEdge>;
 
@@ -62,7 +56,7 @@ export default class API {
   async updateAnimeEntry(
     seriesId: number,
     update: SeriesUpdate
-  ): Promise<SeriesUpdateResult> {
+  ): Promise<SeriesStatus> {
     const url = `${API.BASE_URL}/anime/${seriesId}/my_list_status`;
     const data = new URLSearchParams();
     if (typeof update.assignedScore != "undefined") {
@@ -80,7 +74,7 @@ export default class API {
     });
     return {
       status: response.status as AnimeStatus,
-      score: response.score,
+      assignedScore: response.score,
       episodesWatched: response.num_episodes_watched,
     };
   }

@@ -1,11 +1,13 @@
 import { AnimeStatus, Series } from ".";
 import * as schema from "./api_schema";
 
-export type SeriesUpdate = {
-  episodesWatched?: number;
-  assignedScore?: number;
-  status?: AnimeStatus;
+export type SeriesStatus = {
+  episodesWatched: number;
+  assignedScore: number;
+  status: AnimeStatus;
 };
+
+export type SeriesUpdate = Partial<SeriesStatus>;
 
 export class AnimeListEntry {
   public readonly series: Series;

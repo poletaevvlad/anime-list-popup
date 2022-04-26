@@ -4,6 +4,7 @@ import {
   Series,
   AnimeList,
   SeriesUpdate,
+  SeriesStatus,
 } from "../../model";
 import AsyncDispatcher from "./asyncDispatcher";
 import { ThemeData } from "../../model/theme";
@@ -26,10 +27,8 @@ type Action =
   | {
       type: "series-update-done";
       seriesId: number;
-      status: AnimeStatus;
-      episodesWatched: number;
-      score: number;
       originalStatus: AnimeStatus;
+      seriesStatus: SeriesStatus;
     }
   | { type: "clear-data" }
   | {

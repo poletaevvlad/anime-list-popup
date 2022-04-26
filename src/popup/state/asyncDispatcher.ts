@@ -94,14 +94,12 @@ class AsyncDispatcher extends BaseAsyncDispatcher<Action> {
 
   updateSeries(seriesId: number, update: SeriesUpdate, status: AnimeStatus) {
     this.api.updateAnimeEntry(seriesId, update).then(
-      (result) => {
+      (seriesStatus) => {
         this.dispatch({
           type: "series-update-done",
           seriesId: seriesId,
-          status: result.status,
           originalStatus: status,
-          score: result.score,
-          episodesWatched: result.episodesWatched,
+          seriesStatus,
         });
       },
       (error) => {

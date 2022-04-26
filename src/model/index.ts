@@ -8,4 +8,4 @@ export enum AnimeStatus {
 
 export { default as User } from "./user";
 export { default as Series } from "./series";
-export { AnimeListEntry, AnimeList, SeriesUpdate } from "./list";
+export { AnimeListEntry, AnimeList, SeriesUpdate, SeriesStatus } from "./list";
