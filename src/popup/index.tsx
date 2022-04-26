@@ -4,16 +4,14 @@ import { INITIAL_STATE } from "./state/state";
 import { rootReducer } from "./state/reducers";
 import StatusDropdown from "../components/StatusDropdown";
 import AnimeSeriesList from "../components/AnimeSeriesList";
-import Auth from "../model/auth";
+import Auth, { AccessToken } from "../services/auth";
 import * as browser from "webextension-polyfill";
-import AuthToken from "../model/token";
 import API, { SeriesUpdate } from "../model/api";
 import { AnimeStatus } from "../model";
 import AsyncDispatcher from "./state/asyncDispatcher";
 import UserMenuButton from "../components/UserMenuButton";
 import StateChangeModal from "../components/StateChangeModal";
 import ErrorModal from "../components/ErrorModal";
-import AccessToken from "../model/token";
 import SeriesInfo from "../model/seriesinfo";
 import UserInfo from "../model/userinfo";
 import { ThemeData } from "../model/theme";
@@ -222,7 +220,7 @@ const Application = (props: ApplicationProps) => {
 };
 
 document.addEventListener("DOMContentLoaded", () => {
-  AuthToken.load().then((token) => {
+  AccessToken.load().then((token) => {
     if (token == null) {
       browser.tabs.create({ active: true, url: "/auth.html" });
       window.close();

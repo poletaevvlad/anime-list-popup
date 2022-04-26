@@ -1,11 +1,61 @@
 import * as browser from "webextension-polyfill";
 import { Mutex } from "async-mutex";
 
-import AccessToken from "./token";
-
 const CLIENT_ID = "d654978c44a0b252febf4edb3d1a65d7";
 const CODE_CHALLENGE =
   "0123456798abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ_-";
+
+type AccessTokenProperties = {
+  accessToken: string;
+  refreshToken: string;
+  issuedDate: number;
+  expiresIn: number;
+};
+
+export class AccessToken {
+  readonly issuedDate: number;
+  readonly refreshToken: string;
+  readonly accessToken: string;
+  readonly expiresIn: number;
+
+  constructor(properties: AccessTokenProperties) {
+    this.accessToken = properties.accessToken;
+    this.refreshToken = properties.refreshToken;
+    this.issuedDate = properties.issuedDate;
+    this.expiresIn = properties.expiresIn;
+  }
+
+  get isExpired(): boolean {
+    return new Date().getTime() > this.issuedDate + this.expiresIn;
+  }
+
+  static load(): Promise<AccessToken> {
+    return browser.storage.local.get("access_token").then(
+      (results) => {
+        if (typeof results["access_token"] == "undefined") {
+          return null;
+        }
+        const properties = results["access_token"] as AccessTokenProperties;
+        return new AccessToken(properties);
+      },
+      () => null
+    );
+  }
+
+  save(): Promise<void> {
+    const properties: AccessTokenProperties = {
+      issuedDate: this.issuedDate,
+      refreshToken: this.refreshToken,
+      accessToken: this.accessToken,
+      expiresIn: this.expiresIn,
+    };
+    return browser.storage.local.set({ access_token: properties });
+  }
+
+  static logout(): Promise<void> {
+    return browser.storage.local.remove("access_token");
+  }
+}
 
 function generateCodeChallenge(): string {
   const result: string[] = [];

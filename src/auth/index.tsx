@@ -1,7 +1,7 @@
 import * as React from "react";
 import { render } from "react-dom";
 import ProgressIndicator from "../components/ProgressIndicator";
-import Auth from "../model/auth";
+import Auth from "../services/auth";
 import * as browser from "webextension-polyfill";
 import { ThemeData } from "../model/theme";
 

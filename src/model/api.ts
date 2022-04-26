@@ -1,7 +1,6 @@
-import Auth from "./auth";
+import Auth, { constructUrl } from "../services/auth";
 import UserInfo from "./userinfo";
 import SeriesInfo from "./seriesinfo";
-import { constructUrl } from "./auth";
 import {
   UserResponse,
   PaginatedResponse,
