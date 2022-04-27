@@ -55,7 +55,7 @@ export const EMPTY_LISTS: Record<AnimeListType, AnimeListState> = {
 export const INITIAL_STATE: ApplicationState = {
   user: null,
   currentList: AnimeListType.Watching,
-  query: "",
+  query: "Sket",
   animeLists: EMPTY_LISTS,
   updatingAnime: new Set<number>(),
   loadingCounter: 0,

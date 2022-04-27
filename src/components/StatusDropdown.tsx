@@ -2,10 +2,9 @@ import * as React from "react";
 import { AnimeListType, LIST_TYPE_LABELS, STATUSES } from "../model";
 import Dropdown from "./Dropdown";
 
-const STATUS_LABELS = STATUSES.map((status) => ({
-  key: status,
-  label: LIST_TYPE_LABELS[status],
-}));
+const STATUS_LABELS = [...STATUSES, AnimeListType.SearchResults].map(
+  (status) => ({ key: status, label: LIST_TYPE_LABELS[status] })
+);
 
 interface StatusDropdownProps {
   value: AnimeListType;

@@ -22,7 +22,10 @@ const ShortStatusDropdown = (props: ShortStatusDropdownProps) => {
       <select
         disabled={!props.enabled}
         value={props.value}
-        onChange={(e) => props.onChange(e.currentTarget.value as AnimeStatus)}
+        onChange={(e) =>
+          e.currentTarget.value &&
+          props.onChange(e.currentTarget.value as AnimeStatus)
+        }
       >
         {STATUSES.map((status) => (
           <option key={status} value={status}>
@@ -30,7 +33,9 @@ const ShortStatusDropdown = (props: ShortStatusDropdownProps) => {
           </option>
         ))}
       </select>
-      <div className="current-value">{SHORT_STATUS_LABELS[props.value]}</div>
+      <div className="current-value">
+        {props.value ? SHORT_STATUS_LABELS[props.value] : "—"}
+      </div>
       <DropdownIcon />
     </div>
   );

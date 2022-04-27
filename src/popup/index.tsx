@@ -60,7 +60,11 @@ const Application = (props: ApplicationProps) => {
     //   status: state.currentList,
     //   update: update,
     // });
-    // props.asyncDispatcher.updateSeries(seriesId, update, state.currentList);
+    props.asyncDispatcher.updateSeries(
+      seriesId,
+      update,
+      state.currentList as any
+    );
   };
 
   const numWatchedChanged = (

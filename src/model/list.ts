@@ -13,7 +13,7 @@ export class AnimeListEntry {
   public readonly series: Series;
   public readonly episodesWatched: number;
   public readonly assignedScore: number;
-  public readonly status: AnimeStatus;
+  public readonly status?: AnimeStatus;
 
   constructor(params: {
     series: Series;
@@ -29,7 +29,7 @@ export class AnimeListEntry {
       series: Series.fromResponse(response),
       episodesWatched: response.my_list_status?.num_episodes_watched || 0,
       assignedScore: response.my_list_status?.score || 0,
-      status: response.my_list_status?.status || AnimeStatus.PlanToWatch,
+      status: response.my_list_status?.status,
     });
   }
 
