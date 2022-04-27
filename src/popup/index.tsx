@@ -9,9 +9,10 @@ import * as browser from "webextension-polyfill";
 import API from "../services/api";
 import {
   User,
-  Series,
   SeriesUpdate,
   AnimeListType,
+  AnimeStatus,
+  AnimeListEntry,
   SeriesStatus,
 } from "../model";
 import AsyncDispatcher from "./state/asyncDispatcher";
@@ -59,51 +60,48 @@ const Application = (props: ApplicationProps) => {
     }
   };
 
-  const episodeUpdated = (
-    seriesId: number,
-    currentStatus: SeriesStatus,
+  const episodeUpdated = (entry: AnimeListEntry, update: SeriesUpdate) => {
+    if (Object.keys(update).join() == "episodesWatched") {
+      let suggested: AnimeStatus | null = null;
+      if (
+        entry.status != AnimeStatus.Completed &&
+        entry.series.totalEpisodes != 0 &&
+        update.episodesWatched == entry.series.totalEpisodes
+      ) {
+        suggested = AnimeStatus.Completed;
+      } else if (
+        entry.status != AnimeStatus.Watching &&
+        update.episodesWatched > entry.episodesWatched
+      ) {
+        suggested = AnimeStatus.Watching;
+      }
+
+      if (suggested) {
+        dispatch({
+          type: "set-suggestion",
+          listEntry: entry,
+          rejectUpdate: update,
+          acceptUpdate: { ...update, status: suggested },
+        });
+        return;
+      }
+    }
+
+    episodeUpdatedWithoutSuggestion(entry, update);
+  };
+
+  const episodeUpdatedWithoutSuggestion = (
+    entry: AnimeListEntry,
     update: SeriesUpdate
   ) => {
     dispatch({
       type: "series-updating",
-      seriesId: seriesId,
-      status: currentStatus.status,
+      seriesId: entry.series.id,
+      status: entry.status,
       update: update,
     });
-    props.asyncDispatcher.updateSeries(seriesId, update, currentStatus.status);
+    props.asyncDispatcher.updateSeries(entry.series.id, update, entry.status);
   };
-
-  // const numWatchedChanged = (
-  //   series: Series,
-  //   currentWatched: number,
-  //   numberWatched: number
-  // ) => {
-  // let suggested: AnimeStatus = null;
-  // if (
-  //   state.currentList != AnimeStatus.Completed &&
-  //   series.totalEpisodes != 0 &&
-  //   numberWatched == series.totalEpisodes
-  // ) {
-  //   suggested = AnimeStatus.Completed;
-  // } else if (
-  //   state.currentList != AnimeStatus.Watching &&
-  //   numberWatched > currentWatched
-  // ) {
-  //   suggested = AnimeStatus.Watching;
-  // }
-  // if (suggested == null) {
-  //   episodeUpdated(series.id, { episodesWatched: numberWatched });
-  //   return;
-  // }
-  // dispatch({
-  //   type: "set-suggestion",
-  //   series: series,
-  //   currentStatus: state.currentList,
-  //   newStatus: suggested,
-  //   rejectUpdate: { episodesWatched: numberWatched },
-  //   acceptUpdate: { episodesWatched: numberWatched, status: suggested },
-  // });
-  // };
 
   const refreshData = () => {
     dispatch({ type: "clear-data" });
@@ -148,27 +146,25 @@ const Application = (props: ApplicationProps) => {
       />
     );
   } else if (state.statusSuggestion != null) {
-    modal = null; /*(
+    modal = (
       <StateChangeModal
-        animeTitle={state.statusSuggestion.series.name}
-        currentStatus={state.statusSuggestion.currentStatus}
-        suggestedStatus={state.statusSuggestion.newStatus}
+        animeTitle={state.statusSuggestion.listEntry.series.name}
+        suggestedStatus={state.statusSuggestion.acceptUpdate.status}
+        currentStatus={state.statusSuggestion.listEntry.status}
         onAccepted={() =>
-          episodeUpdated(
-            state.statusSuggestion.series.id,
-            state.statusSuggestion.currentStatus,
+          episodeUpdatedWithoutSuggestion(
+            state.statusSuggestion.listEntry,
             state.statusSuggestion.acceptUpdate
           )
         }
         onRejected={() =>
-          episodeUpdated(
-            state.statusSuggestion.series.id,
-            state.statusSuggestion.currentStatus,
+          episodeUpdatedWithoutSuggestion(
+            state.statusSuggestion.listEntry,
             state.statusSuggestion.rejectUpdate
           )
         }
       />
-    );*/
+    );
   }
 
   return (

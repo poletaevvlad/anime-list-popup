@@ -1,11 +1,11 @@
 import {
   AnimeStatus,
   User,
-  Series,
   AnimeList,
   SeriesUpdate,
   SeriesStatus,
   AnimeListType,
+  AnimeListEntry,
 } from "../../model";
 import AsyncDispatcher from "./asyncDispatcher";
 import { ThemeData } from "../../model/theme";
@@ -41,11 +41,9 @@ type Action =
   | { type: "clear-error" }
   | {
       type: "set-suggestion";
-      series: Series;
+      listEntry: AnimeListEntry;
       acceptUpdate: SeriesUpdate;
       rejectUpdate: SeriesUpdate;
-      currentStatus: AnimeStatus;
-      newStatus: AnimeStatus;
     }
   | { type: "set-theme"; theme: ThemeData };
 

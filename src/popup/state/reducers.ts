@@ -150,13 +150,11 @@ export const rootReducer: Reducer<ApplicationState> = (current, action) => {
     case "set-suggestion":
       return {
         ...current,
-        // statusSuggestion: {
-        //   series: action.series,
-        //   acceptUpdate: action.acceptUpdate,
-        //   rejectUpdate: action.rejectUpdate,
-        //   currentStatus: action.currentStatus,
-        //   newStatus: action.newStatus,
-        // },
+        statusSuggestion: {
+          listEntry: action.listEntry,
+          acceptUpdate: action.acceptUpdate,
+          rejectUpdate: action.rejectUpdate,
+        },
       };
     case "set-theme":
       return { ...current, theme: action.theme };

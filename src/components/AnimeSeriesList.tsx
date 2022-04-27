@@ -1,12 +1,7 @@
 import * as React from "react";
 import SeriesCard from "./SeriesCard";
 import ProgressIndicator from "./ProgressIndicator";
-import {
-  AnimeListEntry,
-  AnimeListType,
-  SeriesUpdate,
-  SeriesStatus,
-} from "../model";
+import { AnimeListEntry, AnimeListType, SeriesUpdate } from "../model";
 
 interface AnimeSeriesListProps {
   enabled: boolean;
@@ -16,11 +11,7 @@ interface AnimeSeriesListProps {
   entries: AnimeListEntry[];
   disabledSeries: Set<number>;
   currentListType: AnimeListType;
-  onUpdate: (
-    seriesId: number,
-    currentStatus: SeriesStatus,
-    update: SeriesUpdate
-  ) => void;
+  onUpdate: (listEntry: AnimeListEntry, update: SeriesUpdate) => void;
 }
 
 const AnimeSeriesList = (props: AnimeSeriesListProps) => {
@@ -54,9 +45,7 @@ const AnimeSeriesList = (props: AnimeSeriesListProps) => {
             enabled={
               props.enabled && !props.disabledSeries.has(entry.series.id)
             }
-            onUpdate={(update) =>
-              props.onUpdate(entry.series.id, entry.seriesStatus, update)
-            }
+            onUpdate={(update) => props.onUpdate(entry, update)}
           />
         );
       })}
