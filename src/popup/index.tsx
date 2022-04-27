@@ -7,7 +7,7 @@ import AnimeSeriesList from "../components/AnimeSeriesList";
 import Auth, { AccessToken } from "../services/auth";
 import * as browser from "webextension-polyfill";
 import API from "../services/api";
-import { AnimeStatus, User, Series, SeriesUpdate } from "../model";
+import { User, Series, SeriesUpdate, AnimeListType } from "../model";
 import AsyncDispatcher from "./state/asyncDispatcher";
 import UserMenuButton from "../components/UserMenuButton";
 import StateChangeModal from "../components/StateChangeModal";
@@ -30,15 +30,15 @@ const Application = (props: ApplicationProps) => {
     return () => props.asyncDispatcher.unsubscribe(dispatch);
   });
 
-  const currentListChanged = (status: AnimeStatus) => {
-    dispatch({ type: "current-list-changed", status: status });
-    const currentList = state.animeLists[status];
+  const currentListChanged = (listType: AnimeListType) => {
+    dispatch({ type: "current-list-changed", listType });
+    const currentList = state.animeLists[listType];
     if (
       currentList.entries.length == 0 &&
       !currentList.entries.isComplete &&
       !currentList.isLoading
     ) {
-      props.asyncDispatcher.loadAnimeList(status, 0);
+      props.asyncDispatcher.loadAnimeList(listType, state.query, 0);
     }
   };
 
@@ -47,19 +47,20 @@ const Application = (props: ApplicationProps) => {
     if (!list.isLoading && !list.entries.isComplete) {
       props.asyncDispatcher.loadAnimeList(
         state.currentList,
+        state.query,
         state.animeLists[state.currentList].entries.length
       );
     }
   };
 
   const episodeUpdated = (seriesId: number, update: SeriesUpdate) => {
-    dispatch({
-      type: "series-updating",
-      seriesId: seriesId,
-      status: state.currentList,
-      update: update,
-    });
-    props.asyncDispatcher.updateSeries(seriesId, update, state.currentList);
+    // dispatch({
+    //   type: "series-updating",
+    //   seriesId: seriesId,
+    //   status: state.currentList,
+    //   update: update,
+    // });
+    // props.asyncDispatcher.updateSeries(seriesId, update, state.currentList);
   };
 
   const numWatchedChanged = (
@@ -67,36 +68,36 @@ const Application = (props: ApplicationProps) => {
     currentWatched: number,
     numberWatched: number
   ) => {
-    let suggested: AnimeStatus = null;
-    if (
-      state.currentList != AnimeStatus.Completed &&
-      series.totalEpisodes != 0 &&
-      numberWatched == series.totalEpisodes
-    ) {
-      suggested = AnimeStatus.Completed;
-    } else if (
-      state.currentList != AnimeStatus.Watching &&
-      numberWatched > currentWatched
-    ) {
-      suggested = AnimeStatus.Watching;
-    }
-    if (suggested == null) {
-      episodeUpdated(series.id, { episodesWatched: numberWatched });
-      return;
-    }
-    dispatch({
-      type: "set-suggestion",
-      series: series,
-      currentStatus: state.currentList,
-      newStatus: suggested,
-      rejectUpdate: { episodesWatched: numberWatched },
-      acceptUpdate: { episodesWatched: numberWatched, status: suggested },
-    });
+    // let suggested: AnimeStatus = null;
+    // if (
+    //   state.currentList != AnimeStatus.Completed &&
+    //   series.totalEpisodes != 0 &&
+    //   numberWatched == series.totalEpisodes
+    // ) {
+    //   suggested = AnimeStatus.Completed;
+    // } else if (
+    //   state.currentList != AnimeStatus.Watching &&
+    //   numberWatched > currentWatched
+    // ) {
+    //   suggested = AnimeStatus.Watching;
+    // }
+    // if (suggested == null) {
+    //   episodeUpdated(series.id, { episodesWatched: numberWatched });
+    //   return;
+    // }
+    // dispatch({
+    //   type: "set-suggestion",
+    //   series: series,
+    //   currentStatus: state.currentList,
+    //   newStatus: suggested,
+    //   rejectUpdate: { episodesWatched: numberWatched },
+    //   acceptUpdate: { episodesWatched: numberWatched, status: suggested },
+    // });
   };
 
   const refreshData = () => {
     dispatch({ type: "clear-data" });
-    props.asyncDispatcher.loadAnimeList(state.currentList, 0);
+    props.asyncDispatcher.loadAnimeList(state.currentList, state.query, 0);
   };
 
   const retryError = () => {
@@ -216,7 +217,7 @@ const Application = (props: ApplicationProps) => {
           onStatusChanged={(series, status) =>
             episodeUpdated(series.id, { status: status })
           }
-          animeStatus={state.currentList}
+          currentListType={state.currentList}
         />
       )}
     </div>
@@ -234,7 +235,7 @@ document.addEventListener("DOMContentLoaded", () => {
     const auth = new Auth(token);
     const api = new API(auth);
     const dispatcher = new AsyncDispatcher(api);
-    dispatcher.loadAnimeList(INITIAL_STATE.currentList, 0);
+    dispatcher.loadAnimeList(INITIAL_STATE.currentList, INITIAL_STATE.query, 0);
     dispatcher.loadUser();
     dispatcher.dispatchLater(
       ThemeData.load().then((theme) => {

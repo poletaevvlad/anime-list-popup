@@ -1,5 +1,5 @@
 import * as React from "react";
-import { User, AnimeStatus } from "../model";
+import { User, AnimeListType, AnimeStatus } from "../model";
 import { COLORS, ThemeData, BRIGHTNESES } from "../model/theme";
 
 const BRIGHTNESS_LABELS = { dark: "Dark", auto: "Auto", light: "Light" };
@@ -12,7 +12,7 @@ interface ThemeEditorProps {
 interface UserMenuButtonProps extends ThemeEditorProps {
   isOpened: boolean;
   setOpened: (opened: boolean) => void;
-  currentList: AnimeStatus;
+  currentList: AnimeListType;
   user: User;
   onLogout: () => void;
 }
@@ -95,7 +95,15 @@ const UserMenuButton = (props: UserMenuButtonProps) => {
           </a>
         </li>
         <li>
-          <a href={props.user.animeListUrl(props.currentList)}>Anime list</a>
+          <a
+            href={props.user.animeListUrl(
+              props.currentList == AnimeListType.SearchResults
+                ? undefined
+                : (props.currentList as string as AnimeStatus)
+            )}
+          >
+            Anime list
+          </a>
         </li>
         <li>
           <a href={props.user.mangaListUrl}>Manga list</a>

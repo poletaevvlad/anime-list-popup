@@ -1,10 +1,10 @@
-import { AnimeStatus, AnimeList } from "../../model";
+import { AnimeList, AnimeListType } from "../../model";
 import Action from "./actions";
 import { AnimeListState, ApplicationState, EMPTY_LISTS } from "./state";
 
 export type Reducer<T> = (currentState: T, action: Action) => T;
 
-const animeListReducer: Reducer<Record<AnimeStatus, AnimeListState>> = (
+const animeListReducer: Reducer<Record<AnimeListType, AnimeListState>> = (
   current,
   action
 ) => {
@@ -14,16 +14,16 @@ const animeListReducer: Reducer<Record<AnimeStatus, AnimeListState>> = (
     case "anime-loading-finished":
       return {
         ...current,
-        [action.status]: {
-          entries: current[action.status].entries.extend(action.list),
+        [action.listType]: {
+          entries: current[action.listType].entries.extend(action.list),
           isLoading: false,
         },
       };
     case "loading-anime-list":
       return {
         ...current,
-        [action.status]: {
-          ...current[action.status],
+        [action.listType]: {
+          ...current[action.listType],
           isLoading: true,
         },
       };
@@ -93,7 +93,7 @@ export const rootReducer: Reducer<ApplicationState> = (current, action) => {
     case "current-list-changed":
       return {
         ...current,
-        currentList: action.status,
+        currentList: action.listType,
       };
     case "user-info-loaded":
       return {

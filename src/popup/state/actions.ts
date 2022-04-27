@@ -5,17 +5,18 @@ import {
   AnimeList,
   SeriesUpdate,
   SeriesStatus,
+  AnimeListType,
 } from "../../model";
 import AsyncDispatcher from "./asyncDispatcher";
 import { ThemeData } from "../../model/theme";
 
 type Action =
-  | { type: "current-list-changed"; status: AnimeStatus }
+  | { type: "current-list-changed"; listType: AnimeListType }
   | { type: "user-info-loaded"; user: User }
-  | { type: "loading-anime-list"; status: AnimeStatus }
+  | { type: "loading-anime-list"; listType: AnimeListType }
   | {
       type: "anime-loading-finished";
-      status: AnimeStatus;
+      listType: AnimeListType;
       list: AnimeList;
     }
   | {

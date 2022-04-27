@@ -1,18 +1,15 @@
 import * as React from "react";
-import { AnimeStatus } from "../model";
+import { AnimeListType, LIST_TYPE_LABELS, STATUSES } from "../model";
 import Dropdown from "./Dropdown";
 
-export const statusLabels: { key: AnimeStatus; label: string }[] = [
-  { key: AnimeStatus.Watching, label: "Currently Watching" },
-  { key: AnimeStatus.Completed, label: "Completed" },
-  { key: AnimeStatus.OnHold, label: "On Hold" },
-  { key: AnimeStatus.Dropped, label: "Dropped" },
-  { key: AnimeStatus.PlanToWatch, label: "Plan to Watch" },
-];
+const STATUS_LABELS = STATUSES.map((status) => ({
+  key: status,
+  label: LIST_TYPE_LABELS[status],
+}));
 
 interface StatusDropdownProps {
-  value: AnimeStatus;
-  onChange: (value: AnimeStatus) => void;
+  value: AnimeListType;
+  onChange: (value: AnimeListType) => void;
   enabled: boolean;
 }
 
@@ -20,7 +17,7 @@ const StatusDropdown = (props: StatusDropdownProps) => {
   return (
     <Dropdown
       value={props.value}
-      options={statusLabels}
+      options={STATUS_LABELS}
       onChange={props.onChange}
       enabled={props.enabled}
     />
