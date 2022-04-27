@@ -2,7 +2,7 @@ import * as React from "react";
 import Dropdown from "./Dropdown";
 import EpisodeSelector from "./EpisodeSelector";
 import ShortStatusDropdown from "./ShortStatusDropdown";
-import { AnimeStatus, Series } from "../model";
+import { AnimeStatus, Series, SeriesUpdate } from "../model";
 
 const SCORE_LABELS = [
   { key: "0", label: "Select" },
@@ -24,9 +24,7 @@ interface SeriesCardProps {
   assignedScore: number;
   enabled: boolean;
   displayedStatus: AnimeStatus;
-  onScoreChanged: (newScore: number) => void;
-  onEpisodesCountChanged: (newEpisodesCount: number) => void;
-  onStatusChanged: (newStatus: AnimeStatus) => void;
+  onUpdate: (update: SeriesUpdate) => void;
 }
 
 const SeriesCard = (props: SeriesCardProps) => (
@@ -43,7 +41,7 @@ const SeriesCard = (props: SeriesCardProps) => (
       <div className="series-description">
         <ShortStatusDropdown
           value={props.displayedStatus}
-          onChange={props.onStatusChanged}
+          onChange={(status) => props.onUpdate({ status })}
           enabled={props.enabled}
         />
 
@@ -73,14 +71,18 @@ const SeriesCard = (props: SeriesCardProps) => (
             <Dropdown
               value={props.assignedScore.toString()}
               options={SCORE_LABELS}
-              onChange={(value) => props.onScoreChanged(parseInt(value))}
+              onChange={(value) =>
+                props.onUpdate({ assignedScore: parseInt(value) })
+              }
               enabled={props.enabled}
             />
             <EpisodeSelector
               key={props.watched}
               current={props.watched}
               totalEpisodes={props.series.totalEpisodes}
-              onChange={(value) => props.onEpisodesCountChanged(value)}
+              onChange={(episodesWatched) =>
+                props.onUpdate({ episodesWatched })
+              }
               enabled={props.enabled}
             />{" "}
           </>

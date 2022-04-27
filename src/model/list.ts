@@ -48,6 +48,14 @@ export class AnimeListEntry {
         typeof update.status === "undefined" ? this.status : update.status,
     });
   }
+
+  get seriesStatus(): SeriesStatus {
+    return {
+      status: this.status,
+      assignedScore: this.assignedScore,
+      episodesWatched: this.episodesWatched,
+    };
+  }
 }
 
 export class AnimeList {

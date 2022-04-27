@@ -97,13 +97,17 @@ class AsyncDispatcher extends BaseAsyncDispatcher<Action> {
     });
   }
 
-  updateSeries(seriesId: number, update: SeriesUpdate, status: AnimeStatus) {
+  updateSeries(
+    seriesId: number,
+    update: SeriesUpdate,
+    originalStatus: AnimeStatus
+  ) {
     this.api.updateAnimeEntry(seriesId, update).then(
       (seriesStatus) => {
         this.dispatch({
           type: "series-update-done",
-          seriesId: seriesId,
-          originalStatus: status,
+          seriesId,
+          originalStatus,
           seriesStatus,
         });
       },
@@ -112,7 +116,7 @@ class AsyncDispatcher extends BaseAsyncDispatcher<Action> {
           type: "set-error",
           title: "An error has occurred",
           message: String(error),
-          retry: (self) => self.updateSeries(seriesId, update, status),
+          retry: (self) => self.updateSeries(seriesId, update, originalStatus),
         });
       }
     );

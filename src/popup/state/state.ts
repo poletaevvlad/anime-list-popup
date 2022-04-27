@@ -1,10 +1,10 @@
 import {
-  AnimeStatus,
   SeriesUpdate,
   User,
   Series,
   AnimeList,
   AnimeListType,
+  SeriesStatus,
 } from "../../model";
 import AsyncDispatcher from "./asyncDispatcher";
 import { ThemeData } from "../../model/theme";
@@ -24,8 +24,7 @@ export interface StatusChangeSuggestion {
   series: Series;
   acceptUpdate: SeriesUpdate;
   rejectUpdate: SeriesUpdate;
-  currentStatus: AnimeStatus;
-  newStatus: AnimeStatus;
+  currentStatus: SeriesStatus;
 }
 
 export interface ApplicationState {

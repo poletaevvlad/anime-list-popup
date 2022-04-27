@@ -7,7 +7,13 @@ import AnimeSeriesList from "../components/AnimeSeriesList";
 import Auth, { AccessToken } from "../services/auth";
 import * as browser from "webextension-polyfill";
 import API from "../services/api";
-import { User, Series, SeriesUpdate, AnimeListType } from "../model";
+import {
+  User,
+  Series,
+  SeriesUpdate,
+  AnimeListType,
+  SeriesStatus,
+} from "../model";
 import AsyncDispatcher from "./state/asyncDispatcher";
 import UserMenuButton from "../components/UserMenuButton";
 import StateChangeModal from "../components/StateChangeModal";
@@ -53,51 +59,51 @@ const Application = (props: ApplicationProps) => {
     }
   };
 
-  const episodeUpdated = (seriesId: number, update: SeriesUpdate) => {
-    // dispatch({
-    //   type: "series-updating",
-    //   seriesId: seriesId,
-    //   status: state.currentList,
-    //   update: update,
-    // });
-    props.asyncDispatcher.updateSeries(
-      seriesId,
-      update,
-      state.currentList as any
-    );
+  const episodeUpdated = (
+    seriesId: number,
+    currentStatus: SeriesStatus,
+    update: SeriesUpdate
+  ) => {
+    dispatch({
+      type: "series-updating",
+      seriesId: seriesId,
+      status: currentStatus.status,
+      update: update,
+    });
+    props.asyncDispatcher.updateSeries(seriesId, update, currentStatus.status);
   };
 
-  const numWatchedChanged = (
-    series: Series,
-    currentWatched: number,
-    numberWatched: number
-  ) => {
-    // let suggested: AnimeStatus = null;
-    // if (
-    //   state.currentList != AnimeStatus.Completed &&
-    //   series.totalEpisodes != 0 &&
-    //   numberWatched == series.totalEpisodes
-    // ) {
-    //   suggested = AnimeStatus.Completed;
-    // } else if (
-    //   state.currentList != AnimeStatus.Watching &&
-    //   numberWatched > currentWatched
-    // ) {
-    //   suggested = AnimeStatus.Watching;
-    // }
-    // if (suggested == null) {
-    //   episodeUpdated(series.id, { episodesWatched: numberWatched });
-    //   return;
-    // }
-    // dispatch({
-    //   type: "set-suggestion",
-    //   series: series,
-    //   currentStatus: state.currentList,
-    //   newStatus: suggested,
-    //   rejectUpdate: { episodesWatched: numberWatched },
-    //   acceptUpdate: { episodesWatched: numberWatched, status: suggested },
-    // });
-  };
+  // const numWatchedChanged = (
+  //   series: Series,
+  //   currentWatched: number,
+  //   numberWatched: number
+  // ) => {
+  // let suggested: AnimeStatus = null;
+  // if (
+  //   state.currentList != AnimeStatus.Completed &&
+  //   series.totalEpisodes != 0 &&
+  //   numberWatched == series.totalEpisodes
+  // ) {
+  //   suggested = AnimeStatus.Completed;
+  // } else if (
+  //   state.currentList != AnimeStatus.Watching &&
+  //   numberWatched > currentWatched
+  // ) {
+  //   suggested = AnimeStatus.Watching;
+  // }
+  // if (suggested == null) {
+  //   episodeUpdated(series.id, { episodesWatched: numberWatched });
+  //   return;
+  // }
+  // dispatch({
+  //   type: "set-suggestion",
+  //   series: series,
+  //   currentStatus: state.currentList,
+  //   newStatus: suggested,
+  //   rejectUpdate: { episodesWatched: numberWatched },
+  //   acceptUpdate: { episodesWatched: numberWatched, status: suggested },
+  // });
+  // };
 
   const refreshData = () => {
     dispatch({ type: "clear-data" });
@@ -142,7 +148,7 @@ const Application = (props: ApplicationProps) => {
       />
     );
   } else if (state.statusSuggestion != null) {
-    modal = (
+    modal = null; /*(
       <StateChangeModal
         animeTitle={state.statusSuggestion.series.name}
         currentStatus={state.statusSuggestion.currentStatus}
@@ -150,17 +156,19 @@ const Application = (props: ApplicationProps) => {
         onAccepted={() =>
           episodeUpdated(
             state.statusSuggestion.series.id,
+            state.statusSuggestion.currentStatus,
             state.statusSuggestion.acceptUpdate
           )
         }
         onRejected={() =>
           episodeUpdated(
             state.statusSuggestion.series.id,
+            state.statusSuggestion.currentStatus,
             state.statusSuggestion.rejectUpdate
           )
         }
       />
-    );
+    );*/
   }
 
   return (
@@ -214,13 +222,7 @@ const Application = (props: ApplicationProps) => {
           }
           onScrolledToBottom={listScrolledToBottom}
           disabledSeries={state.updatingAnime}
-          onScoreChanged={(series, score) =>
-            episodeUpdated(series.id, { assignedScore: score })
-          }
-          onWatchedEpisodesChanged={numWatchedChanged}
-          onStatusChanged={(series, status) =>
-            episodeUpdated(series.id, { status: status })
-          }
+          onUpdate={episodeUpdated}
           currentListType={state.currentList}
         />
       )}

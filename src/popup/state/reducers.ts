@@ -27,18 +27,38 @@ const animeListReducer: Reducer<Record<AnimeListType, AnimeListState>> = (
           isLoading: true,
         },
       };
-    case "series-updating":
-      return {
+    case "series-updating": {
+      const newLists = {
         ...current,
-        [action.status]: {
-          ...current[action.status],
-          entries: current[action.status].entries.updateEntry(
+        [AnimeListType.SearchResults]: {
+          ...current[AnimeListType.SearchResults],
+          entries: current[AnimeListType.SearchResults].entries.updateEntry(
             action.seriesId,
             action.update
           ),
         },
       };
+      if (action.status) {
+        newLists[action.status] = {
+          ...current[action.status],
+          entries: current[action.status].entries.updateEntry(
+            action.seriesId,
+            action.update
+          ),
+        };
+      }
+      return newLists;
+    }
     case "series-update-done":
+      if (!action.originalStatus) {
+        return {
+          ...current,
+          [action.seriesStatus.status]: {
+            entries: AnimeList.INITIAL,
+            isLoading: false,
+          },
+        };
+      }
       if (action.originalStatus != action.seriesStatus.status) {
         return {
           ...current,
@@ -130,13 +150,13 @@ export const rootReducer: Reducer<ApplicationState> = (current, action) => {
     case "set-suggestion":
       return {
         ...current,
-        statusSuggestion: {
-          series: action.series,
-          acceptUpdate: action.acceptUpdate,
-          rejectUpdate: action.rejectUpdate,
-          currentStatus: action.currentStatus,
-          newStatus: action.newStatus,
-        },
+        // statusSuggestion: {
+        //   series: action.series,
+        //   acceptUpdate: action.acceptUpdate,
+        //   rejectUpdate: action.rejectUpdate,
+        //   currentStatus: action.currentStatus,
+        //   newStatus: action.newStatus,
+        // },
       };
     case "set-theme":
       return { ...current, theme: action.theme };
