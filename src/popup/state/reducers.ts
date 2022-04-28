@@ -84,6 +84,16 @@ const animeListReducer: Reducer<Record<AnimeListType, AnimeListState>> = (
           ),
         },
       };
+    case "start-search": {
+      console.log("listReducer", action);
+      return {
+        ...current,
+        [AnimeListType.SearchResults]: {
+          isLoading: false,
+          entries: AnimeList.INITIAL,
+        },
+      };
+    }
     default:
       return { ...current };
   }
@@ -105,6 +115,7 @@ const loadingCounterReducer: Reducer<number> = (current, action) => {
 };
 
 export const rootReducer: Reducer<ApplicationState> = (current, action) => {
+  console.log(action);
   current = {
     ...current,
     loadingCounter: loadingCounterReducer(current.loadingCounter, action),
@@ -158,6 +169,13 @@ export const rootReducer: Reducer<ApplicationState> = (current, action) => {
       };
     case "set-theme":
       return { ...current, theme: action.theme };
+    case "start-search":
+      return {
+        ...current,
+        query: action.query,
+        currentList: AnimeListType.SearchResults,
+        animeLists: animeListReducer(current.animeLists, action),
+      };
     default:
       return {
         ...current,

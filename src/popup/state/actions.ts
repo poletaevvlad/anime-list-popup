@@ -45,6 +45,7 @@ type Action =
       acceptUpdate: SeriesUpdate;
       rejectUpdate: SeriesUpdate;
     }
-  | { type: "set-theme"; theme: ThemeData };
+  | { type: "set-theme"; theme: ThemeData }
+  | { type: "start-search"; query: string };
 
 export default Action;

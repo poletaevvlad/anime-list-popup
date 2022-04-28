@@ -170,7 +170,15 @@ const Application = (props: ApplicationProps) => {
   const [searchQuery, setSearchQuery] = React.useState(null);
 
   const startSearch = () => {
-    console.log("search");
+    if (searchQuery == null || searchQuery.length == 0) {
+      return;
+    }
+    dispatch({ type: "start-search", query: searchQuery });
+    props.asyncDispatcher.loadAnimeList(
+      AnimeListType.SearchResults,
+      searchQuery,
+      0
+    );
   };
 
   return (
@@ -191,11 +199,7 @@ const Application = (props: ApplicationProps) => {
                   : "")
               }
               onClick={() =>
-                searchQuery == null
-                  ? setSearchQuery("")
-                  : searchQuery.length > 0
-                  ? startSearch()
-                  : void 0
+                searchQuery == null ? setSearchQuery("") : startSearch()
               }
             />
             {modal != null || state.loadingCounter > 0 ? (
@@ -235,6 +239,7 @@ const Application = (props: ApplicationProps) => {
                   placeholder="Search..."
                   value={searchQuery}
                   onChange={(event) => setSearchQuery(event.target.value)}
+                  onKeyPress={(event) => event.key == "Enter" && startSearch()}
                   autoFocus
                   onBlur={() => searchQuery.length == 0 && setSearchQuery(null)}
                 />
