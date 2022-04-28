@@ -28,6 +28,7 @@ export interface StatusChangeSuggestion {
 export interface ApplicationState {
   user: User;
   currentList: AnimeListType;
+  previousList: AnimeListType;
   animeLists: Record<AnimeListType, AnimeListState>;
   query: string;
   updatingAnime: Set<number>;
@@ -53,6 +54,7 @@ export const INITIAL_STATE: ApplicationState = {
   user: null,
   currentList: AnimeListType.Watching,
   query: "",
+  previousList: AnimeListType.Watching,
   animeLists: EMPTY_LISTS,
   updatingAnime: new Set<number>(),
   loadingCounter: 0,

@@ -125,6 +125,7 @@ export const rootReducer: Reducer<ApplicationState> = (current, action) => {
       return {
         ...current,
         currentList: action.listType,
+        previousList: current.currentList,
       };
     case "user-info-loaded":
       return {
@@ -174,7 +175,13 @@ export const rootReducer: Reducer<ApplicationState> = (current, action) => {
         ...current,
         query: action.query,
         currentList: AnimeListType.SearchResults,
+        previousList: current.currentList,
         animeLists: animeListReducer(current.animeLists, action),
+      };
+    case "finish-search":
+      return {
+        ...current,
+        currentList: current.previousList,
       };
     default:
       return {

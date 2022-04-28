@@ -181,6 +181,13 @@ const Application = (props: ApplicationProps) => {
     );
   };
 
+  const finishSearch = () => {
+    if (state.currentList == AnimeListType.SearchResults) {
+      dispatch({ type: "finish-search" });
+    }
+    setSearchQuery(null);
+  };
+
   return (
     <div className={isMenuOpen ? "notouch" : ""}>
       {modal}
@@ -231,7 +238,7 @@ const Application = (props: ApplicationProps) => {
             <>
               <div
                 className="header-button icon-back"
-                onClick={() => setSearchQuery(null)}
+                onClick={() => finishSearch()}
               />
               <div className="search-bar">
                 <input
@@ -241,7 +248,11 @@ const Application = (props: ApplicationProps) => {
                   onChange={(event) => setSearchQuery(event.target.value)}
                   onKeyPress={(event) => event.key == "Enter" && startSearch()}
                   autoFocus
-                  onBlur={() => searchQuery.length == 0 && setSearchQuery(null)}
+                  onBlur={() =>
+                    searchQuery.length == 0 &&
+                    state.currentList != AnimeListType.SearchResults &&
+                    setSearchQuery(null)
+                  }
                 />
               </div>
             </>
