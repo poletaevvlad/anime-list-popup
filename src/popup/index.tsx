@@ -173,6 +173,7 @@ const Application = (props: ApplicationProps) => {
       <div className="header-bar-container">
         <div className="header-bar">
           <div className="header-right">
+            <div className="header-button icon-search" />
             {modal != null || state.loadingCounter > 0 ? (
               <div className="header-button icon-refresh disabled" />
             ) : (
