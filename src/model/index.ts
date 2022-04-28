@@ -15,15 +15,6 @@ export enum AnimeListType {
   SearchResults = "search_results",
 }
 
-export const LIST_TYPES: AnimeListType[] = [
-  AnimeListType.Watching,
-  AnimeListType.Completed,
-  AnimeListType.OnHold,
-  AnimeListType.Dropped,
-  AnimeListType.PlanToWatch,
-  AnimeListType.SearchResults,
-];
-
 export const STATUSES: AnimeStatus[] = [
   AnimeStatus.Watching,
   AnimeStatus.Completed,
@@ -32,13 +23,12 @@ export const STATUSES: AnimeStatus[] = [
   AnimeStatus.PlanToWatch,
 ];
 
-export const LIST_TYPE_LABELS: Record<AnimeListType, string> = {
-  [AnimeListType.Watching]: "Currently Watching",
-  [AnimeListType.Completed]: "Completed",
-  [AnimeListType.OnHold]: "On Hold",
-  [AnimeListType.Dropped]: "Dropped",
-  [AnimeListType.PlanToWatch]: "Plan to Watch",
-  [AnimeListType.SearchResults]: "Search Results",
+export const STATUS_LABELS: Record<AnimeStatus, string> = {
+  [AnimeStatus.Watching]: "Currently Watching",
+  [AnimeStatus.Completed]: "Completed",
+  [AnimeStatus.OnHold]: "On Hold",
+  [AnimeStatus.Dropped]: "Dropped",
+  [AnimeStatus.PlanToWatch]: "Plan to Watch",
 };
 
 export { default as User } from "./user";

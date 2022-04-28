@@ -1,5 +1,5 @@
 import * as React from "react";
-import { AnimeStatus, LIST_TYPE_LABELS } from "../model";
+import { AnimeStatus, STATUS_LABELS } from "../model";
 
 interface StateChangeModalProps {
   animeTitle: string;
@@ -10,8 +10,8 @@ interface StateChangeModalProps {
 }
 
 const StateChangeModal = (props: StateChangeModalProps) => {
-  const currentStatusLabel = LIST_TYPE_LABELS[props.currentStatus];
-  const suggestedStatusLabel = LIST_TYPE_LABELS[props.suggestedStatus];
+  const currentStatusLabel = STATUS_LABELS[props.currentStatus];
+  const suggestedStatusLabel = STATUS_LABELS[props.suggestedStatus];
 
   return (
     <div className="modal-background">

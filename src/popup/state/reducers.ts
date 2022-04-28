@@ -85,7 +85,6 @@ const animeListReducer: Reducer<Record<AnimeListType, AnimeListState>> = (
         },
       };
     case "start-search": {
-      console.log("listReducer", action);
       return {
         ...current,
         [AnimeListType.SearchResults]: {
@@ -115,7 +114,6 @@ const loadingCounterReducer: Reducer<number> = (current, action) => {
 };
 
 export const rootReducer: Reducer<ApplicationState> = (current, action) => {
-  console.log(action);
   current = {
     ...current,
     loadingCounter: loadingCounterReducer(current.loadingCounter, action),

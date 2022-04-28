@@ -1,5 +1,5 @@
 import * as React from "react";
-import { AnimeStatus, STATUSES, LIST_TYPE_LABELS } from "../model";
+import { AnimeStatus, STATUSES, STATUS_LABELS } from "../model";
 import { DropdownIcon } from "./Dropdown";
 
 const SHORT_STATUS_LABELS: Record<AnimeStatus, string> = {
@@ -29,7 +29,7 @@ const ShortStatusDropdown = (props: ShortStatusDropdownProps) => {
       >
         {STATUSES.map((status) => (
           <option key={status} value={status}>
-            {LIST_TYPE_LABELS[status]}
+            {STATUS_LABELS[status]}
           </option>
         ))}
       </select>
