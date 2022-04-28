@@ -167,13 +167,37 @@ const Application = (props: ApplicationProps) => {
     );
   }
 
+  const [searchQuery, setSearchQuery] = React.useState(null);
+
+  const startSearch = () => {
+    console.log("search");
+  };
+
   return (
     <div className={isMenuOpen ? "notouch" : ""}>
       {modal}
       <div className="header-bar-container">
-        <div className="header-bar">
+        <div
+          className={
+            searchQuery != null ? "header-bar search-mode" : "header-bar"
+          }
+        >
           <div className="header-right">
-            <div className="header-button icon-search" />
+            <div
+              className={
+                "header-button icon-search" +
+                (searchQuery != null && searchQuery.length == 0
+                  ? " disabled"
+                  : "")
+              }
+              onClick={() =>
+                searchQuery == null
+                  ? setSearchQuery("")
+                  : searchQuery.length > 0
+                  ? startSearch()
+                  : void 0
+              }
+            />
             {modal != null || state.loadingCounter > 0 ? (
               <div className="header-button icon-refresh disabled" />
             ) : (
@@ -198,11 +222,31 @@ const Application = (props: ApplicationProps) => {
               />
             )}
           </div>
-          <StatusDropdown
-            value={state.currentList}
-            onChange={currentListChanged}
-            enabled={state.updatingAnime.size == 0 && modal == null}
-          />
+
+          {searchQuery != null ? (
+            <>
+              <div
+                className="header-button icon-back"
+                onClick={() => setSearchQuery(null)}
+              />
+              <div className="search-bar">
+                <input
+                  type="search"
+                  placeholder="Search..."
+                  value={searchQuery}
+                  onChange={(event) => setSearchQuery(event.target.value)}
+                  autoFocus
+                  onBlur={() => searchQuery.length == 0 && setSearchQuery(null)}
+                />
+              </div>
+            </>
+          ) : (
+            <StatusDropdown
+              value={state.currentList}
+              onChange={currentListChanged}
+              enabled={state.updatingAnime.size == 0 && modal == null}
+            />
+          )}
         </div>
       </div>
       {!currentList.isLoading &&

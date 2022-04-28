@@ -16,12 +16,17 @@
   height: 36px
   border-radius: 4px
   box-shadow: var(--header-shadow)
+  position: relative
 
   .dropdown
     margin: 2px 0
 
     select
       font-weight: 600
+
+  &.search-mode
+    background-color: var(--header-search)
+    box-shadow: 0 0 0 2px var(--header-background) inset, var(--header-shadow)
 
 .header-right
   float: right
@@ -37,6 +42,9 @@
 
   &:not(.disabled):hover
     background-color: var(--header-button-hover)
+
+    .header-bar.search-mode &
+      background-color: var(--header-button-hover-search)
 
   &:not(.disabled):focus
     outline: none
@@ -69,3 +77,35 @@
 
 .icon-refresh
   background-image: var(--icon-reload)
+
+.header-bar.search-mode
+  .icon-user-menu
+    background-image: var(--icon-menu-inverted)
+
+  .icon-search
+    background-image: var(--icon-search-inverted)
+
+  .icon-refresh
+    background-image: var(--icon-reload-inverted)
+
+  .icon-back
+    background-image: var(--icon-back-inverted)
+
+.search-bar 
+  position: absolute
+  top: 2px
+  bottom: 2px
+  left: 42px
+  right: 122px
+
+  &>input
+    height: 100%
+    border: none
+    margin: 0
+    padding: 0
+    width: 100%
+    background-color: transparent
+    padding-bottom: 2px
+    padding-left: 8px
+    outline: none
+
