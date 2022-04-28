@@ -52,6 +52,10 @@ const EpisodeSelector = (props: EpisodeSelectorProps) => {
           }}
           onBlur={() => {
             setFocused(false);
+            if (current == null) {
+              setCurrent(props.current);
+              return;
+            }
             if (props.current != current) {
               props.onChange(current);
             }
