@@ -168,14 +168,18 @@ export const rootReducer: Reducer<ApplicationState> = (current, action) => {
       };
     case "set-theme":
       return { ...current, theme: action.theme };
-    case "start-search":
-      return {
+    case "start-search": {
+      const state = {
         ...current,
         query: action.query,
-        currentList: AnimeListType.SearchResults,
-        previousList: current.currentList,
         animeLists: animeListReducer(current.animeLists, action),
       };
+      if (current.currentList != AnimeListType.SearchResults) {
+        state.currentList = AnimeListType.SearchResults;
+        state.previousList = current.currentList;
+      }
+      return state;
+    }
     case "finish-search":
       return {
         ...current,
