@@ -3,6 +3,7 @@ import Dropdown from "./Dropdown";
 import EpisodeSelector from "./EpisodeSelector";
 import ShortStatusDropdown from "./ShortStatusDropdown";
 import { AnimeStatus, Series, SeriesUpdate } from "../model";
+import AddToListButton from "./AddToListButton";
 
 const SCORE_LABELS = [
   { key: "0", label: "Select" },
@@ -86,7 +87,9 @@ const SeriesCard = (props: SeriesCardProps) => (
               enabled={props.enabled}
             />{" "}
           </>
-        ) : null}
+        ) : (
+          <AddToListButton onClick={(status) => props.onUpdate({ status })} />
+        )}
       </div>
     </div>
   </div>
