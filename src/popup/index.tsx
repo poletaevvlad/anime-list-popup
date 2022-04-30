@@ -13,7 +13,6 @@ import {
   AnimeListType,
   AnimeStatus,
   AnimeListEntry,
-  SeriesStatus,
 } from "../model";
 import AsyncDispatcher from "./state/asyncDispatcher";
 import UserMenuButton from "../components/UserMenuButton";
@@ -45,7 +44,12 @@ const Application = (props: ApplicationProps) => {
       !currentList.entries.isComplete &&
       !currentList.isLoading
     ) {
-      props.asyncDispatcher.loadAnimeList(listType, state.query, 0);
+      props.asyncDispatcher.loadAnimeList(
+        listType,
+        state.query,
+        0,
+        currentList.version
+      );
     }
   };
 
@@ -55,7 +59,8 @@ const Application = (props: ApplicationProps) => {
       props.asyncDispatcher.loadAnimeList(
         state.currentList,
         state.query,
-        state.animeLists[state.currentList].entries.length
+        state.animeLists[state.currentList].entries.length,
+        list.version
       );
     }
   };
@@ -105,7 +110,12 @@ const Application = (props: ApplicationProps) => {
 
   const refreshData = () => {
     dispatch({ type: "clear-data" });
-    props.asyncDispatcher.loadAnimeList(state.currentList, state.query, 0);
+    props.asyncDispatcher.loadAnimeList(
+      state.currentList,
+      state.query,
+      0,
+      state.animeLists[state.currentList].version + 1
+    );
   };
 
   const retryError = () => {
@@ -177,13 +187,27 @@ const Application = (props: ApplicationProps) => {
     props.asyncDispatcher.loadAnimeList(
       AnimeListType.SearchResults,
       searchQuery,
-      0
+      0,
+      state.animeLists[AnimeListType.SearchResults].version + 1
     );
   };
 
   const finishSearch = () => {
     if (state.currentList == AnimeListType.SearchResults) {
       dispatch({ type: "finish-search" });
+      const list = state.animeLists[state.previousList];
+      if (
+        list.entries.length == 0 &&
+        !list.entries.isComplete &&
+        !list.isLoading
+      ) {
+        props.asyncDispatcher.loadAnimeList(
+          state.previousList,
+          "",
+          0,
+          state.animeLists[state.previousList].version
+        );
+      }
     }
     setSearchQuery(null);
   };
@@ -298,7 +322,12 @@ document.addEventListener("DOMContentLoaded", () => {
     const auth = new Auth(token);
     const api = new API(auth);
     const dispatcher = new AsyncDispatcher(api);
-    dispatcher.loadAnimeList(INITIAL_STATE.currentList, INITIAL_STATE.query, 0);
+    dispatcher.loadAnimeList(
+      INITIAL_STATE.currentList,
+      INITIAL_STATE.query,
+      0,
+      0
+    );
     dispatcher.loadUser();
     dispatcher.dispatchLater(
       ThemeData.load().then((theme) => {

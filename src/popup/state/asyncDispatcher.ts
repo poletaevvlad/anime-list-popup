@@ -47,7 +47,12 @@ class AsyncDispatcher extends BaseAsyncDispatcher<Action> {
     this.api = api;
   }
 
-  loadAnimeList(listType: AnimeListType, query: string, offset: number) {
+  loadAnimeList(
+    listType: AnimeListType,
+    query: string,
+    offset: number,
+    version: number
+  ) {
     this.dispatch({ type: "loading-anime-list", listType });
 
     const listPromise =
@@ -56,14 +61,19 @@ class AsyncDispatcher extends BaseAsyncDispatcher<Action> {
         : this.api.getAnimeList(listType as string as AnimeStatus, offset);
     listPromise.then(
       (list) => {
-        this.dispatch({ type: "anime-loading-finished", listType, list });
+        this.dispatch({
+          type: "anime-loading-finished",
+          listType,
+          list,
+          version,
+        });
       },
       (error) => {
         this.dispatch({
           type: "set-error",
           title: "An error has occurred",
           message: String(error),
-          retry: (self) => self.loadAnimeList(listType, query, offset),
+          retry: (self) => self.loadAnimeList(listType, query, offset, version),
         });
       }
     );

@@ -9,12 +9,26 @@ const animeListReducer: Reducer<Record<AnimeListType, AnimeListState>> = (
   action
 ) => {
   switch (action.type) {
-    case "clear-data":
-      return EMPTY_LISTS;
+    case "clear-data": {
+      const newLists: Record<AnimeListType, AnimeListState> = {
+        ...EMPTY_LISTS,
+      };
+      for (const listType of Object.keys(current) as AnimeListType[]) {
+        newLists[listType] = {
+          ...newLists[listType],
+          version: current[listType].version + 1,
+        };
+      }
+      return newLists;
+    }
     case "anime-loading-finished":
+      if (action.version != current[action.listType].version) {
+        return current;
+      }
       return {
         ...current,
         [action.listType]: {
+          ...current[action.listType],
           entries: current[action.listType].entries.extend(action.list),
           isLoading: false,
         },
@@ -54,6 +68,7 @@ const animeListReducer: Reducer<Record<AnimeListType, AnimeListState>> = (
         return {
           ...current,
           [action.seriesStatus.status]: {
+            ...current[action.seriesStatus.status],
             entries: AnimeList.INITIAL,
             isLoading: false,
           },
@@ -63,6 +78,7 @@ const animeListReducer: Reducer<Record<AnimeListType, AnimeListState>> = (
         return {
           ...current,
           [action.seriesStatus.status]: {
+            ...current[action.seriesStatus.status],
             entries: AnimeList.INITIAL,
             isLoading: false,
           },
@@ -90,6 +106,7 @@ const animeListReducer: Reducer<Record<AnimeListType, AnimeListState>> = (
         [AnimeListType.SearchResults]: {
           isLoading: false,
           entries: AnimeList.INITIAL,
+          version: current[AnimeListType.SearchResults].version + 1,
         },
       };
     }

@@ -11,6 +11,7 @@ import { ThemeData } from "../../model/theme";
 export interface AnimeListState {
   entries: AnimeList;
   isLoading: boolean;
+  version: number;
 }
 
 export interface ErrorMessage {
@@ -39,14 +40,35 @@ export interface ApplicationState {
 }
 
 export const EMPTY_LISTS: Record<AnimeListType, AnimeListState> = {
-  [AnimeListType.Watching]: { entries: AnimeList.INITIAL, isLoading: false },
-  [AnimeListType.Completed]: { entries: AnimeList.INITIAL, isLoading: false },
-  [AnimeListType.OnHold]: { entries: AnimeList.INITIAL, isLoading: false },
-  [AnimeListType.Dropped]: { entries: AnimeList.INITIAL, isLoading: false },
-  [AnimeListType.PlanToWatch]: { entries: AnimeList.INITIAL, isLoading: false },
+  [AnimeListType.Watching]: {
+    entries: AnimeList.INITIAL,
+    isLoading: false,
+    version: 0,
+  },
+  [AnimeListType.Completed]: {
+    entries: AnimeList.INITIAL,
+    isLoading: false,
+    version: 0,
+  },
+  [AnimeListType.OnHold]: {
+    entries: AnimeList.INITIAL,
+    isLoading: false,
+    version: 0,
+  },
+  [AnimeListType.Dropped]: {
+    entries: AnimeList.INITIAL,
+    isLoading: false,
+    version: 0,
+  },
+  [AnimeListType.PlanToWatch]: {
+    entries: AnimeList.INITIAL,
+    isLoading: false,
+    version: 0,
+  },
   [AnimeListType.SearchResults]: {
     entries: AnimeList.INITIAL,
     isLoading: false,
+    version: 0,
   },
 };
 

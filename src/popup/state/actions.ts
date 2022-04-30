@@ -18,6 +18,7 @@ type Action =
       type: "anime-loading-finished";
       listType: AnimeListType;
       list: AnimeList;
+      version: number;
     }
   | {
       type: "series-updating";
