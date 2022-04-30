@@ -36,9 +36,13 @@ export default class API {
     return User.fromResponse(data);
   }
 
-  async getAnimeList(status: AnimeStatus, offset: number): Promise<AnimeList> {
-    const url = constructUrl(`${API.BASE_URL}/users/@me/animelist`, {
-      status,
+  private async requestAnime(
+    endpoint: string,
+    params: Record<string, string>,
+    offset: number
+  ): Promise<AnimeList> {
+    const url = constructUrl(`${API.BASE_URL}/${endpoint}`, {
+      ...params,
       offset: offset.toString(),
       limit: "25",
       fields:
@@ -51,6 +55,14 @@ export default class API {
       values.data.map(({ node }) => AnimeListEntry.fromResponse(node)),
       !values.paging.next
     );
+  }
+
+  async getAnimeList(status: AnimeStatus, offset: number): Promise<AnimeList> {
+    return this.requestAnime("users/@me/animelist", { status }, offset);
+  }
+
+  async getSearchResults(query: string, offset: number): Promise<AnimeList> {
+    return this.requestAnime("anime", { q: query }, offset);
   }
 
   async updateAnimeEntry(

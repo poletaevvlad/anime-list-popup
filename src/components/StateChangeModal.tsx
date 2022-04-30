@@ -1,6 +1,5 @@
 import * as React from "react";
-import { AnimeStatus } from "../model";
-import { statusLabels } from "./StatusDropdown";
+import { AnimeStatus, STATUS_LABELS } from "../model";
 
 interface StateChangeModalProps {
   animeTitle: string;
@@ -11,12 +10,8 @@ interface StateChangeModalProps {
 }
 
 const StateChangeModal = (props: StateChangeModalProps) => {
-  const currentStatusLabel = statusLabels.find(
-    (e) => e.key == props.currentStatus
-  ).label;
-  const suggestedStatusLabel = statusLabels.find(
-    (e) => e.key == props.suggestedStatus
-  ).label;
+  const currentStatusLabel = STATUS_LABELS[props.currentStatus];
+  const suggestedStatusLabel = STATUS_LABELS[props.suggestedStatus];
 
   return (
     <div className="modal-background">

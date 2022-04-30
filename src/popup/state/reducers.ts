@@ -1,48 +1,84 @@
-import { AnimeStatus, AnimeList } from "../../model";
+import { AnimeList, AnimeListType } from "../../model";
 import Action from "./actions";
 import { AnimeListState, ApplicationState, EMPTY_LISTS } from "./state";
 
 export type Reducer<T> = (currentState: T, action: Action) => T;
 
-const animeListReducer: Reducer<Record<AnimeStatus, AnimeListState>> = (
+const animeListReducer: Reducer<Record<AnimeListType, AnimeListState>> = (
   current,
   action
 ) => {
   switch (action.type) {
-    case "clear-data":
-      return EMPTY_LISTS;
+    case "clear-data": {
+      const newLists: Record<AnimeListType, AnimeListState> = {
+        ...EMPTY_LISTS,
+      };
+      for (const listType of Object.keys(current) as AnimeListType[]) {
+        newLists[listType] = {
+          ...newLists[listType],
+          version: current[listType].version + 1,
+        };
+      }
+      return newLists;
+    }
     case "anime-loading-finished":
+      if (action.version != current[action.listType].version) {
+        return current;
+      }
       return {
         ...current,
-        [action.status]: {
-          entries: current[action.status].entries.extend(action.list),
+        [action.listType]: {
+          ...current[action.listType],
+          entries: current[action.listType].entries.extend(action.list),
           isLoading: false,
         },
       };
     case "loading-anime-list":
       return {
         ...current,
-        [action.status]: {
-          ...current[action.status],
+        [action.listType]: {
+          ...current[action.listType],
           isLoading: true,
         },
       };
-    case "series-updating":
-      return {
+    case "series-updating": {
+      const newLists = {
         ...current,
-        [action.status]: {
-          ...current[action.status],
-          entries: current[action.status].entries.updateEntry(
+        [AnimeListType.SearchResults]: {
+          ...current[AnimeListType.SearchResults],
+          entries: current[AnimeListType.SearchResults].entries.updateEntry(
             action.seriesId,
             action.update
           ),
         },
       };
+      if (action.status) {
+        newLists[action.status] = {
+          ...current[action.status],
+          entries: current[action.status].entries.updateEntry(
+            action.seriesId,
+            action.update
+          ),
+        };
+      }
+      return newLists;
+    }
     case "series-update-done":
+      if (!action.originalStatus) {
+        return {
+          ...current,
+          [action.seriesStatus.status]: {
+            ...current[action.seriesStatus.status],
+            entries: AnimeList.INITIAL,
+            isLoading: false,
+          },
+        };
+      }
       if (action.originalStatus != action.seriesStatus.status) {
         return {
           ...current,
           [action.seriesStatus.status]: {
+            ...current[action.seriesStatus.status],
             entries: AnimeList.INITIAL,
             isLoading: false,
           },
@@ -64,6 +100,16 @@ const animeListReducer: Reducer<Record<AnimeStatus, AnimeListState>> = (
           ),
         },
       };
+    case "start-search": {
+      return {
+        ...current,
+        [AnimeListType.SearchResults]: {
+          isLoading: false,
+          entries: AnimeList.INITIAL,
+          version: current[AnimeListType.SearchResults].version + 1,
+        },
+      };
+    }
     default:
       return { ...current };
   }
@@ -93,7 +139,8 @@ export const rootReducer: Reducer<ApplicationState> = (current, action) => {
     case "current-list-changed":
       return {
         ...current,
-        currentList: action.status,
+        currentList: action.listType,
+        previousList: current.currentList,
       };
     case "user-info-loaded":
       return {
@@ -131,15 +178,30 @@ export const rootReducer: Reducer<ApplicationState> = (current, action) => {
       return {
         ...current,
         statusSuggestion: {
-          series: action.series,
+          listEntry: action.listEntry,
           acceptUpdate: action.acceptUpdate,
           rejectUpdate: action.rejectUpdate,
-          currentStatus: action.currentStatus,
-          newStatus: action.newStatus,
         },
       };
     case "set-theme":
       return { ...current, theme: action.theme };
+    case "start-search": {
+      const state = {
+        ...current,
+        query: action.query,
+        animeLists: animeListReducer(current.animeLists, action),
+      };
+      if (current.currentList != AnimeListType.SearchResults) {
+        state.currentList = AnimeListType.SearchResults;
+        state.previousList = current.currentList;
+      }
+      return state;
+    }
+    case "finish-search":
+      return {
+        ...current,
+        currentList: current.previousList,
+      };
     default:
       return {
         ...current,

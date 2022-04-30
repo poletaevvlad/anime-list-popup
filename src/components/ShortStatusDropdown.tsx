@@ -1,9 +1,8 @@
 import * as React from "react";
-import { AnimeStatus } from "../model";
+import { AnimeStatus, STATUSES, STATUS_LABELS } from "../model";
 import { DropdownIcon } from "./Dropdown";
-import { statusLabels } from "./StatusDropdown";
 
-const shortStatusLabels: Record<AnimeStatus, string> = {
+const SHORT_STATUS_LABELS: Record<AnimeStatus, string> = {
   [AnimeStatus.Watching]: "CW",
   [AnimeStatus.Completed]: "Cm",
   [AnimeStatus.OnHold]: "OH",
@@ -23,15 +22,20 @@ const ShortStatusDropdown = (props: ShortStatusDropdownProps) => {
       <select
         disabled={!props.enabled}
         value={props.value}
-        onChange={(e) => props.onChange(e.currentTarget.value as AnimeStatus)}
+        onChange={(e) =>
+          e.currentTarget.value &&
+          props.onChange(e.currentTarget.value as AnimeStatus)
+        }
       >
-        {statusLabels.map(({ key, label }) => (
-          <option key={key} value={key}>
-            {label}
+        {STATUSES.map((status) => (
+          <option key={status} value={status}>
+            {STATUS_LABELS[status]}
           </option>
         ))}
       </select>
-      <div className="current-value">{shortStatusLabels[props.value]}</div>
+      <div className="current-value">
+        {props.value ? SHORT_STATUS_LABELS[props.value] : "—"}
+      </div>
       <DropdownIcon />
     </div>
   );

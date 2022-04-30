@@ -7,7 +7,13 @@ import AnimeSeriesList from "../components/AnimeSeriesList";
 import Auth, { AccessToken } from "../services/auth";
 import * as browser from "webextension-polyfill";
 import API from "../services/api";
-import { AnimeStatus, User, Series, SeriesUpdate } from "../model";
+import {
+  User,
+  SeriesUpdate,
+  AnimeListType,
+  AnimeStatus,
+  AnimeListEntry,
+} from "../model";
 import AsyncDispatcher from "./state/asyncDispatcher";
 import UserMenuButton from "../components/UserMenuButton";
 import StateChangeModal from "../components/StateChangeModal";
@@ -30,15 +36,20 @@ const Application = (props: ApplicationProps) => {
     return () => props.asyncDispatcher.unsubscribe(dispatch);
   });
 
-  const currentListChanged = (status: AnimeStatus) => {
-    dispatch({ type: "current-list-changed", status: status });
-    const currentList = state.animeLists[status];
+  const currentListChanged = (listType: AnimeListType) => {
+    dispatch({ type: "current-list-changed", listType });
+    const currentList = state.animeLists[listType];
     if (
       currentList.entries.length == 0 &&
       !currentList.entries.isComplete &&
       !currentList.isLoading
     ) {
-      props.asyncDispatcher.loadAnimeList(status, 0);
+      props.asyncDispatcher.loadAnimeList(
+        listType,
+        state.query,
+        0,
+        currentList.version
+      );
     }
   };
 
@@ -47,56 +58,64 @@ const Application = (props: ApplicationProps) => {
     if (!list.isLoading && !list.entries.isComplete) {
       props.asyncDispatcher.loadAnimeList(
         state.currentList,
-        state.animeLists[state.currentList].entries.length
+        state.query,
+        state.animeLists[state.currentList].entries.length,
+        list.version
       );
     }
   };
 
-  const episodeUpdated = (seriesId: number, update: SeriesUpdate) => {
-    dispatch({
-      type: "series-updating",
-      seriesId: seriesId,
-      status: state.currentList,
-      update: update,
-    });
-    props.asyncDispatcher.updateSeries(seriesId, update, state.currentList);
+  const episodeUpdated = (entry: AnimeListEntry, update: SeriesUpdate) => {
+    if (Object.keys(update).join() == "episodesWatched") {
+      let suggested: AnimeStatus | null = null;
+      if (
+        entry.status != AnimeStatus.Completed &&
+        entry.series.totalEpisodes != 0 &&
+        update.episodesWatched == entry.series.totalEpisodes
+      ) {
+        suggested = AnimeStatus.Completed;
+      } else if (
+        entry.status != AnimeStatus.Watching &&
+        update.episodesWatched > entry.episodesWatched
+      ) {
+        suggested = AnimeStatus.Watching;
+      }
+
+      if (suggested) {
+        dispatch({
+          type: "set-suggestion",
+          listEntry: entry,
+          rejectUpdate: update,
+          acceptUpdate: { ...update, status: suggested },
+        });
+        return;
+      }
+    }
+
+    episodeUpdatedWithoutSuggestion(entry, update);
   };
 
-  const numWatchedChanged = (
-    series: Series,
-    currentWatched: number,
-    numberWatched: number
+  const episodeUpdatedWithoutSuggestion = (
+    entry: AnimeListEntry,
+    update: SeriesUpdate
   ) => {
-    let suggested: AnimeStatus = null;
-    if (
-      state.currentList != AnimeStatus.Completed &&
-      series.totalEpisodes != 0 &&
-      numberWatched == series.totalEpisodes
-    ) {
-      suggested = AnimeStatus.Completed;
-    } else if (
-      state.currentList != AnimeStatus.Watching &&
-      numberWatched > currentWatched
-    ) {
-      suggested = AnimeStatus.Watching;
-    }
-    if (suggested == null) {
-      episodeUpdated(series.id, { episodesWatched: numberWatched });
-      return;
-    }
     dispatch({
-      type: "set-suggestion",
-      series: series,
-      currentStatus: state.currentList,
-      newStatus: suggested,
-      rejectUpdate: { episodesWatched: numberWatched },
-      acceptUpdate: { episodesWatched: numberWatched, status: suggested },
+      type: "series-updating",
+      seriesId: entry.series.id,
+      status: entry.status,
+      update: update,
     });
+    props.asyncDispatcher.updateSeries(entry.series.id, update, entry.status);
   };
 
   const refreshData = () => {
     dispatch({ type: "clear-data" });
-    props.asyncDispatcher.loadAnimeList(state.currentList, 0);
+    props.asyncDispatcher.loadAnimeList(
+      state.currentList,
+      state.query,
+      0,
+      state.animeLists[state.currentList].version + 1
+    );
   };
 
   const retryError = () => {
@@ -139,18 +158,18 @@ const Application = (props: ApplicationProps) => {
   } else if (state.statusSuggestion != null) {
     modal = (
       <StateChangeModal
-        animeTitle={state.statusSuggestion.series.name}
-        currentStatus={state.statusSuggestion.currentStatus}
-        suggestedStatus={state.statusSuggestion.newStatus}
+        animeTitle={state.statusSuggestion.listEntry.series.name}
+        suggestedStatus={state.statusSuggestion.acceptUpdate.status}
+        currentStatus={state.statusSuggestion.listEntry.status}
         onAccepted={() =>
-          episodeUpdated(
-            state.statusSuggestion.series.id,
+          episodeUpdatedWithoutSuggestion(
+            state.statusSuggestion.listEntry,
             state.statusSuggestion.acceptUpdate
           )
         }
         onRejected={() =>
-          episodeUpdated(
-            state.statusSuggestion.series.id,
+          episodeUpdatedWithoutSuggestion(
+            state.statusSuggestion.listEntry,
             state.statusSuggestion.rejectUpdate
           )
         }
@@ -158,12 +177,62 @@ const Application = (props: ApplicationProps) => {
     );
   }
 
+  const [searchQuery, setSearchQuery] = React.useState(null);
+
+  const startSearch = () => {
+    if (searchQuery == null || searchQuery.length == 0) {
+      return;
+    }
+    dispatch({ type: "start-search", query: searchQuery });
+    props.asyncDispatcher.loadAnimeList(
+      AnimeListType.SearchResults,
+      searchQuery,
+      0,
+      state.animeLists[AnimeListType.SearchResults].version + 1
+    );
+  };
+
+  const finishSearch = () => {
+    if (state.currentList == AnimeListType.SearchResults) {
+      dispatch({ type: "finish-search" });
+      const list = state.animeLists[state.previousList];
+      if (
+        list.entries.length == 0 &&
+        !list.entries.isComplete &&
+        !list.isLoading
+      ) {
+        props.asyncDispatcher.loadAnimeList(
+          state.previousList,
+          "",
+          0,
+          state.animeLists[state.previousList].version
+        );
+      }
+    }
+    setSearchQuery(null);
+  };
+
   return (
     <div className={isMenuOpen ? "notouch" : ""}>
       {modal}
       <div className="header-bar-container">
-        <div className="header-bar">
+        <div
+          className={
+            searchQuery != null ? "header-bar search-mode" : "header-bar"
+          }
+        >
           <div className="header-right">
+            <div
+              className={
+                "header-button icon-search" +
+                (searchQuery != null && searchQuery.length == 0
+                  ? " disabled"
+                  : "")
+              }
+              onClick={() =>
+                searchQuery == null ? setSearchQuery("") : startSearch()
+              }
+            />
             {modal != null || state.loadingCounter > 0 ? (
               <div className="header-button icon-refresh disabled" />
             ) : (
@@ -188,11 +257,36 @@ const Application = (props: ApplicationProps) => {
               />
             )}
           </div>
-          <StatusDropdown
-            value={state.currentList}
-            onChange={currentListChanged}
-            enabled={state.updatingAnime.size == 0 && modal == null}
-          />
+
+          {searchQuery != null ? (
+            <>
+              <div
+                className="header-button icon-back"
+                onClick={() => finishSearch()}
+              />
+              <div className="search-bar">
+                <input
+                  type="search"
+                  placeholder="Search..."
+                  value={searchQuery}
+                  onChange={(event) => setSearchQuery(event.target.value)}
+                  onKeyPress={(event) => event.key == "Enter" && startSearch()}
+                  autoFocus
+                  onBlur={() =>
+                    searchQuery.length == 0 &&
+                    state.currentList != AnimeListType.SearchResults &&
+                    setSearchQuery(null)
+                  }
+                />
+              </div>
+            </>
+          ) : (
+            <StatusDropdown
+              value={state.currentList}
+              onChange={currentListChanged}
+              enabled={state.updatingAnime.size == 0 && modal == null}
+            />
+          )}
         </div>
       </div>
       {!currentList.isLoading &&
@@ -209,14 +303,8 @@ const Application = (props: ApplicationProps) => {
           }
           onScrolledToBottom={listScrolledToBottom}
           disabledSeries={state.updatingAnime}
-          onScoreChanged={(series, score) =>
-            episodeUpdated(series.id, { assignedScore: score })
-          }
-          onWatchedEpisodesChanged={numWatchedChanged}
-          onStatusChanged={(series, status) =>
-            episodeUpdated(series.id, { status: status })
-          }
-          animeStatus={state.currentList}
+          onUpdate={episodeUpdated}
+          currentListType={state.currentList}
         />
       )}
     </div>
@@ -234,7 +322,12 @@ document.addEventListener("DOMContentLoaded", () => {
     const auth = new Auth(token);
     const api = new API(auth);
     const dispatcher = new AsyncDispatcher(api);
-    dispatcher.loadAnimeList(INITIAL_STATE.currentList, 0);
+    dispatcher.loadAnimeList(
+      INITIAL_STATE.currentList,
+      INITIAL_STATE.query,
+      0,
+      0
+    );
     dispatcher.loadUser();
     dispatcher.dispatchLater(
       ThemeData.load().then((theme) => {

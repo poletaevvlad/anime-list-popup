@@ -1,7 +1,7 @@
 import * as React from "react";
 import SeriesCard from "./SeriesCard";
 import ProgressIndicator from "./ProgressIndicator";
-import { AnimeStatus, Series, AnimeListEntry } from "../model";
+import { AnimeListEntry, AnimeListType, SeriesUpdate } from "../model";
 
 interface AnimeSeriesListProps {
   enabled: boolean;
@@ -10,14 +10,8 @@ interface AnimeSeriesListProps {
   onScrolledToBottom: () => void;
   entries: AnimeListEntry[];
   disabledSeries: Set<number>;
-  animeStatus: AnimeStatus;
-  onScoreChanged: (series: Series, newScore: number) => void;
-  onWatchedEpisodesChanged: (
-    series: Series,
-    currentNumEpisodes: number,
-    numEpisodes: number
-  ) => void;
-  onStatusChanged: (series: Series, newStatus: AnimeStatus) => void;
+  currentListType: AnimeListType;
+  onUpdate: (listEntry: AnimeListEntry, update: SeriesUpdate) => void;
 }
 
 const AnimeSeriesList = (props: AnimeSeriesListProps) => {
@@ -32,7 +26,7 @@ const AnimeSeriesList = (props: AnimeSeriesListProps) => {
   const scrollRef = React.useRef<HTMLDivElement>();
   React.useEffect(() => {
     scrollRef.current.scrollTo({ top: 0 });
-  }, [props.animeStatus]);
+  }, [props.currentListType]);
 
   return (
     <div
@@ -51,19 +45,7 @@ const AnimeSeriesList = (props: AnimeSeriesListProps) => {
             enabled={
               props.enabled && !props.disabledSeries.has(entry.series.id)
             }
-            onScoreChanged={(score) =>
-              props.onScoreChanged(entry.series, score)
-            }
-            onEpisodesCountChanged={(episodes) =>
-              props.onWatchedEpisodesChanged(
-                entry.series,
-                entry.episodesWatched,
-                episodes
-              )
-            }
-            onStatusChanged={(status) =>
-              props.onStatusChanged(entry.series, status)
-            }
+            onUpdate={(update) => props.onUpdate(entry, update)}
           />
         );
       })}

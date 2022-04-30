@@ -1,22 +1,24 @@
 import {
   AnimeStatus,
   User,
-  Series,
   AnimeList,
   SeriesUpdate,
   SeriesStatus,
+  AnimeListType,
+  AnimeListEntry,
 } from "../../model";
 import AsyncDispatcher from "./asyncDispatcher";
 import { ThemeData } from "../../model/theme";
 
 type Action =
-  | { type: "current-list-changed"; status: AnimeStatus }
+  | { type: "current-list-changed"; listType: AnimeListType }
   | { type: "user-info-loaded"; user: User }
-  | { type: "loading-anime-list"; status: AnimeStatus }
+  | { type: "loading-anime-list"; listType: AnimeListType }
   | {
       type: "anime-loading-finished";
-      status: AnimeStatus;
+      listType: AnimeListType;
       list: AnimeList;
+      version: number;
     }
   | {
       type: "series-updating";
@@ -40,12 +42,12 @@ type Action =
   | { type: "clear-error" }
   | {
       type: "set-suggestion";
-      series: Series;
+      listEntry: AnimeListEntry;
       acceptUpdate: SeriesUpdate;
       rejectUpdate: SeriesUpdate;
-      currentStatus: AnimeStatus;
-      newStatus: AnimeStatus;
     }
-  | { type: "set-theme"; theme: ThemeData };
+  | { type: "set-theme"; theme: ThemeData }
+  | { type: "start-search"; query: string }
+  | { type: "finish-search" };
 
 export default Action;

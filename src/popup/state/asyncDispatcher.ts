@@ -1,5 +1,5 @@
 import API from "../../services/api";
-import { AnimeStatus, User, SeriesUpdate } from "../../model";
+import { AnimeStatus, User, SeriesUpdate, AnimeListType } from "../../model";
 import Action from "./actions";
 
 class BaseAsyncDispatcher<A> {
@@ -47,18 +47,33 @@ class AsyncDispatcher extends BaseAsyncDispatcher<Action> {
     this.api = api;
   }
 
-  loadAnimeList(status: AnimeStatus, offset: number) {
-    this.dispatch({ type: "loading-anime-list", status: status });
-    this.api.getAnimeList(status, offset).then(
+  loadAnimeList(
+    listType: AnimeListType,
+    query: string,
+    offset: number,
+    version: number
+  ) {
+    this.dispatch({ type: "loading-anime-list", listType });
+
+    const listPromise =
+      listType == AnimeListType.SearchResults
+        ? this.api.getSearchResults(query, offset)
+        : this.api.getAnimeList(listType as string as AnimeStatus, offset);
+    listPromise.then(
       (list) => {
-        this.dispatch({ type: "anime-loading-finished", status, list });
+        this.dispatch({
+          type: "anime-loading-finished",
+          listType,
+          list,
+          version,
+        });
       },
       (error) => {
         this.dispatch({
           type: "set-error",
           title: "An error has occurred",
           message: String(error),
-          retry: (self) => self.loadAnimeList(status, offset),
+          retry: (self) => self.loadAnimeList(listType, query, offset, version),
         });
       }
     );
@@ -92,13 +107,17 @@ class AsyncDispatcher extends BaseAsyncDispatcher<Action> {
     });
   }
 
-  updateSeries(seriesId: number, update: SeriesUpdate, status: AnimeStatus) {
+  updateSeries(
+    seriesId: number,
+    update: SeriesUpdate,
+    originalStatus: AnimeStatus
+  ) {
     this.api.updateAnimeEntry(seriesId, update).then(
       (seriesStatus) => {
         this.dispatch({
           type: "series-update-done",
-          seriesId: seriesId,
-          originalStatus: status,
+          seriesId,
+          originalStatus,
           seriesStatus,
         });
       },
@@ -107,7 +126,7 @@ class AsyncDispatcher extends BaseAsyncDispatcher<Action> {
           type: "set-error",
           title: "An error has occurred",
           message: String(error),
-          retry: (self) => self.updateSeries(seriesId, update, status),
+          retry: (self) => self.updateSeries(seriesId, update, originalStatus),
         });
       }
     );

@@ -1,9 +1,9 @@
 import {
-  AnimeStatus,
   SeriesUpdate,
   User,
-  Series,
   AnimeList,
+  AnimeListType,
+  AnimeListEntry,
 } from "../../model";
 import AsyncDispatcher from "./asyncDispatcher";
 import { ThemeData } from "../../model/theme";
@@ -11,6 +11,7 @@ import { ThemeData } from "../../model/theme";
 export interface AnimeListState {
   entries: AnimeList;
   isLoading: boolean;
+  version: number;
 }
 
 export interface ErrorMessage {
@@ -20,17 +21,17 @@ export interface ErrorMessage {
 }
 
 export interface StatusChangeSuggestion {
-  series: Series;
+  listEntry: AnimeListEntry;
   acceptUpdate: SeriesUpdate;
   rejectUpdate: SeriesUpdate;
-  currentStatus: AnimeStatus;
-  newStatus: AnimeStatus;
 }
 
 export interface ApplicationState {
   user: User;
-  currentList: AnimeStatus;
-  animeLists: Record<AnimeStatus, AnimeListState>;
+  currentList: AnimeListType;
+  previousList: AnimeListType;
+  animeLists: Record<AnimeListType, AnimeListState>;
+  query: string;
   updatingAnime: Set<number>;
   loadingCounter: number;
   errorMessage: ErrorMessage | null;
@@ -38,17 +39,44 @@ export interface ApplicationState {
   theme: ThemeData;
 }
 
-export const EMPTY_LISTS: Record<AnimeStatus, AnimeListState> = {
-  [AnimeStatus.Watching]: { entries: AnimeList.INITIAL, isLoading: false },
-  [AnimeStatus.Completed]: { entries: AnimeList.INITIAL, isLoading: false },
-  [AnimeStatus.OnHold]: { entries: AnimeList.INITIAL, isLoading: false },
-  [AnimeStatus.Dropped]: { entries: AnimeList.INITIAL, isLoading: false },
-  [AnimeStatus.PlanToWatch]: { entries: AnimeList.INITIAL, isLoading: false },
+export const EMPTY_LISTS: Record<AnimeListType, AnimeListState> = {
+  [AnimeListType.Watching]: {
+    entries: AnimeList.INITIAL,
+    isLoading: false,
+    version: 0,
+  },
+  [AnimeListType.Completed]: {
+    entries: AnimeList.INITIAL,
+    isLoading: false,
+    version: 0,
+  },
+  [AnimeListType.OnHold]: {
+    entries: AnimeList.INITIAL,
+    isLoading: false,
+    version: 0,
+  },
+  [AnimeListType.Dropped]: {
+    entries: AnimeList.INITIAL,
+    isLoading: false,
+    version: 0,
+  },
+  [AnimeListType.PlanToWatch]: {
+    entries: AnimeList.INITIAL,
+    isLoading: false,
+    version: 0,
+  },
+  [AnimeListType.SearchResults]: {
+    entries: AnimeList.INITIAL,
+    isLoading: false,
+    version: 0,
+  },
 };
 
 export const INITIAL_STATE: ApplicationState = {
   user: null,
-  currentList: AnimeStatus.Watching,
+  currentList: AnimeListType.Watching,
+  query: "",
+  previousList: AnimeListType.Watching,
   animeLists: EMPTY_LISTS,
   updatingAnime: new Set<number>(),
   loadingCounter: 0,
