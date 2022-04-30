@@ -69,19 +69,15 @@ const Application = (props: ApplicationProps) => {
     if (Object.keys(update).join() == "episodesWatched") {
       let suggested: AnimeStatus | null = null;
       if (
-        entry.status != AnimeStatus.Completed &&
         entry.series.totalEpisodes != 0 &&
         update.episodesWatched == entry.series.totalEpisodes
       ) {
         suggested = AnimeStatus.Completed;
-      } else if (
-        entry.status != AnimeStatus.Watching &&
-        update.episodesWatched > entry.episodesWatched
-      ) {
+      } else if (update.episodesWatched > entry.episodesWatched) {
         suggested = AnimeStatus.Watching;
       }
 
-      if (suggested) {
+      if (suggested && suggested != entry.status) {
         dispatch({
           type: "set-suggestion",
           listEntry: entry,
