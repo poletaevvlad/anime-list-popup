@@ -16,13 +16,13 @@
     "default_title": "Anime List",
     "theme_icons": [
       {
-        "dark": "assets/action-icon-dark.svg",
-        "light": "assets/action-icon-light.svg",
+        "dark": "assets/action-icon.svg",
+        "light": "assets/action-icon.svg",
         "size": 16
       },
       {
-        "dark": "assets/action-icon-dark.svg",
-        "light": "assets/action-icon-light.svg",
+        "dark": "assets/action-icon.svg",
+        "light": "assets/action-icon.svg",
         "size": 32
       }
     ]

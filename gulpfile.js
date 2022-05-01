@@ -9,40 +9,23 @@ function clean() {
   return src("dist", { read: false, allowEmpty: true }).pipe(gulpClean());
 }
 
-function manifest() {
+const manifest = () => {
   const packageJson = JSON.parse(fs.readFileSync("./package.json"));
   return src("src/manifest.json")
     .pipe(replace("{#VERSION#}", packageJson.version))
     .pipe(dest("dist"));
-}
+};
+const watchManifest = () => watch("src/manifest.json", manifest);
 
-function watchManifest() {
-  return watch("src/manifest.json", manifest);
-}
+const assets = () => src("assets/**/*").pipe(dest("dist/assets"));
+const watchAssets = () => watch("assets/**/*", assets);
 
-function assets() {
-  return src("assets/**/*").pipe(dest("dist/assets"));
-}
+const html = () => src("html/*.html").pipe(dest("dist"));
+const watchHtml = () => watch("html/*.html", html);
 
-function watchAssets() {
-  return watch("assets/**/*", assets);
-}
-
-function html() {
-  return src("html/*.html").pipe(dest("dist"));
-}
-
-function watchHtml() {
-  return watch("html/*.html", html);
-}
-
-function sass() {
-  return src("sass/styles.sass").pipe(buildSass()).pipe(dest("dist/assets"));
-}
-
-function watchSass() {
-  return watch("sass/**/*.sass", sass);
-}
+const sass = () =>
+  src("sass/styles.sass").pipe(buildSass()).pipe(dest("dist/assets"));
+const watchSass = () => watch("sass/**/*.sass", sass);
 
 function buildJs(watch, release) {
   return src("src/popup/index.tsx")
@@ -87,12 +70,15 @@ exports.default = parallel(
   sass,
   assets
 );
-exports.watch = parallel(
-  watchManifest,
-  watchHtml,
-  buildJs.bind(undefined, true, true),
-  watchSass,
-  watchAssets
+exports.watch = series(
+  parallel(manifest, html, sass, assets),
+  parallel(
+    watchManifest,
+    watchHtml,
+    buildJs.bind(undefined, true, true),
+    watchSass,
+    watchAssets
+  )
 );
 exports.release = series(
   clean,
