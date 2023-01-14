@@ -62,7 +62,11 @@ export default class API {
   }
 
   async getSearchResults(query: string, offset: number): Promise<AnimeList> {
-    return this.requestAnime("anime", { q: query }, offset);
+    return this.requestAnime(
+      "anime",
+      { q: query.trim().substr(0, 64) },
+      offset
+    );
   }
 
   async updateAnimeEntry(

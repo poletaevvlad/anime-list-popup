@@ -11,6 +11,7 @@ import { ThemeData } from "../../model/theme";
 export interface AnimeListState {
   entries: AnimeList;
   isLoading: boolean;
+  isInvalid: boolean;
   version: number;
 }
 
@@ -39,37 +40,20 @@ export interface ApplicationState {
   theme: ThemeData;
 }
 
+const initialListState: AnimeListState = {
+  entries: AnimeList.INITIAL,
+  isLoading: false,
+  isInvalid: false,
+  version: 0,
+};
+
 export const EMPTY_LISTS: Record<AnimeListType, AnimeListState> = {
-  [AnimeListType.Watching]: {
-    entries: AnimeList.INITIAL,
-    isLoading: false,
-    version: 0,
-  },
-  [AnimeListType.Completed]: {
-    entries: AnimeList.INITIAL,
-    isLoading: false,
-    version: 0,
-  },
-  [AnimeListType.OnHold]: {
-    entries: AnimeList.INITIAL,
-    isLoading: false,
-    version: 0,
-  },
-  [AnimeListType.Dropped]: {
-    entries: AnimeList.INITIAL,
-    isLoading: false,
-    version: 0,
-  },
-  [AnimeListType.PlanToWatch]: {
-    entries: AnimeList.INITIAL,
-    isLoading: false,
-    version: 0,
-  },
-  [AnimeListType.SearchResults]: {
-    entries: AnimeList.INITIAL,
-    isLoading: false,
-    version: 0,
-  },
+  [AnimeListType.Watching]: initialListState,
+  [AnimeListType.Completed]: initialListState,
+  [AnimeListType.OnHold]: initialListState,
+  [AnimeListType.Dropped]: initialListState,
+  [AnimeListType.PlanToWatch]: initialListState,
+  [AnimeListType.SearchResults]: initialListState,
 };
 
 export const INITIAL_STATE: ApplicationState = {

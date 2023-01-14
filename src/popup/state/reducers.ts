@@ -33,6 +33,16 @@ const animeListReducer: Reducer<Record<AnimeListType, AnimeListState>> = (
           isLoading: false,
         },
       };
+    case "anime-list-invalid":
+      return {
+        ...current,
+        [action.listType]: {
+          isLoading: false,
+          isInvalid: true,
+          entries: AnimeList.INITIAL,
+          version: current[action.listType],
+        },
+      };
     case "loading-anime-list":
       return {
         ...current,
@@ -105,6 +115,7 @@ const animeListReducer: Reducer<Record<AnimeListType, AnimeListState>> = (
         ...current,
         [AnimeListType.SearchResults]: {
           isLoading: false,
+          isInvalid: false,
           entries: AnimeList.INITIAL,
           version: current[AnimeListType.SearchResults].version + 1,
         },

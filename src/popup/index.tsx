@@ -292,6 +292,8 @@ const Application = (props: ApplicationProps) => {
         watchScrolling={
           !currentList.entries.isComplete && !currentList.isLoading
         }
+        isSearch={state.currentList == AnimeListType.SearchResults}
+        isInvalid={currentList.isInvalid}
         onScrolledToBottom={listScrolledToBottom}
         disabledSeries={state.updatingAnime}
         onUpdate={episodeUpdated}

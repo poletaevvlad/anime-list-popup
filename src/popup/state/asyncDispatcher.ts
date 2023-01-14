@@ -69,12 +69,18 @@ class AsyncDispatcher extends BaseAsyncDispatcher<Action> {
         });
       },
       (error) => {
-        this.dispatch({
-          type: "set-error",
-          title: "An error has occurred",
-          message: String(error),
-          retry: (self) => self.loadAnimeList(listType, query, offset, version),
-        });
+        const message = String(error);
+        if (message == "Error: invalid q (bad_request)") {
+          this.dispatch({ type: "anime-list-invalid", listType });
+        } else {
+          this.dispatch({
+            type: "set-error",
+            title: "An error has occurred",
+            message,
+            retry: (self) =>
+              self.loadAnimeList(listType, query, offset, version),
+          });
+        }
       }
     );
   }

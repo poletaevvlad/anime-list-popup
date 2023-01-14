@@ -11,12 +11,14 @@ import {
 interface AnimeSeriesListProps {
   enabled: boolean;
   isLoading: boolean;
+  isInvalid: boolean;
   watchScrolling: boolean;
   onScrolledToBottom: () => void;
   list: AnimeList;
   disabledSeries: Set<number>;
   currentListType: AnimeListType;
   onUpdate: (listEntry: AnimeListEntry, update: SeriesUpdate) => void;
+  isSearch: boolean;
 }
 
 const AnimeSeriesList = (props: AnimeSeriesListProps) => {
@@ -35,8 +37,20 @@ const AnimeSeriesList = (props: AnimeSeriesListProps) => {
     }
   }, [props.currentListType]);
 
+  if (props.isInvalid) {
+    return (
+      <div className="anime-list empty-list">
+        The request could not be processed
+      </div>
+    );
+  }
+
   if (!props.isLoading && props.list.isComplete && props.list.length == 0) {
-    return <div className="anime-list empty-list">This list is empty</div>;
+    return (
+      <div className="anime-list empty-list">
+        {props.isSearch ? "Nothing is found" : "This list is empty"}
+      </div>
+    );
   }
 
   return (
