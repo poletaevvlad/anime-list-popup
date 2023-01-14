@@ -1,17 +1,24 @@
 import * as React from "react";
 import SeriesCard from "./SeriesCard";
 import ProgressIndicator from "./ProgressIndicator";
-import { AnimeListEntry, AnimeListType, SeriesUpdate } from "../model";
+import {
+  AnimeList,
+  AnimeListEntry,
+  AnimeListType,
+  SeriesUpdate,
+} from "../model";
 
 interface AnimeSeriesListProps {
   enabled: boolean;
   isLoading: boolean;
+  isInvalid: boolean;
   watchScrolling: boolean;
   onScrolledToBottom: () => void;
-  entries: AnimeListEntry[];
+  list: AnimeList;
   disabledSeries: Set<number>;
   currentListType: AnimeListType;
   onUpdate: (listEntry: AnimeListEntry, update: SeriesUpdate) => void;
+  isSearch: boolean;
 }
 
 const AnimeSeriesList = (props: AnimeSeriesListProps) => {
@@ -25,8 +32,26 @@ const AnimeSeriesList = (props: AnimeSeriesListProps) => {
 
   const scrollRef = React.useRef<HTMLDivElement>();
   React.useEffect(() => {
-    scrollRef.current.scrollTo({ top: 0 });
+    if (scrollRef.current) {
+      scrollRef.current.scrollTo({ top: 0 });
+    }
   }, [props.currentListType]);
+
+  if (props.isInvalid) {
+    return (
+      <div className="anime-list empty-list">
+        The request could not be processed
+      </div>
+    );
+  }
+
+  if (!props.isLoading && props.list.isComplete && props.list.length == 0) {
+    return (
+      <div className="anime-list empty-list">
+        {props.isSearch ? "Nothing is found" : "This list is empty"}
+      </div>
+    );
+  }
 
   return (
     <div
@@ -34,7 +59,7 @@ const AnimeSeriesList = (props: AnimeSeriesListProps) => {
       ref={scrollRef}
       onScroll={props.watchScrolling ? onScrolled : undefined}
     >
-      {props.entries.map((entry) => {
+      {props.list.entries.map((entry) => {
         return (
           <SeriesCard
             key={entry.series.id.toString()}

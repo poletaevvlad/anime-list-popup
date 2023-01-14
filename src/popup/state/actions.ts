@@ -20,6 +20,7 @@ type Action =
       list: AnimeList;
       version: number;
     }
+  | { type: "anime-list-invalid"; listType: AnimeListType }
   | {
       type: "series-updating";
       seriesId: number;

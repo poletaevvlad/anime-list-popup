@@ -19,6 +19,7 @@ import UserMenuButton from "../components/UserMenuButton";
 import StateChangeModal from "../components/StateChangeModal";
 import ErrorModal from "../components/ErrorModal";
 import { ThemeData } from "../model/theme";
+import SearchField from "../components/SearchField";
 
 interface ApplicationProps {
   asyncDispatcher: AsyncDispatcher;
@@ -221,7 +222,7 @@ const Application = (props: ApplicationProps) => {
             <div
               className={
                 "header-button icon-search" +
-                (searchQuery != null && searchQuery.length == 0
+                (searchQuery != null && searchQuery.length < 3
                   ? " disabled"
                   : "")
               }
@@ -260,21 +261,16 @@ const Application = (props: ApplicationProps) => {
                 className="header-button icon-back"
                 onClick={() => finishSearch()}
               />
-              <div className="search-bar">
-                <input
-                  type="search"
-                  placeholder="Search..."
-                  value={searchQuery}
-                  onChange={(event) => setSearchQuery(event.target.value)}
-                  onKeyPress={(event) => event.key == "Enter" && startSearch()}
-                  autoFocus
-                  onBlur={() =>
-                    searchQuery.length == 0 &&
-                    state.currentList != AnimeListType.SearchResults &&
-                    setSearchQuery(null)
-                  }
-                />
-              </div>
+              <SearchField
+                query={searchQuery}
+                setQuery={setSearchQuery}
+                onSubmit={startSearch}
+                onBlur={() =>
+                  searchQuery.length == 0 &&
+                  state.currentList != AnimeListType.SearchResults &&
+                  setSearchQuery(null)
+                }
+              />
             </>
           ) : (
             <StatusDropdown
@@ -285,24 +281,20 @@ const Application = (props: ApplicationProps) => {
           )}
         </div>
       </div>
-      {!currentList.isLoading &&
-      currentList.entries.isComplete &&
-      currentList.entries.length == 0 ? (
-        <div className="anime-list empty-list">This list is empty</div>
-      ) : (
-        <AnimeSeriesList
-          enabled={modal == null}
-          isLoading={currentList.isLoading}
-          entries={currentList.entries.entries}
-          watchScrolling={
-            !currentList.entries.isComplete && !currentList.isLoading
-          }
-          onScrolledToBottom={listScrolledToBottom}
-          disabledSeries={state.updatingAnime}
-          onUpdate={episodeUpdated}
-          currentListType={state.currentList}
-        />
-      )}
+      <AnimeSeriesList
+        enabled={modal == null}
+        isLoading={currentList.isLoading}
+        list={currentList.entries}
+        watchScrolling={
+          !currentList.entries.isComplete && !currentList.isLoading
+        }
+        isSearch={state.currentList == AnimeListType.SearchResults}
+        isInvalid={currentList.isInvalid}
+        onScrolledToBottom={listScrolledToBottom}
+        disabledSeries={state.updatingAnime}
+        onUpdate={episodeUpdated}
+        currentListType={state.currentList}
+      />
     </div>
   );
 };
