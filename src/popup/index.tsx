@@ -285,24 +285,18 @@ const Application = (props: ApplicationProps) => {
           )}
         </div>
       </div>
-      {!currentList.isLoading &&
-      currentList.entries.isComplete &&
-      currentList.entries.length == 0 ? (
-        <div className="anime-list empty-list">This list is empty</div>
-      ) : (
-        <AnimeSeriesList
-          enabled={modal == null}
-          isLoading={currentList.isLoading}
-          entries={currentList.entries.entries}
-          watchScrolling={
-            !currentList.entries.isComplete && !currentList.isLoading
-          }
-          onScrolledToBottom={listScrolledToBottom}
-          disabledSeries={state.updatingAnime}
-          onUpdate={episodeUpdated}
-          currentListType={state.currentList}
-        />
-      )}
+      <AnimeSeriesList
+        enabled={modal == null}
+        isLoading={currentList.isLoading}
+        list={currentList.entries}
+        watchScrolling={
+          !currentList.entries.isComplete && !currentList.isLoading
+        }
+        onScrolledToBottom={listScrolledToBottom}
+        disabledSeries={state.updatingAnime}
+        onUpdate={episodeUpdated}
+        currentListType={state.currentList}
+      />
     </div>
   );
 };
