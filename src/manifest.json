@@ -34,7 +34,7 @@
     "64": "./assets/icon-64.png",
     "128": "./assets/icon-128.png"
   },
-  "content_security_policy": "script-src 'self'; default-src https://myanimelist.net https://api.myanimelist.net; img-src https://api-cdn.myanimelist.net; object-src 'none'",
+  "content_security_policy": "script-src 'self'; default-src https://myanimelist.net https://api.myanimelist.net; img-src https://*.myanimelist.net; object-src 'none'",
   "permissions": [
     "storage",
     "identity",
