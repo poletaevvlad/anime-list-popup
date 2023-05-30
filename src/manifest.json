@@ -1,11 +1,11 @@
 {
-  "manifest_version": 2,
+  "manifest_version": 3,
   "name": "Anime List Popup",
   "description": "Shows your anime list from MyAnimeList in the browser's toolbar.",
   "version": "{#VERSION#}",
   "author": "Vlad Poletaev",
   "homepage_url": "https://github.com/poletaevvlad/anime-list-popup",
-  "browser_action": {
+  "action": {
     "default_popup": "popup.html",
     "default_icon": {
       "16": "assets/action-icon-16.png",
@@ -34,10 +34,11 @@
     "64": "./assets/icon-64.png",
     "128": "./assets/icon-128.png"
   },
-  "content_security_policy": "script-src 'self'; default-src https://myanimelist.net https://api.myanimelist.net; img-src https://*.myanimelist.net; object-src 'none'",
-  "permissions": [
-    "storage",
-    "identity",
+  "content_security_policy": {
+    "extension_pages": "script-src 'self'; default-src https://myanimelist.net https://api.myanimelist.net; img-src https://*.myanimelist.net; object-src 'none'"
+  },
+  "permissions": ["storage", "identity"],
+  "host_permissions": [
     "https://myanimelist.net/v1/*",
     "https://api.myanimelist.net/v2/*"
   ],
