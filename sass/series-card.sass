@@ -31,10 +31,34 @@
 .series-description
   flex: 1 1
 
-  .short-dropdown
+  .series-aside
     float: right
     margin-left: 12px
     margin-right: 6px
+    display: flex
+
+  .series-edit-button
+    margin-right: 8px
+    border-style: none
+    background-color: transparent
+    padding: 0
+    padding: 3px 6px
+    margin-top: -3px
+    border-radius: 4px
+    display: inline-block
+
+    &:hover 
+      background-color: var(--button-transparent-hover)
+
+    &:active
+      background-color: var(--button-transparent-pressed)
+
+    &::after
+      content: ""
+      display: inline-block
+      width: 14px
+      height: 14px
+      background: var(--icon-edit)
 
   .series-name
     font-size: 14px

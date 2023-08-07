@@ -39,7 +39,11 @@ export default class Series {
   }
 
   get pageUrl(): string {
-    return "https://myanimelist.net/anime/" + this.id.toString();
+    return `https://myanimelist.net/anime/${this.id}`;
+  }
+
+  get editPageUrl(): string {
+    return `https://myanimelist.net/ownlist/anime/${this.id}/edit`;
   }
 
   get seasonFmt(): string | null {
