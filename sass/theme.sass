@@ -12,6 +12,9 @@ $accent-colors: ( "orange": #C76016, "green": #3f945b, "purple": #8e47a0, "red":
   --button-hover: #{lighten($default, 3%)}
   --button-pressed: #{lighten($default, 7%)}
 
+  --button-transparent-hover: #{transparentize($default, 0.4)}
+  --button-transparent-pressed: #{transparentize($default, 0.1)}
+
 @mixin set-accent($accent)
   --header-background: #{$accent}
   --button-primary: #{$accent}
@@ -64,6 +67,7 @@ $accent-colors: ( "orange": #C76016, "green": #3f945b, "purple": #8e47a0, "red":
   --icon-arrow-right: url(../assets/arrow-right-icon.svg)
   --icon-inc-disabled: url("../assets/inc-icon-disabled.svg")
   --icon-inc: url("../assets/inc-icon.svg")
+  --icon-edit: url(../assets/edit-icon-dark.svg)
   --no-cover-image: url(../assets/no-cover-image.svg)
   --avatar-placeholder: url(../assets/avatar-placeholder.svg)
 
@@ -91,6 +95,7 @@ $accent-colors: ( "orange": #C76016, "green": #3f945b, "purple": #8e47a0, "red":
   --icon-error: url(../assets/error-icon-light.svg)
   --icon-arrow-right: url(../assets/arrow-right-icon-light.svg)
   --icon-inc-disabled: url("../assets/inc-icon-disabled-light.svg")
+  --icon-edit: url(../assets/edit-icon-light.svg)
   --no-cover-image: url(../assets/no-cover-image-light.svg)
   --avatar-placeholder: url(../assets/avatar-placeholder-light.svg)
 

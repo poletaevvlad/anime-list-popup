@@ -40,11 +40,20 @@ const SeriesCard = (props: SeriesCardProps) => (
     />
     <div className="card-contents">
       <div className="series-description">
-        <ShortStatusDropdown
-          value={props.displayedStatus}
-          onChange={(status) => props.onUpdate({ status })}
-          enabled={props.enabled}
-        />
+        <div className="series-aside">
+          {props.displayedStatus ? (
+            <a
+              href={props.series.editPageUrl}
+              className="series-edit-button"
+              title="Edit series details"
+            ></a>
+          ) : null}
+          <ShortStatusDropdown
+            value={props.displayedStatus}
+            onChange={(status) => props.onUpdate({ status })}
+            enabled={props.enabled}
+          />
+        </div>
 
         <div className="series-name">
           <a
