@@ -7,6 +7,9 @@
   position: relative
   border: 1px solid transparent
 
+  &.invisible select
+    opacity: 0
+
   select
     margin: 0
     padding: 2px 24px 2px 8px
@@ -61,3 +64,30 @@
 
     &.focused
       border-color: var(--field-accent)
+
+  &.ordering-dropdown
+    select
+      width: 56px
+
+    .ordering-dropdown-icon
+      position: absolute
+      left: 8px
+      top: 4px
+      width: 21px
+      height: 14px
+      background: purple
+
+    .ordering-by-name
+      background: var(--icon-sort-name)
+
+    .ordering-by-rating
+      background: var(--icon-sort-rating)
+
+    .ordering-by-start-date
+      background: var(--icon-sort-start-date)
+
+    .ordering-by-update-date
+      background: var(--icon-sort-update-date)
+
+
+    

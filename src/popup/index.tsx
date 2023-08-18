@@ -13,6 +13,7 @@ import {
   AnimeListType,
   AnimeStatus,
   AnimeListEntry,
+  ListSortOrder,
 } from "../model";
 import AsyncDispatcher from "./state/asyncDispatcher";
 import UserMenuButton from "../components/UserMenuButton";
@@ -20,6 +21,8 @@ import StateChangeModal from "../components/StateChangeModal";
 import ErrorModal from "../components/ErrorModal";
 import { ThemeData } from "../model/theme";
 import SearchField from "../components/SearchField";
+import ListSortOrderDropdown from "../components/OrderingDropdown";
+import OrderingDropdown from "../components/OrderingDropdown";
 
 interface ApplicationProps {
   asyncDispatcher: AsyncDispatcher;
@@ -52,6 +55,10 @@ const Application = (props: ApplicationProps) => {
         currentList.version
       );
     }
+  };
+
+  const listOrderingChanged = (sortOrder: ListSortOrder) => {
+    dispatch({ type: "list-sort-order-changed", sortOrder });
   };
 
   const listScrolledToBottom = () => {
@@ -219,6 +226,13 @@ const Application = (props: ApplicationProps) => {
           }
         >
           <div className="header-right">
+            {searchQuery == null ? (
+              <OrderingDropdown
+                value={state.ordering}
+                enabled
+                onChange={listOrderingChanged}
+              />
+            ) : null}
             <div
               className={
                 "header-button icon-search" +

@@ -4,7 +4,10 @@ interface DropdownProps {
   value: string;
   options: { key: string; label: string }[];
   onChange: (value: string) => void;
-  enabled: boolean;
+  enabled?: boolean;
+  invisible?: boolean;
+  className?: string;
+  title?: string;
 }
 
 export const DropdownIcon = () => (
@@ -13,23 +16,40 @@ export const DropdownIcon = () => (
   </svg>
 );
 
-const Dropdown = (props: DropdownProps) => {
+const Dropdown = ({
+  value,
+  options,
+  onChange,
+  enabled = true,
+  invisible = false,
+  children,
+  className = "",
+  title,
+}: React.PropsWithChildren<DropdownProps>) => {
   const [focused, setFocused] = React.useState(false);
   return (
-    <div className={"dropdown" + (focused ? " focused" : "")}>
+    <div
+      className={
+        `dropdown ${className}` +
+        (focused ? " focused" : "") +
+        (invisible ? " invisible" : "")
+      }
+      title={title}
+    >
       <select
-        value={props.value}
-        disabled={!props.enabled}
-        onChange={(event) => props.onChange(event.target.value)}
+        value={value}
+        disabled={!enabled}
+        onChange={(event) => onChange(event.target.value)}
         onFocus={() => setFocused(true)}
         onBlur={() => setFocused(false)}
       >
-        {props.options.map(({ key, label }) => (
+        {options.map(({ key, label }) => (
           <option key={key} value={key}>
             {label}
           </option>
         ))}
       </select>
+      {children}
       <DropdownIcon />
     </div>
   );

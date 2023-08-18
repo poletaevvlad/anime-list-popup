@@ -6,12 +6,14 @@ import {
   SeriesStatus,
   AnimeListType,
   AnimeListEntry,
+  ListSortOrder,
 } from "../../model";
 import AsyncDispatcher from "./asyncDispatcher";
 import { ThemeData } from "../../model/theme";
 
 type Action =
   | { type: "current-list-changed"; listType: AnimeListType }
+  | { type: "list-sort-order-changed"; sortOrder: ListSortOrder }
   | { type: "user-info-loaded"; user: User }
   | { type: "loading-anime-list"; listType: AnimeListType }
   | {

@@ -153,6 +153,11 @@ export const rootReducer: Reducer<ApplicationState> = (current, action) => {
         currentList: action.listType,
         previousList: current.currentList,
       };
+    case "list-sort-order-changed":
+      return {
+        ...current,
+        ordering: action.sortOrder,
+      };
     case "user-info-loaded":
       return {
         ...current,
