@@ -89,4 +89,26 @@ export class AnimeList {
       this.isComplete
     );
   }
+
+  moveEntry(
+    seriasId: number,
+    beforePredicate: (entry: AnimeListEntry) => boolean
+  ) {
+    const entryIndex = this.entries.findIndex(
+      (entry) => entry.series.id == seriasId
+    );
+    if (entryIndex == -1) {
+      return false;
+    }
+
+    const [entry] = this.entries.splice(entryIndex, 1);
+    for (let i = 0; i < this.entries.length; i++) {
+      if (beforePredicate(this.entries[i])) {
+        this.entries.splice(i, 0, entry);
+        return true;
+      }
+    }
+
+    return false;
+  }
 }
