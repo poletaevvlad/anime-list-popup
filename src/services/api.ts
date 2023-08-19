@@ -1,5 +1,5 @@
 import Auth, { constructUrl } from "../services/auth";
-import { User, AnimeListEntry, AnimeList } from "../model";
+import { User, AnimeListEntry, AnimeList, ListSortOrder } from "../model";
 import * as schema from "../model/api_schema";
 import { AnimeStatus, SeriesUpdate, SeriesStatus } from "../model";
 
@@ -57,14 +57,18 @@ export default class API {
     );
   }
 
-  async getAnimeList(status: AnimeStatus, offset: number): Promise<AnimeList> {
-    return this.requestAnime("users/@me/animelist", { status }, offset);
+  async getAnimeList(
+    status: AnimeStatus,
+    sort: ListSortOrder,
+    offset: number
+  ): Promise<AnimeList> {
+    return this.requestAnime("users/@me/animelist", { status, sort }, offset);
   }
 
   async getSearchResults(query: string, offset: number): Promise<AnimeList> {
     return this.requestAnime(
       "anime",
-      { q: query.trim().substr(0, 64) },
+      { q: query.trim().substring(0, 64) },
       offset
     );
   }

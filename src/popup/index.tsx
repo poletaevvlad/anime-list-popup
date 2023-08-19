@@ -21,7 +21,6 @@ import StateChangeModal from "../components/StateChangeModal";
 import ErrorModal from "../components/ErrorModal";
 import { ThemeData } from "../model/theme";
 import SearchField from "../components/SearchField";
-import ListSortOrderDropdown from "../components/OrderingDropdown";
 import OrderingDropdown from "../components/OrderingDropdown";
 
 interface ApplicationProps {
@@ -48,28 +47,37 @@ const Application = (props: ApplicationProps) => {
       !currentList.entries.isComplete &&
       !currentList.isLoading
     ) {
-      props.asyncDispatcher.loadAnimeList(
+      props.asyncDispatcher.loadAnimeList({
         listType,
-        state.query,
-        0,
-        currentList.version
-      );
+        query: state.query,
+        offset: 0,
+        version: currentList.version,
+        order: state.ordering,
+      });
     }
   };
 
   const listOrderingChanged = (sortOrder: ListSortOrder) => {
     dispatch({ type: "list-sort-order-changed", sortOrder });
+    props.asyncDispatcher.loadAnimeList({
+      listType: state.currentList,
+      query: state.query,
+      offset: 0,
+      version: state.animeLists[state.currentList].version + 1,
+      order: sortOrder,
+    });
   };
 
   const listScrolledToBottom = () => {
     const list = state.animeLists[state.currentList];
     if (!list.isLoading && !list.entries.isComplete) {
-      props.asyncDispatcher.loadAnimeList(
-        state.currentList,
-        state.query,
-        state.animeLists[state.currentList].entries.length,
-        list.version
-      );
+      props.asyncDispatcher.loadAnimeList({
+        listType: state.currentList,
+        query: state.query,
+        offset: state.animeLists[state.currentList].entries.length,
+        version: list.version,
+        order: state.ordering,
+      });
     }
   };
 
@@ -114,12 +122,13 @@ const Application = (props: ApplicationProps) => {
 
   const refreshData = () => {
     dispatch({ type: "clear-data" });
-    props.asyncDispatcher.loadAnimeList(
-      state.currentList,
-      state.query,
-      0,
-      state.animeLists[state.currentList].version + 1
-    );
+    props.asyncDispatcher.loadAnimeList({
+      listType: state.currentList,
+      query: state.query,
+      offset: 0,
+      version: state.animeLists[state.currentList].version + 1,
+      order: state.ordering,
+    });
   };
 
   const retryError = () => {
@@ -188,12 +197,13 @@ const Application = (props: ApplicationProps) => {
       return;
     }
     dispatch({ type: "start-search", query: searchQuery });
-    props.asyncDispatcher.loadAnimeList(
-      AnimeListType.SearchResults,
-      searchQuery,
-      0,
-      state.animeLists[AnimeListType.SearchResults].version + 1
-    );
+    props.asyncDispatcher.loadAnimeList({
+      listType: AnimeListType.SearchResults,
+      query: searchQuery,
+      offset: 0,
+      version: state.animeLists[AnimeListType.SearchResults].version + 1,
+      order: state.ordering,
+    });
   };
 
   const finishSearch = () => {
@@ -205,12 +215,13 @@ const Application = (props: ApplicationProps) => {
         !list.entries.isComplete &&
         !list.isLoading
       ) {
-        props.asyncDispatcher.loadAnimeList(
-          state.previousList,
-          "",
-          0,
-          state.animeLists[state.previousList].version
-        );
+        props.asyncDispatcher.loadAnimeList({
+          listType: state.previousList,
+          query: "",
+          offset: 0,
+          version: state.animeLists[state.previousList].version,
+          order: state.ordering,
+        });
       }
     }
     setSearchQuery(null);
@@ -324,12 +335,13 @@ document.addEventListener("DOMContentLoaded", () => {
     const auth = new Auth(token);
     const api = new API(auth);
     const dispatcher = new AsyncDispatcher(api);
-    dispatcher.loadAnimeList(
-      INITIAL_STATE.currentList,
-      INITIAL_STATE.query,
-      0,
-      0
-    );
+    dispatcher.loadAnimeList({
+      listType: INITIAL_STATE.currentList,
+      query: INITIAL_STATE.query,
+      offset: 0,
+      version: 0,
+      order: INITIAL_STATE.ordering,
+    });
     dispatcher.loadUser();
     dispatcher.dispatchLater(
       ThemeData.load().then((theme) => {

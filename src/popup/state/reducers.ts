@@ -9,6 +9,7 @@ const animeListReducer: Reducer<Record<AnimeListType, AnimeListState>> = (
   action
 ) => {
   switch (action.type) {
+    case "list-sort-order-changed":
     case "clear-data": {
       const newLists: Record<AnimeListType, AnimeListState> = {
         ...EMPTY_LISTS,
@@ -157,6 +158,7 @@ export const rootReducer: Reducer<ApplicationState> = (current, action) => {
       return {
         ...current,
         ordering: action.sortOrder,
+        animeLists: animeListReducer(current.animeLists, action),
       };
     case "user-info-loaded":
       return {

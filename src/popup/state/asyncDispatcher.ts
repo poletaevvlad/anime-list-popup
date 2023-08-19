@@ -1,5 +1,11 @@
 import API from "../../services/api";
-import { AnimeStatus, User, SeriesUpdate, AnimeListType } from "../../model";
+import {
+  AnimeStatus,
+  User,
+  SeriesUpdate,
+  AnimeListType,
+  ListSortOrder,
+} from "../../model";
 import Action from "./actions";
 
 class BaseAsyncDispatcher<A> {
@@ -47,18 +53,29 @@ class AsyncDispatcher extends BaseAsyncDispatcher<Action> {
     this.api = api;
   }
 
-  loadAnimeList(
-    listType: AnimeListType,
-    query: string,
-    offset: number,
-    version: number
-  ) {
+  loadAnimeList({
+    listType,
+    query,
+    offset,
+    version,
+    order,
+  }: {
+    listType: AnimeListType;
+    query: string;
+    offset: number;
+    version: number;
+    order: ListSortOrder;
+  }) {
     this.dispatch({ type: "loading-anime-list", listType });
 
     const listPromise =
       listType == AnimeListType.SearchResults
         ? this.api.getSearchResults(query, offset)
-        : this.api.getAnimeList(listType as string as AnimeStatus, offset);
+        : this.api.getAnimeList(
+            listType as string as AnimeStatus,
+            order,
+            offset
+          );
     listPromise.then(
       (list) => {
         this.dispatch({
@@ -78,7 +95,7 @@ class AsyncDispatcher extends BaseAsyncDispatcher<Action> {
             title: "An error has occurred",
             message,
             retry: (self) =>
-              self.loadAnimeList(listType, query, offset, version),
+              self.loadAnimeList({ listType, query, offset, version, order }),
           });
         }
       }
