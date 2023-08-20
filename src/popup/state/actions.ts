@@ -9,7 +9,7 @@ import {
   ListSortOrder,
 } from "../../model";
 import AsyncDispatcher from "./asyncDispatcher";
-import { ThemeData } from "../../model/theme";
+import { Config } from "../../model/config";
 
 type Action =
   | { type: "current-list-changed"; listType: AnimeListType }
@@ -49,7 +49,7 @@ type Action =
       acceptUpdate: SeriesUpdate;
       rejectUpdate: SeriesUpdate;
     }
-  | { type: "set-theme"; theme: ThemeData }
+  | { type: "set-config"; config: Config }
   | { type: "start-search"; query: string }
   | { type: "finish-search" };
 

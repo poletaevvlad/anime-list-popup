@@ -7,7 +7,7 @@ import {
   ListSortOrder,
 } from "../../model";
 import AsyncDispatcher from "./asyncDispatcher";
-import { ThemeData } from "../../model/theme";
+import { Config } from "../../model/config";
 
 export interface AnimeListState {
   entries: AnimeList;
@@ -39,7 +39,7 @@ export interface ApplicationState {
   loadingCounter: number;
   errorMessage: ErrorMessage | null;
   statusSuggestion: StatusChangeSuggestion | null;
-  theme: ThemeData;
+  config: Config;
 }
 
 const initialListState: AnimeListState = {
@@ -69,5 +69,5 @@ export const INITIAL_STATE: ApplicationState = {
   loadingCounter: 0,
   errorMessage: null,
   statusSuggestion: null,
-  theme: ThemeData.DEFAULT_THEME,
+  config: new Config(Config.DEFAULT),
 };

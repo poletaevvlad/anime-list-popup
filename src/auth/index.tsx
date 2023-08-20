@@ -3,7 +3,7 @@ import { render } from "react-dom";
 import ProgressIndicator from "../components/ProgressIndicator";
 import Auth from "../services/auth";
 import * as browser from "webextension-polyfill";
-import { ThemeData } from "../model/theme";
+import { Config } from "../model/config";
 
 type CurrentState =
   | { state: "not-authenticated" }
@@ -55,7 +55,7 @@ const Application = () => {
 };
 
 document.addEventListener("DOMContentLoaded", () => {
-  ThemeData.load().then((theme) =>
+  Config.load().then((theme) =>
     document
       .getElementsByTagName("body")[0]
       .setAttribute("class", theme.rootClassName)

@@ -1,6 +1,6 @@
 import * as React from "react";
 import { render } from "react-dom";
-import { INITIAL_STATE } from "./state/state";
+import { ApplicationState, INITIAL_STATE } from "./state/state";
 import { rootReducer } from "./state/reducers";
 import StatusDropdown from "../components/StatusDropdown";
 import AnimeSeriesList from "../components/AnimeSeriesList";
@@ -19,21 +19,22 @@ import AsyncDispatcher from "./state/asyncDispatcher";
 import UserMenuButton from "../components/UserMenuButton";
 import StateChangeModal from "../components/StateChangeModal";
 import ErrorModal from "../components/ErrorModal";
-import { ThemeData } from "../model/theme";
+import { Config } from "../model/config";
 import SearchField from "../components/SearchField";
 import OrderingDropdown from "../components/OrderingDropdown";
 
 interface ApplicationProps {
   asyncDispatcher: AsyncDispatcher;
+  initialState: ApplicationState;
 }
 
 const Application = (props: ApplicationProps) => {
-  const [state, dispatch] = React.useReducer(rootReducer, INITIAL_STATE);
+  const [state, dispatch] = React.useReducer(rootReducer, props.initialState);
   const [isMenuOpen, setMenuOpen] = React.useState(false);
 
   React.useEffect(() => {
     const body = document.getElementsByTagName("body")[0];
-    body.setAttribute("class", "popup " + state.theme.rootClassName);
+    body.setAttribute("class", "popup " + state.config.rootClassName);
 
     props.asyncDispatcher.subscribe(dispatch);
     return () => props.asyncDispatcher.unsubscribe(dispatch);
@@ -150,9 +151,9 @@ const Application = (props: ApplicationProps) => {
       logInError
     );
 
-  const changeTheme = (theme: ThemeData) => {
-    dispatch({ type: "set-theme", theme: theme });
-    theme.save();
+  const changeTheme = (config: Config) => {
+    dispatch({ type: "set-config", config });
+    config.save();
   };
 
   const currentList = state.animeLists[state.currentList];
@@ -271,7 +272,7 @@ const Application = (props: ApplicationProps) => {
               <UserMenuButton
                 user={state.user}
                 onLogout={logOut}
-                theme={state.theme}
+                config={state.config}
                 onThemeChanged={changeTheme}
                 isOpened={isMenuOpen}
                 setOpened={setMenuOpen}
@@ -325,7 +326,7 @@ const Application = (props: ApplicationProps) => {
 };
 
 document.addEventListener("DOMContentLoaded", () => {
-  AccessToken.load().then((token) => {
+  Promise.all([AccessToken.load(), Config.load()]).then(([token, config]) => {
     if (token == null) {
       browser.tabs.create({ active: true, url: "/auth.html" });
       window.close();
@@ -343,13 +344,12 @@ document.addEventListener("DOMContentLoaded", () => {
       order: INITIAL_STATE.ordering,
     });
     dispatcher.loadUser();
-    dispatcher.dispatchLater(
-      ThemeData.load().then((theme) => {
-        return { type: "set-theme", theme: theme };
-      })
-    );
+
     render(
-      <Application asyncDispatcher={dispatcher} />,
+      <Application
+        asyncDispatcher={dispatcher}
+        initialState={{ ...INITIAL_STATE, config }}
+      />,
       document.getElementById("app")
     );
   });

@@ -226,8 +226,8 @@ export const rootReducer: Reducer<ApplicationState> = (current, action) => {
           rejectUpdate: action.rejectUpdate,
         },
       };
-    case "set-theme":
-      return { ...current, theme: action.theme };
+    case "set-config":
+      return { ...current, config: action.config };
     case "start-search": {
       const state = {
         ...current,
