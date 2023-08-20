@@ -13,7 +13,6 @@ const animeListReducer: Reducer<
 > = (currentState, action) => {
   const current = currentState.animeLists;
   switch (action.type) {
-    case "list-sort-order-changed":
     case "clear-data": {
       const newLists: Record<AnimeListType, AnimeListState> = {
         ...EMPTY_LISTS,
@@ -111,7 +110,7 @@ const animeListReducer: Reducer<
         action.seriesStatus
       );
       if (currentState.currentList != AnimeListType.SearchResults) {
-        switch (currentState.ordering) {
+        switch (currentState.config.listOrder) {
           case ListSortOrder.UpdatedAt:
             newList.moveEntry(action.seriesId, () => true);
             break;
@@ -178,12 +177,6 @@ export const rootReducer: Reducer<ApplicationState> = (current, action) => {
         ...current,
         currentList: action.listType,
         previousList: current.currentList,
-      };
-    case "list-sort-order-changed":
-      return {
-        ...current,
-        ordering: action.sortOrder,
-        animeLists: animeListReducer(current, action),
       };
     case "user-info-loaded":
       return {

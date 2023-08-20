@@ -33,7 +33,6 @@ export interface ApplicationState {
   currentList: AnimeListType;
   previousList: AnimeListType;
   animeLists: Record<AnimeListType, AnimeListState>;
-  ordering: ListSortOrder;
   query: string;
   updatingAnime: Set<number>;
   loadingCounter: number;
@@ -63,7 +62,6 @@ export const INITIAL_STATE: ApplicationState = {
   currentList: AnimeListType.Watching,
   query: "",
   previousList: AnimeListType.Watching,
-  ordering: ListSortOrder.Title,
   animeLists: EMPTY_LISTS,
   updatingAnime: new Set<number>(),
   loadingCounter: 0,

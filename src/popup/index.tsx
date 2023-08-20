@@ -53,19 +53,22 @@ const Application = (props: ApplicationProps) => {
         query: state.query,
         offset: 0,
         version: currentList.version,
-        order: state.ordering,
+        order: state.config.listOrder,
       });
     }
   };
 
-  const listOrderingChanged = (sortOrder: ListSortOrder) => {
-    dispatch({ type: "list-sort-order-changed", sortOrder });
+  const listOrderingChanged = (listOrder: ListSortOrder) => {
+    dispatch({ type: "clear-data" });
+    const config = state.config.with({ listOrder });
+    config.save();
+    dispatch({ type: "set-config", config });
     props.asyncDispatcher.loadAnimeList({
       listType: state.currentList,
       query: state.query,
       offset: 0,
       version: state.animeLists[state.currentList].version + 1,
-      order: sortOrder,
+      order: listOrder,
     });
   };
 
@@ -77,7 +80,7 @@ const Application = (props: ApplicationProps) => {
         query: state.query,
         offset: state.animeLists[state.currentList].entries.length,
         version: list.version,
-        order: state.ordering,
+        order: state.config.listOrder,
       });
     }
   };
@@ -128,7 +131,7 @@ const Application = (props: ApplicationProps) => {
       query: state.query,
       offset: 0,
       version: state.animeLists[state.currentList].version + 1,
-      order: state.ordering,
+      order: state.config.listOrder,
     });
   };
 
@@ -203,7 +206,7 @@ const Application = (props: ApplicationProps) => {
       query: searchQuery,
       offset: 0,
       version: state.animeLists[AnimeListType.SearchResults].version + 1,
-      order: state.ordering,
+      order: state.config.listOrder,
     });
   };
 
@@ -221,7 +224,7 @@ const Application = (props: ApplicationProps) => {
           query: "",
           offset: 0,
           version: state.animeLists[state.previousList].version,
-          order: state.ordering,
+          order: state.config.listOrder,
         });
       }
     }
@@ -240,7 +243,7 @@ const Application = (props: ApplicationProps) => {
           <div className="header-right">
             {searchQuery == null ? (
               <OrderingDropdown
-                value={state.ordering}
+                value={state.config.listOrder}
                 enabled
                 onChange={listOrderingChanged}
               />
@@ -341,7 +344,7 @@ document.addEventListener("DOMContentLoaded", () => {
       query: INITIAL_STATE.query,
       offset: 0,
       version: 0,
-      order: INITIAL_STATE.ordering,
+      order: config.listOrder,
     });
     dispatcher.loadUser();
 

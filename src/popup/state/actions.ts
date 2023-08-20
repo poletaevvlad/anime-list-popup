@@ -13,7 +13,6 @@ import { Config } from "../../model/config";
 
 type Action =
   | { type: "current-list-changed"; listType: AnimeListType }
-  | { type: "list-sort-order-changed"; sortOrder: ListSortOrder }
   | { type: "user-info-loaded"; user: User }
   | { type: "loading-anime-list"; listType: AnimeListType }
   | {
