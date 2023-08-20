@@ -1,6 +1,6 @@
 import * as React from "react";
 import { render } from "react-dom";
-import { INITIAL_STATE } from "./state/state";
+import { ApplicationState, INITIAL_STATE } from "./state/state";
 import { rootReducer } from "./state/reducers";
 import StatusDropdown from "../components/StatusDropdown";
 import AnimeSeriesList from "../components/AnimeSeriesList";
@@ -13,25 +13,28 @@ import {
   AnimeListType,
   AnimeStatus,
   AnimeListEntry,
+  ListSortOrder,
 } from "../model";
 import AsyncDispatcher from "./state/asyncDispatcher";
 import UserMenuButton from "../components/UserMenuButton";
 import StateChangeModal from "../components/StateChangeModal";
 import ErrorModal from "../components/ErrorModal";
-import { ThemeData } from "../model/theme";
+import { Config } from "../model/config";
 import SearchField from "../components/SearchField";
+import OrderingDropdown from "../components/OrderingDropdown";
 
 interface ApplicationProps {
   asyncDispatcher: AsyncDispatcher;
+  initialState: ApplicationState;
 }
 
 const Application = (props: ApplicationProps) => {
-  const [state, dispatch] = React.useReducer(rootReducer, INITIAL_STATE);
+  const [state, dispatch] = React.useReducer(rootReducer, props.initialState);
   const [isMenuOpen, setMenuOpen] = React.useState(false);
 
   React.useEffect(() => {
     const body = document.getElementsByTagName("body")[0];
-    body.setAttribute("class", "popup " + state.theme.rootClassName);
+    body.setAttribute("class", "popup " + state.config.rootClassName);
 
     props.asyncDispatcher.subscribe(dispatch);
     return () => props.asyncDispatcher.unsubscribe(dispatch);
@@ -45,24 +48,40 @@ const Application = (props: ApplicationProps) => {
       !currentList.entries.isComplete &&
       !currentList.isLoading
     ) {
-      props.asyncDispatcher.loadAnimeList(
+      props.asyncDispatcher.loadAnimeList({
         listType,
-        state.query,
-        0,
-        currentList.version
-      );
+        query: state.query,
+        offset: 0,
+        version: currentList.version,
+        order: state.config.listOrder,
+      });
     }
+  };
+
+  const listOrderingChanged = (listOrder: ListSortOrder) => {
+    dispatch({ type: "clear-data" });
+    const config = state.config.with({ listOrder });
+    config.save();
+    dispatch({ type: "set-config", config });
+    props.asyncDispatcher.loadAnimeList({
+      listType: state.currentList,
+      query: state.query,
+      offset: 0,
+      version: state.animeLists[state.currentList].version + 1,
+      order: listOrder,
+    });
   };
 
   const listScrolledToBottom = () => {
     const list = state.animeLists[state.currentList];
     if (!list.isLoading && !list.entries.isComplete) {
-      props.asyncDispatcher.loadAnimeList(
-        state.currentList,
-        state.query,
-        state.animeLists[state.currentList].entries.length,
-        list.version
-      );
+      props.asyncDispatcher.loadAnimeList({
+        listType: state.currentList,
+        query: state.query,
+        offset: state.animeLists[state.currentList].entries.length,
+        version: list.version,
+        order: state.config.listOrder,
+      });
     }
   };
 
@@ -107,12 +126,13 @@ const Application = (props: ApplicationProps) => {
 
   const refreshData = () => {
     dispatch({ type: "clear-data" });
-    props.asyncDispatcher.loadAnimeList(
-      state.currentList,
-      state.query,
-      0,
-      state.animeLists[state.currentList].version + 1
-    );
+    props.asyncDispatcher.loadAnimeList({
+      listType: state.currentList,
+      query: state.query,
+      offset: 0,
+      version: state.animeLists[state.currentList].version + 1,
+      order: state.config.listOrder,
+    });
   };
 
   const retryError = () => {
@@ -134,9 +154,9 @@ const Application = (props: ApplicationProps) => {
       logInError
     );
 
-  const changeTheme = (theme: ThemeData) => {
-    dispatch({ type: "set-theme", theme: theme });
-    theme.save();
+  const changeTheme = (config: Config) => {
+    dispatch({ type: "set-config", config });
+    config.save();
   };
 
   const currentList = state.animeLists[state.currentList];
@@ -181,12 +201,13 @@ const Application = (props: ApplicationProps) => {
       return;
     }
     dispatch({ type: "start-search", query: searchQuery });
-    props.asyncDispatcher.loadAnimeList(
-      AnimeListType.SearchResults,
-      searchQuery,
-      0,
-      state.animeLists[AnimeListType.SearchResults].version + 1
-    );
+    props.asyncDispatcher.loadAnimeList({
+      listType: AnimeListType.SearchResults,
+      query: searchQuery,
+      offset: 0,
+      version: state.animeLists[AnimeListType.SearchResults].version + 1,
+      order: state.config.listOrder,
+    });
   };
 
   const finishSearch = () => {
@@ -198,12 +219,13 @@ const Application = (props: ApplicationProps) => {
         !list.entries.isComplete &&
         !list.isLoading
       ) {
-        props.asyncDispatcher.loadAnimeList(
-          state.previousList,
-          "",
-          0,
-          state.animeLists[state.previousList].version
-        );
+        props.asyncDispatcher.loadAnimeList({
+          listType: state.previousList,
+          query: "",
+          offset: 0,
+          version: state.animeLists[state.previousList].version,
+          order: state.config.listOrder,
+        });
       }
     }
     setSearchQuery(null);
@@ -219,6 +241,13 @@ const Application = (props: ApplicationProps) => {
           }
         >
           <div className="header-right">
+            {searchQuery == null ? (
+              <OrderingDropdown
+                value={state.config.listOrder}
+                enabled
+                onChange={listOrderingChanged}
+              />
+            ) : null}
             <div
               className={
                 "header-button icon-search" +
@@ -246,7 +275,7 @@ const Application = (props: ApplicationProps) => {
               <UserMenuButton
                 user={state.user}
                 onLogout={logOut}
-                theme={state.theme}
+                config={state.config}
                 onThemeChanged={changeTheme}
                 isOpened={isMenuOpen}
                 setOpened={setMenuOpen}
@@ -300,7 +329,7 @@ const Application = (props: ApplicationProps) => {
 };
 
 document.addEventListener("DOMContentLoaded", () => {
-  AccessToken.load().then((token) => {
+  Promise.all([AccessToken.load(), Config.load()]).then(([token, config]) => {
     if (token == null) {
       browser.tabs.create({ active: true, url: "/auth.html" });
       window.close();
@@ -310,20 +339,20 @@ document.addEventListener("DOMContentLoaded", () => {
     const auth = new Auth(token);
     const api = new API(auth);
     const dispatcher = new AsyncDispatcher(api);
-    dispatcher.loadAnimeList(
-      INITIAL_STATE.currentList,
-      INITIAL_STATE.query,
-      0,
-      0
-    );
+    dispatcher.loadAnimeList({
+      listType: INITIAL_STATE.currentList,
+      query: INITIAL_STATE.query,
+      offset: 0,
+      version: 0,
+      order: config.listOrder,
+    });
     dispatcher.loadUser();
-    dispatcher.dispatchLater(
-      ThemeData.load().then((theme) => {
-        return { type: "set-theme", theme: theme };
-      })
-    );
+
     render(
-      <Application asyncDispatcher={dispatcher} />,
+      <Application
+        asyncDispatcher={dispatcher}
+        initialState={{ ...INITIAL_STATE, config }}
+      />,
       document.getElementById("app")
     );
   });

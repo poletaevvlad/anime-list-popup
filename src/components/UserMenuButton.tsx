@@ -1,12 +1,12 @@
 import * as React from "react";
 import { User, AnimeListType, AnimeStatus } from "../model";
-import { COLORS, ThemeData, BRIGHTNESES } from "../model/theme";
+import { COLORS, Config, BRIGHTNESES } from "../model/config";
 
 const BRIGHTNESS_LABELS = { dark: "Dark", auto: "Auto", light: "Light" };
 
 interface ThemeEditorProps {
-  theme: ThemeData;
-  onThemeChanged: (newTheme: ThemeData) => void;
+  config: Config;
+  onThemeChanged: (newConfig: Config) => void;
 }
 
 interface UserMenuButtonProps extends ThemeEditorProps {
@@ -23,7 +23,7 @@ const ThemeEditor = (props: ThemeEditorProps) => {
       <div className="settings-selector">
         {BRIGHTNESES.map((brightness) => {
           let className = "item text";
-          if (brightness == props.theme.brightness) {
+          if (brightness == props.config.brightness) {
             className += " selected";
           }
           return (
@@ -33,13 +33,13 @@ const ThemeEditor = (props: ThemeEditorProps) => {
               tabIndex={0}
               onClick={() =>
                 props.onThemeChanged(
-                  props.theme.with({ brightness: brightness })
+                  props.config.with({ brightness: brightness })
                 )
               }
               onKeyPress={(event) =>
                 event.key == "Enter" &&
                 props.onThemeChanged(
-                  props.theme.with({ brightness: brightness })
+                  props.config.with({ brightness: brightness })
                 )
               }
             >
@@ -51,7 +51,7 @@ const ThemeEditor = (props: ThemeEditorProps) => {
       <div className="settings-selector">
         {COLORS.map((color) => {
           let className = "item color color-" + color;
-          if (color == props.theme.color) {
+          if (color == props.config.color) {
             className += " selected";
           }
           return (
@@ -60,11 +60,11 @@ const ThemeEditor = (props: ThemeEditorProps) => {
               className={className}
               tabIndex={0}
               onClick={() =>
-                props.onThemeChanged(props.theme.with({ color: color }))
+                props.onThemeChanged(props.config.with({ color: color }))
               }
               onKeyPress={(event) =>
                 event.key == "Enter" &&
-                props.onThemeChanged(props.theme.with({ color: color }))
+                props.onThemeChanged(props.config.with({ color: color }))
               }
             />
           );
@@ -118,7 +118,7 @@ const UserMenuButton = (props: UserMenuButtonProps) => {
           </a>
         </li>
         <ThemeEditor
-          theme={props.theme}
+          config={props.config}
           onThemeChanged={props.onThemeChanged}
         />
       </ul>

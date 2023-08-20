@@ -1,13 +1,17 @@
-import { AnimeList, AnimeListType } from "../../model";
+import { AnimeList, AnimeListType, ListSortOrder } from "../../model";
 import Action from "./actions";
 import { AnimeListState, ApplicationState, EMPTY_LISTS } from "./state";
 
-export type Reducer<T> = (currentState: T, action: Action) => T;
+export type Reducer<T, Current = T> = (
+  currentState: Current,
+  action: Action
+) => T;
 
-const animeListReducer: Reducer<Record<AnimeListType, AnimeListState>> = (
-  current,
-  action
-) => {
+const animeListReducer: Reducer<
+  Record<AnimeListType, AnimeListState>,
+  ApplicationState
+> = (currentState, action) => {
+  const current = currentState.animeLists;
   switch (action.type) {
     case "clear-data": {
       const newLists: Record<AnimeListType, AnimeListState> = {
@@ -73,7 +77,7 @@ const animeListReducer: Reducer<Record<AnimeListType, AnimeListState>> = (
       }
       return newLists;
     }
-    case "series-update-done":
+    case "series-update-done": {
       if (!action.originalStatus) {
         return {
           ...current,
@@ -100,16 +104,37 @@ const animeListReducer: Reducer<Record<AnimeListType, AnimeListState>> = (
           },
         };
       }
+
+      const newList = current[action.seriesStatus.status].entries.updateEntry(
+        action.seriesId,
+        action.seriesStatus
+      );
+      if (currentState.currentList != AnimeListType.SearchResults) {
+        switch (currentState.config.listOrder) {
+          case ListSortOrder.UpdatedAt:
+            newList.moveEntry(action.seriesId, () => true);
+            break;
+          case ListSortOrder.Score: {
+            const currentScore = action.seriesStatus.assignedScore;
+            newList.moveEntry(
+              action.seriesId,
+              (next) =>
+                next.assignedScore < currentScore ||
+                (next.assignedScore == currentScore &&
+                  next.series.id > action.seriesId)
+            );
+            break;
+          }
+        }
+      }
       return {
         ...current,
         [action.seriesStatus.status]: {
           ...current[action.seriesStatus.status],
-          entries: current[action.seriesStatus.status].entries.updateEntry(
-            action.seriesId,
-            action.seriesStatus
-          ),
+          entries: newList,
         },
       };
+    }
     case "start-search": {
       return {
         ...current,
@@ -163,7 +188,7 @@ export const rootReducer: Reducer<ApplicationState> = (current, action) => {
         ...current,
         statusSuggestion: null,
         updatingAnime: new Set([...current.updatingAnime, action.seriesId]),
-        animeLists: animeListReducer(current.animeLists, action),
+        animeLists: animeListReducer(current, action),
       };
     case "series-update-done": {
       const updating = new Set(current.updatingAnime);
@@ -171,7 +196,7 @@ export const rootReducer: Reducer<ApplicationState> = (current, action) => {
       return {
         ...current,
         updatingAnime: updating,
-        animeLists: animeListReducer(current.animeLists, action),
+        animeLists: animeListReducer(current, action),
       };
     }
     case "set-error":
@@ -194,13 +219,13 @@ export const rootReducer: Reducer<ApplicationState> = (current, action) => {
           rejectUpdate: action.rejectUpdate,
         },
       };
-    case "set-theme":
-      return { ...current, theme: action.theme };
+    case "set-config":
+      return { ...current, config: action.config };
     case "start-search": {
       const state = {
         ...current,
         query: action.query,
-        animeLists: animeListReducer(current.animeLists, action),
+        animeLists: animeListReducer(current, action),
       };
       if (current.currentList != AnimeListType.SearchResults) {
         state.currentList = AnimeListType.SearchResults;
@@ -216,7 +241,7 @@ export const rootReducer: Reducer<ApplicationState> = (current, action) => {
     default:
       return {
         ...current,
-        animeLists: animeListReducer(current.animeLists, action),
+        animeLists: animeListReducer(current, action),
       };
   }
 };

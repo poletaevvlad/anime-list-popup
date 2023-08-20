@@ -31,6 +31,19 @@ export const STATUS_LABELS: Record<AnimeStatus, string> = {
   [AnimeStatus.PlanToWatch]: "Plan to Watch",
 };
 
+export enum ListSortOrder {
+  Score = "list_score",
+  UpdatedAt = "list_updated_at",
+  Title = "anime_title",
+  StartDate = "anime_start_date",
+}
+
+export const SORT_ORDERS: ListSortOrder[] = [
+  ListSortOrder.Title,
+  ListSortOrder.StartDate,
+  ListSortOrder.Score,
+  ListSortOrder.UpdatedAt,
+];
 export { default as User } from "./user";
 export { default as Series } from "./series";
 export { AnimeListEntry, AnimeList, SeriesUpdate, SeriesStatus } from "./list";
