@@ -7,6 +7,11 @@ $accent-colors: ( "orange": #C76016, "green": #3f945b, "purple": #8e47a0, "red":
   --clr-separator: #{transparentize($text-color, 0.9)}
   --clr-separator-light: #{transparentize($text-color, 0.95)}
 
+  --scrollbar-background: #{transparentize($text-color, 0.95)}
+  --scrollbar-thumb: #{transparentize($text-color, 0.92)}
+  --scrollbar-thumb-hover: #{transparentize($text-color, 0.90)}
+  --scrollbar-thumb-active: #{transparentize($text-color, 0.85)}
+
 @mixin create-button-theme($default)
   --button: #{$default}
   --button-hover: #{lighten($default, 3%)}
@@ -119,3 +124,17 @@ $accent-colors: ( "orange": #C76016, "green": #3f945b, "purple": #8e47a0, "red":
 
 .brightness-light
   @include light-theme
+
+::-webkit-scrollbar
+  background-color: var(--scrollbar-background)
+  width: 10px
+
+::-webkit-scrollbar-thumb
+  background-color: var(--scrollbar-thumb)
+  border-radius: 5px
+
+  &:hover
+    background-color: var(--scrollbar-thumb-hover)
+
+  &:active
+    background-color: var(--scrollbar-thumb-active)
