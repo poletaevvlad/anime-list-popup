@@ -1,6 +1,6 @@
 {
   "name": "animelist-ext",
-  "version": "1.3.2",
+  "version": "1.4.0",
   "scripts": {
     "build": "rm -rf dist && npx gulp release",
     "lint": "npx addons-linter dist",

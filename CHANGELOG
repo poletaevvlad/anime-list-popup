@@ -1,0 +1,62 @@
+1.4.0
+
+This release introduces new features, improves performance, and adds visual
+enhancements.
+
+- Allow specifying in which order anime list entries will be shown. Allows
+  options are alphabetically (ascending), by user rating (descending), by
+  series start date (descending) and by the last update date (descending). The
+  selected sort order will be preserved between popup openings.
+- Added a button to items in any of the user's anime lists for opening extended
+  anime preferences including removal option.
+- Fixed an issue where the default theme was applied for a brief period when
+  the popup window is opened.
+- Added custom styling for the scrollbar on Chromium-based browsers.
+
+
+1.3.2
+
+This release fixes an issue where cover images could not be loaded due to
+strong security restriction and recent changes to MAL API.
+
+
+
+1.3.1
+
+This release includes visual improvements and fixes a bug in the search
+functionality:
+
+- The requests are now truncated to 64 characters before due to limitations of
+  MAL API.
+- The extension now prevents users from making a search query that's too short.
+
+
+
+1.3.0
+
+This release introduces new functionality and enhancement, fixes some bugs:
+
+- Users are now able to search through MAL database from the extensions. Found
+  anime can be added to a list, or if it’s already present, update its status,
+  rating, or the number of episodes watched.
+- Bugfix: Under rare circumstances in poor networking conditions, a list
+  section could be duplicated or inserted in the wrong position.
+- Bugfix: If a user increments the number of watched episodes to equal the
+  total number of episodes for an anime in the completed state, the extension
+  erroneously recommends marking it as “watching”.
+- Updated the monochrome icon to conform with the new Firefox guidelines.
+- Small visual tweaks: the scrollbar now has the same color as the background;
+  the light theme is slightly lighter.
+- Multiple internal changes and optimizations.
+
+
+
+1.2.0
+
+This release contain small bug fixes and improvements mainly to do with support
+for series with unknown number of episodes:
+
+- The episodes with the unknown number of episodes are now labeled as #/?
+  instead of #/0.
+- Changed the logic for suggesting the status change: if the episodes number is
+  unknown, the extension wont suggest marking series as completed.
