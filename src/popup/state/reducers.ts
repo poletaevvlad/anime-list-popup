@@ -121,7 +121,12 @@ const animeListReducer: Reducer<
               (next) =>
                 next.assignedScore < currentScore ||
                 (next.assignedScore == currentScore &&
-                  next.series.id > action.seriesId)
+                  next.series.id > action.seriesId),
+              {
+                atEnd:
+                  currentState.animeLists[currentState.currentList].entries
+                    .isComplete,
+              }
             );
             break;
           }

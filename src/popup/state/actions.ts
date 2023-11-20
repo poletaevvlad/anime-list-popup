@@ -6,7 +6,6 @@ import {
   SeriesStatus,
   AnimeListType,
   AnimeListEntry,
-  ListSortOrder,
 } from "../../model";
 import AsyncDispatcher from "./asyncDispatcher";
 import { Config } from "../../model/config";
