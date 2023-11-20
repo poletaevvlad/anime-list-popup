@@ -91,11 +91,12 @@ export class AnimeList {
   }
 
   moveEntry(
-    seriasId: number,
-    beforePredicate: (entry: AnimeListEntry) => boolean
+    seriesId: number,
+    beforePredicate: (entry: AnimeListEntry) => boolean,
+    { atEnd = true }: { atEnd?: boolean } = {}
   ) {
     const entryIndex = this.entries.findIndex(
-      (entry) => entry.series.id == seriasId
+      (entry) => entry.series.id == seriesId
     );
     if (entryIndex == -1) {
       return false;
@@ -105,10 +106,12 @@ export class AnimeList {
     for (let i = 0; i < this.entries.length; i++) {
       if (beforePredicate(this.entries[i])) {
         this.entries.splice(i, 0, entry);
-        return true;
+        return;
       }
     }
 
-    return false;
+    if (atEnd) {
+      this.entries.push(entry);
+    }
   }
 }

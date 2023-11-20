@@ -9,7 +9,6 @@ import {
   ListSortOrder,
   Series,
   SeriesStatus,
-  SORT_ORDERS,
 } from "../../model";
 
 const mockSeries = (
@@ -62,11 +61,11 @@ const seriesNames = (state: ApplicationState): string[] =>
     (entry) => entry.series.name
   );
 
-const makeEntry = (series: Series) =>
+const makeEntry = (series: Series, score = 5) =>
   new AnimeListEntry({
     series,
     status: AnimeStatus.Watching,
-    assignedScore: 4,
+    assignedScore: score,
     episodesWatched: 2,
   });
 
@@ -160,4 +159,36 @@ describe("Series update reducers", () => {
       expect(seriesNames(state)).toEqual(["A"]);
     });
   }
+
+  describe("placement of series after score changes in a list sorted by score", () => {
+    const entries = [
+      makeEntry(mockSeries("A", 10), 5),
+      makeEntry(mockSeries("B", 40), 5),
+      makeEntry(mockSeries("C", 20), 4),
+      makeEntry(mockSeries("D", 30), 4),
+      makeEntry(mockSeries("E", 60), 3),
+    ];
+
+    test("places in the known portion of the list", () => {
+      let state = createConfig({ order: ListSortOrder.Score, entries });
+      state = reduceUpdaate(state, 30, { assignedScore: 5 });
+      expect(seriesNames(state)).toEqual(["A", "D", "B", "C", "E"]);
+    });
+
+    test("places at the end if the entire list is loaded", () => {
+      let state = createConfig({ order: ListSortOrder.Score, entries });
+      state = reduceUpdaate(state, 30, { assignedScore: 2 });
+      expect(seriesNames(state)).toEqual(["A", "B", "C", "E", "D"]);
+    });
+
+    test("removes the element if the placement in an unloaded portion", () => {
+      let state = createConfig({
+        order: ListSortOrder.Score,
+        entries,
+        completed: false,
+      });
+      state = reduceUpdaate(state, 30, { assignedScore: 2 });
+      expect(seriesNames(state)).toEqual(["A", "B", "C", "E"]);
+    });
+  });
 });
