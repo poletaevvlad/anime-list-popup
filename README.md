@@ -1,8 +1,6 @@
-# Anime List Popup
+# <img src="assets/icon-64.png" width="24"> Anime List Popup
 
 [![Mozilla Add-on](https://img.shields.io/amo/v/anime-list-popup?label=Firefox%20add-on&style=for-the-badge)](https://addons.mozilla.org/en-US/firefox/addon/anime-list-popup/) [![Chrome Web Store](https://img.shields.io/chrome-web-store/v/glabhkacodgkcgnbccfkjhlkolcidkdo?style=for-the-badge)](https://chrome.google.com/webstore/detail/anime-list-popup/glabhkacodgkcgnbccfkjhlkolcidkdo)
-
-![](assets/image-48.png)
 
 This is an extension for [Firefox](https://addons.mozilla.org/en-US/firefox/addon/anime-list-popup/), [Chrome, or Chromium-based browser](https://chrome.google.com/webstore/detail/anime-list-popup/glabhkacodgkcgnbccfkjhlkolcidkdo) that shows your anime list from MyAnimeList in the browser's toolbar.
 
