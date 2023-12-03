@@ -1,4 +1,5 @@
 import { AnimeStatus } from ".";
+import { AiringStatus } from "./series";
 
 export interface User {
   /**
@@ -49,6 +50,7 @@ export interface Series {
   mean: number | null;
   my_list_status: AnimeStatusEntry | null;
   start_season: { year: number; season: string } | null;
+  status: AiringStatus;
 }
 
 export interface UserAnimeListEdge {

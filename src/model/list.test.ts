@@ -13,6 +13,7 @@ const createList = (entries: [number, string][], completed = true): AnimeList =>
             englishName: name,
             score: 6.5,
             totalEpisodes: 24,
+            airingStatus: "finished_airing",
           }),
           episodesWatched: 5,
           assignedScore: 8,

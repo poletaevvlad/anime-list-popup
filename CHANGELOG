@@ -1,3 +1,10 @@
+1.4.3
+
+This release adds the "Airing" and "Not aired" badge to appropriate anime
+series.
+
+
+
 1.4.2
 
 This release fixes some bugs:
@@ -5,6 +12,7 @@ This release fixes some bugs:
 - (Firefox only) The icon did not reflect the browser theme.
 - An anime series disappeared from the list sorted by the date of a last change
   if this anime is the only one in a list.
+
 
 
 1.4.0
@@ -21,6 +29,7 @@ enhancements.
 - Fixed an issue where the default theme was applied for a brief period when
   the popup window is opened.
 - Added custom styling for the scrollbar on Chromium-based browsers.
+
 
 
 1.3.2

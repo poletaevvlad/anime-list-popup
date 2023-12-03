@@ -5,6 +5,11 @@ export interface Season {
   season: string;
 }
 
+export type AiringStatus =
+  | "finished_airing"
+  | "currently_airing"
+  | "not_yet_aired";
+
 export default class Series {
   readonly id: number;
   readonly name: string;
@@ -13,6 +18,7 @@ export default class Series {
   readonly coverUrl?: string;
   readonly totalEpisodes: number;
   readonly season?: Season;
+  readonly airingStatus: AiringStatus;
 
   constructor(props: {
     id: number;
@@ -22,6 +28,7 @@ export default class Series {
     coverUrl?: string;
     totalEpisodes: number;
     season?: Season;
+    airingStatus: AiringStatus;
   }) {
     Object.assign(this, props);
   }
@@ -35,6 +42,7 @@ export default class Series {
       coverUrl: series.main_picture?.medium,
       totalEpisodes: series.num_episodes,
       season: series.start_season,
+      airingStatus: series.status,
     });
   }
 
