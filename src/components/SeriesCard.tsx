@@ -4,6 +4,7 @@ import EpisodeSelector from "./EpisodeSelector";
 import ShortStatusDropdown from "./ShortStatusDropdown";
 import { AnimeStatus, Series, SeriesUpdate } from "../model";
 import AddToListButton from "./AddToListButton";
+import { AiringStatus } from "../model/series";
 
 const SCORE_LABELS = [
   { key: "0", label: "Select" },
@@ -18,6 +19,11 @@ const SCORE_LABELS = [
   { key: "2", label: "2. Horrible" },
   { key: "1", label: "1. Appalling" },
 ];
+
+const AIRING_STATUSES: Partial<Record<AiringStatus, string>> = {
+  not_yet_aired: "Not aired",
+  currently_airing: "Airing",
+};
 
 interface SeriesCardProps {
   series: Series;
@@ -61,6 +67,11 @@ const SeriesCard = (props: SeriesCardProps) => (
             title={props.series.name}
           >
             {props.series.name}
+            {props.series.airingStatus in AIRING_STATUSES ? (
+              <small className="airing-badge">
+                {AIRING_STATUSES[props.series.airingStatus]}
+              </small>
+            ) : null}
           </a>
         </div>
         <div className="series-english-name" title={props.series.englishName}>

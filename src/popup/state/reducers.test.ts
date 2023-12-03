@@ -22,6 +22,7 @@ const mockSeries = (
     name,
     englishName: name,
     totalEpisodes: 20,
+    airingStatus: "finished_airing",
   });
 };
 

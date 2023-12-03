@@ -3,6 +3,7 @@ $accent-colors: ( "orange": #C76016, "green": #3f945b, "purple": #8e47a0, "red":
 @mixin create-brightness-theme($text-color)
   --text-primary: #{transparentize($text-color, 0.1)}
   --text-primary-opaque: #{transparentize($text-color, 0.5)}
+  --badge-background: #{transparentize($text-color, 0.9)}
   --text-secondary: #{transparentize($text-color, 0.3)}
   --clr-separator: #{transparentize($text-color, 0.9)}
   --clr-separator-light: #{transparentize($text-color, 0.95)}
