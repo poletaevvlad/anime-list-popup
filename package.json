@@ -1,6 +1,6 @@
 {
   "name": "animelist-ext",
-  "version": "1.4.3",
+  "version": "1.5.0",
   "scripts": {
     "test": "jest",
     "test-watch": "jest --watch",
