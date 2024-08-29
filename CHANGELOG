@@ -1,3 +1,12 @@
+1.5.0
+
+Switched to Web Extension manifest version V3. This change should not
+end users except for the potential loss of compatibility with old versions of
+browsers. The transition is motivated by the changed policies of browser
+vendors.
+
+
+
 1.4.3
 
 This release adds the "Airing" and "Not aired" badge to appropriate anime
