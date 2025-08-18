@@ -5,6 +5,8 @@ import { AnimeStatus, SeriesUpdate, SeriesStatus } from "../model";
 
 type AnimeListResponse = schema.PaginatedResponse<schema.UserAnimeListEdge>;
 
+const DEFAULT_LIMIT = "25";
+
 export default class API {
   static readonly BASE_URL = "https://api.myanimelist.net/v2";
 
@@ -53,7 +55,6 @@ export default class API {
     const url = constructUrl(`${API.BASE_URL}/${endpoint}`, {
       ...params,
       offset: offset.toString(),
-      limit: "25",
       fields:
         "alternative_titles,num_episodes,mean,my_list_status{num_episodes_watched,score},start_season,status",
       nsfw: "true",
@@ -66,18 +67,35 @@ export default class API {
     );
   }
 
+  async getAnimeAtIndex(
+    status: AnimeStatus,
+    sort: ListSortOrder,
+    index: number
+  ): Promise<AnimeListEntry | undefined> {
+    const animes = await this.requestAnime(
+      "users/@me/animelist",
+      { status, sort, limit: "1" },
+      index
+    );
+    return animes.entries[0];
+  }
+
   async getAnimeList(
     status: AnimeStatus,
     sort: ListSortOrder,
     offset: number
   ): Promise<AnimeList> {
-    return this.requestAnime("users/@me/animelist", { status, sort }, offset);
+    return this.requestAnime(
+      "users/@me/animelist",
+      { status, sort, limit: DEFAULT_LIMIT },
+      offset
+    );
   }
 
   async getSearchResults(query: string, offset: number): Promise<AnimeList> {
     return this.requestAnime(
       "anime",
-      { q: query.trim().substring(0, 64) },
+      { q: query.trim().substring(0, 64), limit: DEFAULT_LIMIT },
       offset
     );
   }

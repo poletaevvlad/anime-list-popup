@@ -46,6 +46,7 @@ const animeListReducer: Reducer<
       return {
         ...current,
         [action.listType]: {
+          totalStatistics: current[action.listType].totalStatistics,
           isLoading: false,
           isInvalid: true,
           entries: AnimeList.INITIAL,
@@ -264,6 +265,12 @@ export const rootReducer: Reducer<ApplicationState> = (current, action) => {
         ...current,
         currentList: current.previousList,
       };
+    case "mark-random-loading":
+      return {
+        ...current,
+        isLoadingRandom: action.isLoading,
+      };
+
     default:
       return {
         ...current,

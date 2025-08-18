@@ -39,6 +39,7 @@ export interface ApplicationState {
   errorMessage: ErrorMessage | null;
   statusSuggestion: StatusChangeSuggestion | null;
   config: Config;
+  isLoadingRandom: boolean;
 }
 
 const initialListState: AnimeListState = {
@@ -69,4 +70,5 @@ export const INITIAL_STATE: ApplicationState = {
   errorMessage: null,
   statusSuggestion: null,
   config: new Config(Config.DEFAULT),
+  isLoadingRandom: false,
 };

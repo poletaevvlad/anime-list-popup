@@ -231,6 +231,25 @@ const Application = (props: ApplicationProps) => {
     setSearchQuery(null);
   };
 
+  const openRandom = () => {
+    const list = state.animeLists[state.currentList];
+    const totalAnime = list.totalStatistics;
+    if (typeof totalAnime != "number") {
+      return;
+    }
+    const animeIndex = (Math.random() * totalAnime) | 0;
+
+    if (animeIndex < list.entries.length) {
+      window.open(list.entries.entries[animeIndex].series.pageUrl);
+    } else {
+      props.asyncDispatcher.openRandom(
+        state.currentList as unknown as AnimeStatus,
+        state.config.listOrder,
+        animeIndex
+      );
+    }
+  };
+
   return (
     <div className={isMenuOpen ? "notouch" : ""}>
       {modal}
@@ -258,6 +277,10 @@ const Application = (props: ApplicationProps) => {
               onClick={() =>
                 searchQuery == null ? setSearchQuery("") : startSearch()
               }
+              onKeyPress={() =>
+                searchQuery == null ? setSearchQuery("") : startSearch()
+              }
+              tabIndex={0}
             />
             {modal != null || state.loadingCounter > 0 ? (
               <div className="header-button icon-refresh disabled" />
@@ -269,6 +292,20 @@ const Application = (props: ApplicationProps) => {
                 onKeyPress={(event) => event.key == "Enter" && refreshData()}
               />
             )}
+
+            {modal != null ||
+            state.isLoadingRandom ||
+            state.animeLists[state.currentList].totalStatistics == null ? (
+              <div className="header-button icon-random disabled" />
+            ) : (
+              <div
+                className="header-button icon-random"
+                tabIndex={0}
+                onClick={openRandom}
+                onKeyPress={(event) => event.key == "Enter" && openRandom()}
+              />
+            )}
+
             {modal != null || state.user == null ? (
               <div className="header-button icon-user-menu disabled" />
             ) : (

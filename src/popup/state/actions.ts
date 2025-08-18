@@ -53,6 +53,7 @@ type Action =
     }
   | { type: "set-config"; config: Config }
   | { type: "start-search"; query: string }
-  | { type: "finish-search" };
+  | { type: "finish-search" }
+  | { type: "mark-random-loading"; isLoading: boolean };
 
 export default Action;
