@@ -1,4 +1,9 @@
-import { AnimeList, AnimeListType, ListSortOrder } from "../../model";
+import {
+  AnimeList,
+  AnimeListType,
+  AnimeStatus,
+  ListSortOrder,
+} from "../../model";
 import Action from "./actions";
 import { AnimeListState, ApplicationState, EMPTY_LISTS } from "./state";
 
@@ -41,6 +46,7 @@ const animeListReducer: Reducer<
       return {
         ...current,
         [action.listType]: {
+          totalStatistics: current[action.listType].totalStatistics,
           isLoading: false,
           isInvalid: true,
           entries: AnimeList.INITIAL,
@@ -144,6 +150,7 @@ const animeListReducer: Reducer<
       return {
         ...current,
         [AnimeListType.SearchResults]: {
+          totalStatistics: null,
           isLoading: false,
           isInvalid: false,
           entries: AnimeList.INITIAL,
@@ -151,8 +158,22 @@ const animeListReducer: Reducer<
         },
       };
     }
+    case "user-info-loaded": {
+      if (action.countByStatus != null) {
+        const newCurrent = { ...current };
+        for (const status_ of Object.keys(action.countByStatus)) {
+          const status = status_ as AnimeStatus;
+          newCurrent[status] = {
+            ...current[status],
+            totalStatistics: action.countByStatus[status],
+          };
+        }
+        return newCurrent;
+      }
+      return current;
+    }
     default:
-      return { ...current };
+      return current;
   }
 };
 
@@ -187,6 +208,7 @@ export const rootReducer: Reducer<ApplicationState> = (current, action) => {
       return {
         ...current,
         user: action.user,
+        animeLists: animeListReducer(current, action),
       };
     case "series-updating":
       return {
@@ -243,6 +265,12 @@ export const rootReducer: Reducer<ApplicationState> = (current, action) => {
         ...current,
         currentList: current.previousList,
       };
+    case "mark-random-loading":
+      return {
+        ...current,
+        isLoadingRandom: action.isLoading,
+      };
+
     default:
       return {
         ...current,

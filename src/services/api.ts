@@ -5,6 +5,8 @@ import { AnimeStatus, SeriesUpdate, SeriesStatus } from "../model";
 
 type AnimeListResponse = schema.PaginatedResponse<schema.UserAnimeListEdge>;
 
+const DEFAULT_LIMIT = "25";
+
 export default class API {
   static readonly BASE_URL = "https://api.myanimelist.net/v2";
 
@@ -29,11 +31,20 @@ export default class API {
     return json as TResult;
   }
 
-  async getUserInfo(): Promise<User> {
+  async getUserInfo(): Promise<[User, Record<AnimeStatus, number>]> {
     const data = await this.makeApiCall<schema.User>(
-      `${API.BASE_URL}/users/@me`
+      `${API.BASE_URL}/users/@me?fields=anime_statistics`
     );
-    return User.fromResponse(data);
+
+    const counts: Record<AnimeStatus, number> = {
+      [AnimeStatus.Watching]: data.anime_statistics?.num_items_watching ?? 0,
+      [AnimeStatus.Completed]: data.anime_statistics?.num_items_completed ?? 0,
+      [AnimeStatus.OnHold]: data.anime_statistics?.num_items_on_hold ?? 0,
+      [AnimeStatus.Dropped]: data.anime_statistics?.num_items_dropped ?? 0,
+      [AnimeStatus.PlanToWatch]:
+        data.anime_statistics?.num_items_plan_to_watch ?? 0,
+    };
+    return [User.fromResponse(data), counts];
   }
 
   private async requestAnime(
@@ -44,7 +55,6 @@ export default class API {
     const url = constructUrl(`${API.BASE_URL}/${endpoint}`, {
       ...params,
       offset: offset.toString(),
-      limit: "25",
       fields:
         "alternative_titles,num_episodes,mean,my_list_status{num_episodes_watched,score},start_season,status",
       nsfw: "true",
@@ -57,18 +67,35 @@ export default class API {
     );
   }
 
+  async getAnimeAtIndex(
+    status: AnimeStatus,
+    sort: ListSortOrder,
+    index: number
+  ): Promise<AnimeListEntry | undefined> {
+    const animes = await this.requestAnime(
+      "users/@me/animelist",
+      { status, sort, limit: "1" },
+      index
+    );
+    return animes.entries[0];
+  }
+
   async getAnimeList(
     status: AnimeStatus,
     sort: ListSortOrder,
     offset: number
   ): Promise<AnimeList> {
-    return this.requestAnime("users/@me/animelist", { status, sort }, offset);
+    return this.requestAnime(
+      "users/@me/animelist",
+      { status, sort, limit: DEFAULT_LIMIT },
+      offset
+    );
   }
 
   async getSearchResults(query: string, offset: number): Promise<AnimeList> {
     return this.requestAnime(
       "anime",
-      { q: query.trim().substring(0, 64) },
+      { q: query.trim().substring(0, 64), limit: DEFAULT_LIMIT },
       offset
     );
   }

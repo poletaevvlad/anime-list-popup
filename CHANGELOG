@@ -1,6 +1,14 @@
+1.6.0
+
+The list selection dropdown now displays the number of entries in this list.
+A new button on the toolbar for opening a page for the random anime from the
+currently openned list.
+
+
+
 1.5.0
 
-Switched to Web Extension manifest version V3. This change should not
+Switched to Web Extension manifest version V3. This change should not affect
 end users except for the potential loss of compatibility with old versions of
 browsers. The transition is motivated by the changed policies of browser
 vendors.

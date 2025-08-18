@@ -102,19 +102,44 @@ class AsyncDispatcher extends BaseAsyncDispatcher<Action> {
     );
   }
 
+  openRandom(listType: AnimeStatus, sortOrder: ListSortOrder, index: number) {
+    this.dispatch({ type: "mark-random-loading", isLoading: true });
+    this.api
+      .getAnimeAtIndex(listType, sortOrder, index)
+      .then(
+        (entry) => {
+          window.open(entry.series.pageUrl);
+        },
+        (error) => {
+          const message = String(error);
+          this.dispatch({
+            type: "set-error",
+            title: "Couldn't get an anime",
+            message,
+            retry: (self) => self.openRandom(listType, sortOrder, index),
+          });
+        }
+      )
+      .finally(() => {
+        this.dispatch({ type: "mark-random-loading", isLoading: false });
+      });
+  }
+
   loadUser() {
     User.loadCached().then((cached) => {
       if (cached != null) {
         this.dispatch({
           type: "user-info-loaded",
           user: cached,
+          countByStatus: null,
         });
       }
       this.api.getUserInfo().then(
-        (result) => {
+        ([result, countByStatus]) => {
           this.dispatch({
             type: "user-info-loaded",
             user: result,
+            countByStatus,
           });
           result.saveIntoCache();
         },

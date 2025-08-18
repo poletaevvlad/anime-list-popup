@@ -15,6 +15,9 @@ export enum AnimeListType {
   SearchResults = "search_results",
 }
 
+export const statusAsListType = (status: AnimeStatus) =>
+  status as unknown as AnimeListType;
+
 export const STATUSES: AnimeStatus[] = [
   AnimeStatus.Watching,
   AnimeStatus.Completed,

@@ -12,7 +12,11 @@ import { Config } from "../../model/config";
 
 type Action =
   | { type: "current-list-changed"; listType: AnimeListType }
-  | { type: "user-info-loaded"; user: User }
+  | {
+      type: "user-info-loaded";
+      user: User;
+      countByStatus: Record<AnimeStatus, number> | null;
+    }
   | { type: "loading-anime-list"; listType: AnimeListType }
   | {
       type: "anime-loading-finished";
@@ -49,6 +53,7 @@ type Action =
     }
   | { type: "set-config"; config: Config }
   | { type: "start-search"; query: string }
-  | { type: "finish-search" };
+  | { type: "finish-search" }
+  | { type: "mark-random-loading"; isLoading: boolean };
 
 export default Action;
