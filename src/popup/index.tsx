@@ -302,14 +302,18 @@ const Application = (props: ApplicationProps) => {
               />
             </>
           ) : (
-            <StatusDropdown
-              value={state.currentList}
-              onChange={currentListChanged}
-              enabled={state.updatingAnime.size == 0 && modal == null}
-            />
+            <>
+              <StatusDropdown
+                value={state.currentList}
+                onChange={currentListChanged}
+                enabled={state.updatingAnime.size == 0 && modal == null}
+                countByStatus={(list) => state.animeLists[list].totalStatistics}
+              />
+            </>
           )}
         </div>
       </div>
+
       <AnimeSeriesList
         enabled={modal == null}
         isLoading={currentList.isLoading}

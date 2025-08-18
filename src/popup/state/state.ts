@@ -9,6 +9,7 @@ import AsyncDispatcher from "./asyncDispatcher";
 import { Config } from "../../model/config";
 
 export interface AnimeListState {
+  totalStatistics: number | null;
   entries: AnimeList;
   isLoading: boolean;
   isInvalid: boolean;
@@ -41,6 +42,7 @@ export interface ApplicationState {
 }
 
 const initialListState: AnimeListState = {
+  totalStatistics: null,
   entries: AnimeList.INITIAL,
   isLoading: false,
   isInvalid: false,

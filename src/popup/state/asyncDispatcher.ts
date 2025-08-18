@@ -108,13 +108,15 @@ class AsyncDispatcher extends BaseAsyncDispatcher<Action> {
         this.dispatch({
           type: "user-info-loaded",
           user: cached,
+          countByStatus: null,
         });
       }
       this.api.getUserInfo().then(
-        (result) => {
+        ([result, countByStatus]) => {
           this.dispatch({
             type: "user-info-loaded",
             user: result,
+            countByStatus,
           });
           result.saveIntoCache();
         },
