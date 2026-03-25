@@ -1,3 +1,10 @@
+1.6.1
+
+Bugfix: update content security policy to allow loading images from 
+myanimelist.net root domain following recent change from MAL.
+
+
+
 1.6.0
 
 The list selection dropdown now displays the number of entries in this list.
