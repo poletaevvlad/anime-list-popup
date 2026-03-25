@@ -3,6 +3,9 @@
 Bugfix: update content security policy to allow loading images from 
 myanimelist.net root domain following recent change from MAL.
 
+Added data collection permissions settings in the extension manifest to comply
+with Firefox policies.
+
 
 
 1.6.0
