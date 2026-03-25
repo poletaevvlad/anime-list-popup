@@ -35,7 +35,7 @@
     "128": "assets/icon-128.png"
   },
   "content_security_policy": {
-    "extension_pages": "script-src 'self'; default-src https://myanimelist.net https://api.myanimelist.net; img-src https://*.myanimelist.net; object-src 'none'"
+    "extension_pages": "script-src 'self'; default-src https://myanimelist.net https://api.myanimelist.net; img-src https://myanimelist.net https://*.myanimelist.net; object-src 'none'"
   },
   "permissions": ["storage", "identity"],
   "host_permissions": [
@@ -44,7 +44,10 @@
   ],
   "browser_specific_settings": {
     "gecko": {
-      "id": "animelist@poletaevvlad.github.io"
+      "id": "animelist@poletaevvlad.github.io",
+      "data_collection_permissions": {
+        "required": ["none"]
+      }
     }
   }
 }
